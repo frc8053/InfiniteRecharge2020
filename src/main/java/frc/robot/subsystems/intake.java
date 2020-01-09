@@ -9,11 +9,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class intake extends SubsystemBase {
+public class Intake extends SubsystemBase {
   /**
-   * Creates a new intake.
+   * Creates a new outtake.
    */
-  public intake() {
+  public Intake() {
 
   }
 

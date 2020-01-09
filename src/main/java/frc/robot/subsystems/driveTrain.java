@@ -15,19 +15,26 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class driveTrain extends SubsystemBase {
+public class DriveTrain extends SubsystemBase {
   /**
    * Creates a new driveTrain.
    */
-  private final WPI_VictorSPX m_frontLeft = new WPI_VictorSPX(0);
-  private final WPI_VictorSPX m_frontRight = new WPI_VictorSPX(1);
-  private final WPI_VictorSPX m_backLeft = new WPI_VictorSPX(2);
-  private final WPI_VictorSPX m_backRight = new WPI_VictorSPX(3);
-  private final SpeedControllerGroup driveLeft = new SpeedControllerGroup(m_frontLeft, m_backLeft);
-  private final SpeedControllerGroup driveRight = new SpeedControllerGroup(m_frontRight, m_backRight);
-  private final DifferentialDrive myRobot = new DifferentialDrive(driveLeft, driveRight);
-  public driveTrain() {
+  private WPI_VictorSPX m_frontLeft;
+  private WPI_VictorSPX m_frontRight;
+  private WPI_VictorSPX m_backLeft;
+  private WPI_VictorSPX m_backRight;
+  private SpeedControllerGroup driveLeft;
+  private SpeedControllerGroup driveRight;
+  private DifferentialDrive myRobot;;
+  public DriveTrain() {
+    m_frontLeft = new WPI_VictorSPX(0);
+    m_frontRight = new WPI_VictorSPX(1);
+    m_backLeft = new WPI_VictorSPX(2);
+    m_backRight = new WPI_VictorSPX(3);
 
+    driveLeft = new SpeedControllerGroup(m_frontLeft, m_backLeft);
+    driveRight = new SpeedControllerGroup(m_frontRight, m_backRight);
+    myRobot = new DifferentialDrive(driveLeft, driveRight);
   }
 
   @Override

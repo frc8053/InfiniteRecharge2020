@@ -38,14 +38,12 @@ public class RobotContainer {
   int rightHoriz = 4;
   int rightVert = 5;
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final driveTrain m_driveTrain = new driveTrain();
-  private final intake m_intake = new intake();
-  private final odemetry m_odemetry = new odemetry();
-  private final outtake m_outtake = new outtake();
-  private final vision m_vision = new vision();
+  private final DriveTrain m_driveTrain = new DriveTrain();
+  private final Intake m_intake = new Intake();
+
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   XboxController driverController = new XboxController(0);
-  
+
   
 
 
