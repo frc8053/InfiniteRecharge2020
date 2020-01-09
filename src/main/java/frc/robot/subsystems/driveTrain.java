@@ -7,10 +7,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,34 +16,40 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Creates a new driveTrain.
    */
-  private WPI_VictorSPX m_frontLeft;
-  private WPI_VictorSPX m_frontRight;
-  private WPI_VictorSPX m_backLeft;
-  private WPI_VictorSPX m_backRight;
-  private SpeedControllerGroup driveLeft;
-  private SpeedControllerGroup driveRight;
-  private DifferentialDrive myRobot;;
-  public DriveTrain() {
-    m_frontLeft = new WPI_VictorSPX(0);
-    m_frontRight = new WPI_VictorSPX(1);
-    m_backLeft = new WPI_VictorSPX(2);
-    m_backRight = new WPI_VictorSPX(3);
+  private WPI_VictorSPX frontLeft;
+  private WPI_VictorSPX frontRight;
+  private WPI_VictorSPX backLeft;
+  private WPI_VictorSPX backRight;
 
-    driveLeft = new SpeedControllerGroup(m_frontLeft, m_backLeft);
-    driveRight = new SpeedControllerGroup(m_frontRight, m_backRight);
-    myRobot = new DifferentialDrive(driveLeft, driveRight);
+  private SpeedControllerGroup leftDrive;
+  private SpeedControllerGroup rightDrive;
+  private DifferentialDrive myRobot;
+
+  /***
+   * 
+   * <p>Initalizes drive motors and helper classes.</p>
+   */
+  public DriveTrain() {
+    frontLeft = new WPI_VictorSPX(0);
+    frontRight = new WPI_VictorSPX(1);
+    backLeft = new WPI_VictorSPX(2);
+    backRight = new WPI_VictorSPX(3);
+
+    leftDrive = new SpeedControllerGroup(frontLeft, backLeft);
+    rightDrive = new SpeedControllerGroup(frontRight, backRight);
+    myRobot = new DifferentialDrive(leftDrive, rightDrive);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
-  public void driveArcade(double left, double right)
-  {
-    myRobot.arcadeDrive(left, right);
+
+  public void arcadeDrive(double forward, double rotation) {
+    myRobot.arcadeDrive(forward, rotation);
   }
-  public void driveTank(double left, double right)
-  {
+
+  public void tankDrive(double left, double right) {
     myRobot.tankDrive(left, right);
   }
 }
