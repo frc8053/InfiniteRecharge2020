@@ -17,4 +17,7 @@ package frc.robot;
  */
 public final class Constants {
   public static final boolean DRIVE_ARCADE = true;
+  public static final double LOW_SPEED = 0.33;
+  public static final double MID_SPEED = 0.67;
+  public static final double HIGH_SPEED = 1;
 }

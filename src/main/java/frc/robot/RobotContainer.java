@@ -9,10 +9,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
+import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -66,23 +69,16 @@ public class RobotContainer {
     // Configure default commands
     
     // Set the default drive command to split-stick arcade drive
-    if (Constants.DRIVE_ARCADE) {
-      driveTrain.setDefaultCommand(
-          // A split-stick arcade command, with forward/backward controlled by the left
-          // hand, and turning controlled by the right.
-          new RunCommand(() -> driveTrain
-              .arcadeDrive(driverController.getY(GenericHID.Hand.kLeft),
-                  driverController.getX(GenericHID.Hand.kRight)), driveTrain));  
-    } else {
-      driveTrain.setDefaultCommand(
-          // A tank drive command, with left drive controlled by the left
-          // hand, and right drive controlled by the right.
-          new RunCommand(() -> driveTrain
-              .tankDrive(driverController.getY(GenericHID.Hand.kLeft),
-                  driverController.getX(GenericHID.Hand.kRight)), driveTrain));  
-    }
-    
-    
+   driveTrain.setDefaultCommand(new DefaultDriveCommand(
+     () -> driverController.getY(Hand.kLeft),
+     () -> driverController.getY(Hand.kRight), 
+     () -> driverController.getX(Hand.kRight), 
+     () -> driverController.getXButtonReleased(), 
+     () -> driverController.getYButtonReleased(),
+     () -> driverController.getBButtonReleased(),
+     () -> driverController.getAButtonReleased(),
+     driveTrain));
+          
     configureButtonBindings();
   }
 
@@ -93,7 +89,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
+    
   }
 
 
