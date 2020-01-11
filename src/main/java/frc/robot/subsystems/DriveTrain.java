@@ -34,6 +34,10 @@ public class DriveTrain extends SubsystemBase {
     frontRight = new WPI_VictorSPX(1);
     backLeft = new WPI_VictorSPX(2);
     backRight = new WPI_VictorSPX(3);
+    frontLeft.setInverted(true);
+    frontRight.setInverted(true);
+    backLeft.setInverted(true);
+    backRight.setInverted(true);
 
     leftDrive = new SpeedControllerGroup(frontLeft, backLeft);
     rightDrive = new SpeedControllerGroup(frontRight, backRight);
