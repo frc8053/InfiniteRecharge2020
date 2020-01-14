@@ -1,7 +1,6 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2020.1.2"
-    id 'checkstyle'
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
