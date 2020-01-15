@@ -53,8 +53,8 @@ public class ChameleonVision {
     return new Rotational(pitch.getDouble(0.0), yaw.getDouble(0.0));
   }
 
-  public void setDriverMode(boolean modes) {
-    driverMode.setValue(modes);
+  public void setDriverMode(boolean enabled) {
+    driverMode.setValue(enabled);
   }
 
   public boolean isDriverMode() {
@@ -65,7 +65,7 @@ public class ChameleonVision {
     return pipeline.getDouble(0.0);
   }
 
-  public boolean getValidity() {
+  public boolean isValidFrame() {
     return isValid.getBoolean(false);
   }
 
