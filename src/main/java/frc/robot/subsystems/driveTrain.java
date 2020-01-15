@@ -10,7 +10,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+<<<<<<< Updated upstream
 import edu.wpi.first.wpilibj.SpeedController;
+=======
+import edu.wpi.first.wpilibj.Encoder;
+>>>>>>> Stashed changes
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,6 +23,7 @@ public class driveTrain extends SubsystemBase {
   /**
    * Creates a new driveTrain.
    */
+<<<<<<< Updated upstream
   private final WPI_VictorSPX m_frontLeft = new WPI_VictorSPX(0);
   private final WPI_VictorSPX m_frontRight = new WPI_VictorSPX(1);
   private final WPI_VictorSPX m_backLeft = new WPI_VictorSPX(2);
@@ -28,6 +33,40 @@ public class driveTrain extends SubsystemBase {
   private final DifferentialDrive myRobot = new DifferentialDrive(driveLeft, driveRight);
   public driveTrain() {
 
+=======
+  private WPI_VictorSPX frontLeft;
+  private WPI_VictorSPX frontRight;
+  private WPI_VictorSPX backLeft;
+  private WPI_VictorSPX backRight;
+
+  private SpeedControllerGroup leftDrive;
+  private SpeedControllerGroup rightDrive;
+  private DifferentialDrive myRobot;
+
+  private Encoder leftEncoder;
+  private Encoder rightEncoder;
+  /***
+   * 
+   * <p>Initalizes drive motors and helper classes.</p>
+   */
+
+  public DriveTrain() {
+    frontLeft = new WPI_VictorSPX(0);
+    frontRight = new WPI_VictorSPX(1);
+    backLeft = new WPI_VictorSPX(2);
+    backRight = new WPI_VictorSPX(3);
+    frontLeft.setInverted(true);
+    frontRight.setInverted(true);
+    backLeft.setInverted(true);
+    backRight.setInverted(true);
+
+    leftDrive = new SpeedControllerGroup(frontLeft, backLeft);
+    rightDrive = new SpeedControllerGroup(frontRight, backRight);
+    myRobot = new DifferentialDrive(leftDrive, rightDrive);
+
+    leftEncoder = new Encoder(0, 1);
+    rightEncoder = new Encoder(2, 3);
+>>>>>>> Stashed changes
   }
 
   @Override
@@ -41,5 +80,9 @@ public class driveTrain extends SubsystemBase {
   public void driveTank(double left, double right)
   {
     myRobot.tankDrive(left, right);
+  }
+
+  public double leftEncoderValue() {
+    return leftEncoder.getDistance();
   }
 }

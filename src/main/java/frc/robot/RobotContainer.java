@@ -9,12 +9,16 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Button;
 =======
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+=======
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+>>>>>>> Stashed changes
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
@@ -98,6 +102,9 @@ public class RobotContainer {
     downPOV = new DownPov(driverController.getPOV());
 
       
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     // Configure the button bindings
     m_driveTrain.setDefaultCommand(new defaultDrive(m_driveTrain, driverController.getY(GenericHID.Hand.kLeft), driverController.getX(GenericHID.Hand.kRight)));  
@@ -118,6 +125,9 @@ public class RobotContainer {
         () -> downPOV.get(),
         driveTrain));
         
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     configureButtonBindings();
   }
