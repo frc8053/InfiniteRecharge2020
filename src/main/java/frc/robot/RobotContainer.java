@@ -8,32 +8,22 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Button;
-=======
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-=======
 import edu.wpi.first.wpilibj.GenericHID.Hand;
->>>>>>> Stashed changes
-=======
 import edu.wpi.first.wpilibj.GenericHID.Hand;
->>>>>>> Stashed changes
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DefaultDriveCommand;
->>>>>>> Stashed changes
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.defaultDrive;
 import frc.robot.commands.tankDriveControl;
 import frc.robot.subsystems.ExampleSubsystem;
-<<<<<<< Updated upstream
 import frc.robot.subsystems.driveTrain;
 import frc.robot.subsystems.intake;
 import frc.robot.subsystems.odemetry;
@@ -42,11 +32,8 @@ import frc.robot.subsystems.vision;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-=======
 import frc.robot.subsystems.Intake;
 import frc.robot.triggers.DownPov;
-
->>>>>>> Stashed changes
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -70,9 +57,6 @@ public class RobotContainer {
   XboxController driverController = new XboxController(0);
   
   
-<<<<<<< Updated upstream
-=======
-  
   private ExampleSubsystem exampleSubsystem;
   private DriveTrain driveTrain;
   private Intake intake;
@@ -81,16 +65,11 @@ public class RobotContainer {
   XboxController driverController;
   DownPov downPOV;
   
->>>>>>> Stashed changes
-
-
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-<<<<<<< Updated upstream
-=======
 
     // Initalize subsystems
     exampleSubsystem = new ExampleSubsystem();
@@ -106,20 +85,12 @@ public class RobotContainer {
     downPOV = new DownPov(driverController.getPOV());
 
       
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
     // Configure the button bindings
     m_driveTrain.setDefaultCommand(new defaultDrive(m_driveTrain, driverController.getY(GenericHID.Hand.kLeft), driverController.getX(GenericHID.Hand.kRight)));  
     
     
     
-<<<<<<< Updated upstream
-=======
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
         () -> driverController.getY(Hand.kLeft),
@@ -131,14 +102,6 @@ public class RobotContainer {
         () -> driverController.getAButtonReleased(),
         () -> downPOV.get(),
         driveTrain));
-        
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     configureButtonBindings();
   }
 
