@@ -57,7 +57,7 @@ public class ChameleonVision {
     driverMode.setValue(modes);
   }
 
-  public boolean getDriverMode() {
+  public boolean isDriverMode() {
     return driverMode.getBoolean(false);
   }
 
