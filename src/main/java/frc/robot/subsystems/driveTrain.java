@@ -11,7 +11,11 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import edu.wpi.first.wpilibj.SpeedController;
+=======
+import edu.wpi.first.wpilibj.Encoder;
+>>>>>>> Stashed changes
 =======
 import edu.wpi.first.wpilibj.Encoder;
 >>>>>>> Stashed changes
@@ -66,6 +70,9 @@ public class driveTrain extends SubsystemBase {
 
     leftEncoder = new Encoder(0, 1);
     rightEncoder = new Encoder(2, 3);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   }
 

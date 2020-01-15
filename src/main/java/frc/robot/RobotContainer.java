@@ -10,12 +10,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Button;
 =======
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+=======
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+>>>>>>> Stashed changes
 =======
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 >>>>>>> Stashed changes
@@ -103,6 +107,9 @@ public class RobotContainer {
 
       
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -126,6 +133,9 @@ public class RobotContainer {
         driveTrain));
         
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
