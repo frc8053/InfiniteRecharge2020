@@ -8,13 +8,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.triggers.DownPov;
 
@@ -38,7 +38,7 @@ public class RobotContainer {
 
   private ExampleCommand exampleAutoCommand;
   XboxController driverController;
-  DownPov downPOV;
+  DownPov downPov;
   
 
   /**
@@ -56,7 +56,7 @@ public class RobotContainer {
 
     // Initialize Gamepads
     driverController = new XboxController(0);
-    downPOV = new DownPov(driverController.getPOV());
+    downPov = new DownPov(driverController.getPOV());
     // Configure the button bindings
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
@@ -67,7 +67,7 @@ public class RobotContainer {
         () -> driverController.getYButtonReleased(),
         () -> driverController.getBButtonReleased(),
         () -> driverController.getAButtonReleased(),
-        () -> downPOV.get(),
+        () -> downPov.get(),
         driveTrain));
     configureButtonBindings();
   }

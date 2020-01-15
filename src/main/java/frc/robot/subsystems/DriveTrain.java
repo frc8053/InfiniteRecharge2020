@@ -7,10 +7,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -20,17 +17,17 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Creates a new driveTrain.
    */
-    private WPI_VictorSPX frontLeft;
-    private WPI_VictorSPX frontRight;
-    private WPI_VictorSPX backLeft;
-    private WPI_VictorSPX backRight;
+  private WPI_VictorSPX frontLeft;
+  private WPI_VictorSPX frontRight;
+  private WPI_VictorSPX backLeft;
+  private WPI_VictorSPX backRight;
 
-    private SpeedControllerGroup leftDrive;
-    private SpeedControllerGroup rightDrive;
-    private DifferentialDrive myRobot;
+  private SpeedControllerGroup leftDrive;
+  private SpeedControllerGroup rightDrive;
+  private DifferentialDrive myRobot;
 
-    private Encoder leftEncoder;
-    private Encoder rightEncoder;
+  private Encoder leftEncoder;
+  private Encoder rightEncoder;
   /***
    * 
    * <p>Initalizes drive motors and helper classes.</p>
@@ -59,12 +56,12 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
-  public void arcadeDrive(double left, double right)
-  {
+  
+  public void arcadeDrive(double left, double right) {
     myRobot.arcadeDrive(left, right);
   }
-  public void tankDrive(double left, double right)
-  {
+  
+  public void tankDrive(double left, double right) {
     myRobot.tankDrive(left, right);
   }
 
