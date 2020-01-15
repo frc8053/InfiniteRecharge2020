@@ -8,30 +8,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Button;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.defaultDrive;
-import frc.robot.commands.tankDriveControl;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.driveTrain;
-import frc.robot.subsystems.intake;
-import frc.robot.subsystems.odemetry;
-import frc.robot.subsystems.outtake;
-import frc.robot.subsystems.vision;
-import frc.robot.Constants;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.triggers.DownPov;
 
@@ -47,15 +30,7 @@ public class RobotContainer {
   int leftVert = 1;
   int rightHoriz = 4;
   int rightVert = 5;
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final driveTrain m_driveTrain = new driveTrain();
-  private final intake m_intake = new intake();
-  private final odemetry m_odemetry = new odemetry();
-  private final outtake m_outtake = new outtake();
-  private final vision m_vision = new vision();
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-  XboxController driverController = new XboxController(0);
-  
+
   
   private ExampleSubsystem exampleSubsystem;
   private DriveTrain driveTrain;
@@ -79,18 +54,10 @@ public class RobotContainer {
     // Initalize commands
     exampleAutoCommand = new ExampleCommand(exampleSubsystem);
 
-
     // Initialize Gamepads
     driverController = new XboxController(0);
     downPOV = new DownPov(driverController.getPOV());
-
-      
-
     // Configure the button bindings
-    m_driveTrain.setDefaultCommand(new defaultDrive(m_driveTrain, driverController.getY(GenericHID.Hand.kLeft), driverController.getX(GenericHID.Hand.kRight)));  
-    
-    
-    
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
         () -> driverController.getY(Hand.kLeft),
@@ -111,10 +78,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() 
-  {
-    new JoystickButton(driverController, Button.kBumperRight.value)
-      .whileHeld(new tankDriveControl(m_driveTrain, driverController.getY(Hand.kLeft), driverController.getY(Hand.kRight)));
+  private void configureButtonBindings() {
+    
   }
 
 
@@ -125,6 +90,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return exampleAutoCommand;
   }
 }
