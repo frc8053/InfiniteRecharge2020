@@ -1,0 +1,9 @@
+[
+  {
+    "artifact": "frcJava (in project RAM2020code)",
+    "target": "roborio",
+    "debugfile": "frcJava_roborio.debugconfig",
+    "project": "RAM2020code",
+    "language": "java"
+  }
+]

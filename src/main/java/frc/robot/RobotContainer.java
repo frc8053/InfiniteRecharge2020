@@ -8,14 +8,24 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+<<<<<<< Updated upstream
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Button;
+=======
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.DefaultDriveCommand;
+>>>>>>> Stashed changes
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.defaultDrive;
 import frc.robot.commands.tankDriveControl;
 import frc.robot.subsystems.ExampleSubsystem;
+<<<<<<< Updated upstream
 import frc.robot.subsystems.driveTrain;
 import frc.robot.subsystems.intake;
 import frc.robot.subsystems.odemetry;
@@ -24,6 +34,11 @@ import frc.robot.subsystems.vision;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+=======
+import frc.robot.subsystems.Intake;
+import frc.robot.triggers.DownPov;
+
+>>>>>>> Stashed changes
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -47,6 +62,18 @@ public class RobotContainer {
   XboxController driverController = new XboxController(0);
   
   
+<<<<<<< Updated upstream
+=======
+  
+  private ExampleSubsystem exampleSubsystem;
+  private DriveTrain driveTrain;
+  private Intake intake;
+
+  private ExampleCommand exampleAutoCommand;
+  XboxController driverController;
+  DownPov downPOV;
+  
+>>>>>>> Stashed changes
 
 
 
@@ -54,11 +81,44 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+<<<<<<< Updated upstream
+=======
+
+    // Initalize subsystems
+    exampleSubsystem = new ExampleSubsystem();
+    driveTrain = new DriveTrain();
+    intake = new Intake();
+
+    // Initalize commands
+    exampleAutoCommand = new ExampleCommand(exampleSubsystem);
+
+
+    // Initialize Gamepads
+    driverController = new XboxController(0);
+    downPOV = new DownPov(driverController.getPOV());
+
+      
+>>>>>>> Stashed changes
     // Configure the button bindings
     m_driveTrain.setDefaultCommand(new defaultDrive(m_driveTrain, driverController.getY(GenericHID.Hand.kLeft), driverController.getX(GenericHID.Hand.kRight)));  
     
     
     
+<<<<<<< Updated upstream
+=======
+    // Set the default drive command to split-stick arcade drive
+    driveTrain.setDefaultCommand(new DefaultDriveCommand(
+        () -> driverController.getY(Hand.kLeft),
+        () -> driverController.getY(Hand.kRight), 
+        () -> driverController.getX(Hand.kRight), 
+        () -> driverController.getXButtonReleased(), 
+        () -> driverController.getYButtonReleased(),
+        () -> driverController.getBButtonReleased(),
+        () -> driverController.getAButtonReleased(),
+        () -> downPOV.get(),
+        driveTrain));
+        
+>>>>>>> Stashed changes
     configureButtonBindings();
   }
 
