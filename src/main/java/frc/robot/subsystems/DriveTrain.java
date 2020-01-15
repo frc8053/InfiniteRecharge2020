@@ -56,11 +56,11 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
-  
+
   public void arcadeDrive(double left, double right) {
     myRobot.arcadeDrive(left, right);
   }
-  
+
   public void tankDrive(double left, double right) {
     myRobot.tankDrive(left, right);
   }
