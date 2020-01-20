@@ -12,16 +12,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 /**
  * Add your docs here.
  */
-public class DownPov extends Trigger {
-  double povValue;
+public class LeftTriggerButton extends Trigger {
+  private double triggerLeftValue;
 
-  public DownPov(double povValue){
-    this.povValue = povValue;
+  public LeftTriggerButton(double triggerLeftValue) {
+    this.triggerLeftValue = triggerLeftValue;
   }
-  
+
   @Override
-    public boolean get() {
-    if (povValue == 180) {
+  public boolean get() {
+    if (triggerLeftValue > 50) {
       return true;
     } else {
       return false;

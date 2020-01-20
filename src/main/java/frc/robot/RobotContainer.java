@@ -11,12 +11,15 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.DownPovCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
-import frc.robot.triggers.DownPov;
+import frc.robot.triggers.LeftTriggerButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -38,7 +41,9 @@ public class RobotContainer {
 
   private ExampleCommand exampleAutoCommand;
   XboxController driverController;
-  DownPov downPov;
+  POVButton povDown;
+  Trigger leftTrigger;
+  
   
 
   /**
@@ -55,10 +60,13 @@ public class RobotContainer {
     exampleAutoCommand = new ExampleCommand(exampleSubsystem);
 
     // Initialize Gamepads
+    
     driverController = new XboxController(0);
-    downPov = new DownPov(driverController.getPOV());
+    povDown = new POVButton(driverController, 180);
+    leftTrigger = new LeftTriggerButton(driverController.getTriggerAxis(Hand.kLeft));
     // Configure the button bindings
     // Set the default drive command to split-stick arcade drive
+    povDown.whenReleased(new DownPovCommand(driveTrain));
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
         () -> driverController.getY(Hand.kLeft),
         () -> driverController.getY(Hand.kRight), 
@@ -67,7 +75,6 @@ public class RobotContainer {
         () -> driverController.getYButtonReleased(),
         () -> driverController.getBButtonReleased(),
         () -> driverController.getAButtonReleased(),
-        () -> downPov.get(),
         driveTrain));
     configureButtonBindings();
   }

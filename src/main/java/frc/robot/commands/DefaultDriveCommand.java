@@ -43,14 +43,13 @@ public class DefaultDriveCommand extends CommandBase {
    * @param isHighSpeed Whether Y has been released
    * @param isMidSpeed Whether B has been released
    * @param isLowSpeed Whether A has been released
-   * @param isDriveBackward Whether reverse is selected by POV
    * 
    * @param driveTrain The driveTrain subsystem.
    */
   public DefaultDriveCommand(DoubleSupplier leftY, DoubleSupplier rightY, DoubleSupplier rightX, 
                             Supplier<Boolean> isDriveToggled, Supplier<Boolean> isHighSpeed, 
                             Supplier<Boolean> isMidSpeed,  Supplier<Boolean> isLowSpeed,
-                            Supplier<Boolean> isDriveBackward, DriveTrain driveTrain) {
+                            DriveTrain driveTrain) {
 
     this.driveTrain = driveTrain;
 
@@ -62,10 +61,8 @@ public class DefaultDriveCommand extends CommandBase {
     this.isHighSpeed = isHighSpeed;
     this.isMidSpeed = isMidSpeed;
     this.isLowSpeed = isLowSpeed;
-    this.isDriveBackward = isDriveBackward;
     this.driveState = false;
     this.speed = 1;
-    this.reverse = 1;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
   }
@@ -73,6 +70,7 @@ public class DefaultDriveCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    reverse = 1;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -90,9 +88,7 @@ public class DefaultDriveCommand extends CommandBase {
     if (isDriveToggled.get()) {
       driveState = !driveState;
     }
-    if (isDriveBackward.get()) {
-      reverse = -reverse;
-    }
+    reverse = driveTrain.getReverse();
     if (driveState) {
       driveTrain.tankDrive(leftY.getAsDouble() * speed * reverse, 
                           rightY.getAsDouble() * speed * reverse);

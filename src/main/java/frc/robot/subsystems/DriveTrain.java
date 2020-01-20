@@ -28,6 +28,8 @@ public class DriveTrain extends SubsystemBase {
 
   private Encoder leftEncoder;
   private Encoder rightEncoder;
+  
+  private double reverse;
   /***
    * 
    * <p>Initalizes drive motors and helper classes.</p>
@@ -50,6 +52,8 @@ public class DriveTrain extends SubsystemBase {
 
     leftEncoder = new Encoder(0, 1);
     rightEncoder = new Encoder(2, 3);
+
+    reverse = 1;
   }
 
   @Override
@@ -68,4 +72,13 @@ public class DriveTrain extends SubsystemBase {
   public double leftEncoderValue() {
     return leftEncoder.getDistance();
   }
+
+  public void downPov() {
+    reverse = -reverse;
+  }
+
+  public double getReverse() {
+    return reverse;
+  }
+
 }

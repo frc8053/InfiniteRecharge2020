@@ -10,42 +10,28 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
-public class DriveDistanceCommand extends CommandBase {
-  private DriveTrain driveTrain;
-  
-  private double left;
-  private double right;
-  private double distance;
-  
-  
+public class DownPovCommand extends CommandBase {
+  private final DriveTrain driveTrain;
   /**
-   * Creates a new DriveStraightCommand.
-   * @param left Speed of the left side of the robot
-   * @param right Speed of the right side of the robot
-   * @param distance Total distance the right encoder reads
-   * 
-   * @param driveTrain The DriveTrain subsystem used by this command
+   * Creates a new DownPovCommand.
+   * @param driveTrain the drive subsystem used
    */
 
-  public DriveDistanceCommand(double left, double right, double distance, DriveTrain driveTrain) {
+  public DownPovCommand(DriveTrain driveTrain) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.left = left;
-    this.right = right;
-    this.distance = distance;
     this.driveTrain = driveTrain;
-    this.addRequirements(driveTrain);
+    addRequirements(driveTrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    
+  public void initialize() {    
+    driveTrain.downPov();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.tankDrive(left, right);
   }
 
   // Called once the command ends or is interrupted.
@@ -56,10 +42,6 @@ public class DriveDistanceCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (distance >= driveTrain.leftEncoderValue()) {
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 }
