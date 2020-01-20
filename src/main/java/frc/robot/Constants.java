@@ -16,8 +16,7 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final boolean DRIVE_ARCADE = true;
-  public static final double LOW_SPEED = 0.33;
-  public static final double MID_SPEED = 0.67;
-  public static final double HIGH_SPEED = 1;
+  public static double HIGH_SPEED = 0.85;
+  public static double MID_SPEED = 0.6;
+  public static double LOW_SPEED = 0.4;
 }

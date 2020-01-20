@@ -8,19 +8,18 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.DownPovCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
-
+import frc.robot.triggers.LeftTriggerButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -34,8 +33,7 @@ public class RobotContainer {
   int leftVert = 1;
   int rightHoriz = 4;
   int rightVert = 5;
-  
-  
+
   
   private ExampleSubsystem exampleSubsystem;
   private DriveTrain driveTrain;
@@ -43,9 +41,10 @@ public class RobotContainer {
 
   private ExampleCommand exampleAutoCommand;
   XboxController driverController;
+  POVButton povDown;
+  Trigger leftTrigger;
   
-
-
+  
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -60,25 +59,23 @@ public class RobotContainer {
     // Initalize commands
     exampleAutoCommand = new ExampleCommand(exampleSubsystem);
 
-
     // Initialize Gamepads
+    
     driverController = new XboxController(0);
-
+    povDown = new POVButton(driverController, 180);
+    leftTrigger = new LeftTriggerButton(driverController.getTriggerAxis(Hand.kLeft));
     // Configure the button bindings
-    
-    // Configure default commands
-    
     // Set the default drive command to split-stick arcade drive
-   driveTrain.setDefaultCommand(new DefaultDriveCommand(
-     () -> driverController.getY(Hand.kLeft),
-     () -> driverController.getY(Hand.kRight), 
-     () -> driverController.getX(Hand.kRight), 
-     () -> driverController.getXButtonReleased(), 
-     () -> driverController.getYButtonReleased(),
-     () -> driverController.getBButtonReleased(),
-     () -> driverController.getAButtonReleased(),
-     driveTrain));
-          
+    povDown.whenReleased(new DownPovCommand(driveTrain));
+    driveTrain.setDefaultCommand(new DefaultDriveCommand(
+        () -> driverController.getY(Hand.kLeft),
+        () -> driverController.getY(Hand.kRight), 
+        () -> driverController.getX(Hand.kRight), 
+        () -> driverController.getXButtonReleased(), 
+        () -> driverController.getYButtonReleased(),
+        () -> driverController.getBButtonReleased(),
+        () -> driverController.getAButtonReleased(),
+        driveTrain));
     configureButtonBindings();
   }
 

@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,10 +26,16 @@ public class DriveTrain extends SubsystemBase {
   private SpeedControllerGroup rightDrive;
   private DifferentialDrive myRobot;
 
+  private Encoder leftEncoder;
+  private Encoder rightEncoder;
+  
+  private double reverse;
   /***
    * 
    * <p>Initalizes drive motors and helper classes.</p>
    */
+  
+
   public DriveTrain() {
     frontLeft = new WPI_VictorSPX(0);
     frontRight = new WPI_VictorSPX(1);
@@ -42,6 +49,11 @@ public class DriveTrain extends SubsystemBase {
     leftDrive = new SpeedControllerGroup(frontLeft, backLeft);
     rightDrive = new SpeedControllerGroup(frontRight, backRight);
     myRobot = new DifferentialDrive(leftDrive, rightDrive);
+
+    leftEncoder = new Encoder(0, 1);
+    rightEncoder = new Encoder(2, 3);
+
+    reverse = 1;
   }
 
   @Override
@@ -49,11 +61,24 @@ public class DriveTrain extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void arcadeDrive(double forward, double rotation) {
-    myRobot.arcadeDrive(forward, rotation);
+  public void arcadeDrive(double left, double right) {
+    myRobot.arcadeDrive(left, right);
   }
 
   public void tankDrive(double left, double right) {
     myRobot.tankDrive(left, right);
   }
+
+  public double leftEncoderValue() {
+    return leftEncoder.getDistance();
+  }
+
+  public void downPov() {
+    reverse = -reverse;
+  }
+
+  public double getReverse() {
+    return reverse;
+  }
+
 }

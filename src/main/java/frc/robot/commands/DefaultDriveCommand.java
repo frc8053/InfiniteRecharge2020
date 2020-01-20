@@ -20,12 +20,13 @@ public class DefaultDriveCommand extends CommandBase {
   private DoubleSupplier leftY;
   private DoubleSupplier rightY;
   private DoubleSupplier rightX;
-  private Supplier<Boolean> ypressed;
-  private Supplier<Boolean> bpressed;
-  private Supplier<Boolean> apressed;
+  private Supplier<Boolean> isHighSpeed;
+  private Supplier<Boolean> isMidSpeed;
+  private Supplier<Boolean> isLowSpeed;
 
   private Supplier<Boolean> isDriveToggled;
   double speed;
+  double reverse;
   boolean driveState;
 
   /**
@@ -35,12 +36,18 @@ public class DefaultDriveCommand extends CommandBase {
    * @param rightY The RightY joystick of driver gamepad
    * @param rightX rightX joystick of driver gamepad
    * 
+   * 
    * @param isDriveToggled Whether the toggle button has been released (basically pressed)
+   * @param isHighSpeed Whether Y has been released
+   * @param isMidSpeed Whether B has been released
+   * @param isLowSpeed Whether A has been released
    * 
    * @param driveTrain The driveTrain subsystem.
    */
   public DefaultDriveCommand(DoubleSupplier leftY, DoubleSupplier rightY, DoubleSupplier rightX, 
-      Supplier<Boolean> isDriveToggled, Supplier<Boolean> ypressed, Supplier<Boolean> bpressed, Supplier<Boolean> apressed, DriveTrain driveTrain) {
+                            Supplier<Boolean> isDriveToggled, Supplier<Boolean> isHighSpeed, 
+                            Supplier<Boolean> isMidSpeed,  Supplier<Boolean> isLowSpeed,
+                            DriveTrain driveTrain) {
 
     this.driveTrain = driveTrain;
 
@@ -49,10 +56,11 @@ public class DefaultDriveCommand extends CommandBase {
     this.rightX = rightX;
 
     this.isDriveToggled = isDriveToggled;
-    this.ypressed = ypressed;
-    this.bpressed = bpressed;
-    this.apressed = apressed;
+    this.isHighSpeed = isHighSpeed;
+    this.isMidSpeed = isMidSpeed;
+    this.isLowSpeed = isLowSpeed;
     this.driveState = false;
+    this.speed = 1;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
   }
@@ -60,29 +68,31 @@ public class DefaultDriveCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    reverse = 1;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(ypressed.get())
-    {
+    if (isHighSpeed.get()) {
       speed = Constants.HIGH_SPEED;
     }
-    if(bpressed.get()){
+    if (isMidSpeed.get()) {
       speed = Constants.MID_SPEED;
     }
-    if(apressed.get()){
+    if (isLowSpeed.get()) {
       speed = Constants.LOW_SPEED;
     }
     if (isDriveToggled.get()) {
       driveState = !driveState;
     }
-
+    reverse = driveTrain.getReverse();
     if (driveState) {
-      driveTrain.tankDrive(leftY.getAsDouble()*speed, rightY.getAsDouble()*speed);
+      driveTrain.tankDrive(leftY.getAsDouble() * speed * reverse, 
+                          rightY.getAsDouble() * speed * reverse);
     } else {
-      driveTrain.arcadeDrive(leftY.getAsDouble()*speed, rightX.getAsDouble()*speed);
+      driveTrain.arcadeDrive(leftY.getAsDouble() * speed * reverse, 
+                            rightX.getAsDouble() * speed * reverse);
     }
   }
 
