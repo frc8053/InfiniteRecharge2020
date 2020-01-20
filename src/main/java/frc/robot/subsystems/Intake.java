@@ -11,11 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
   /**
-<<<<<<< HEAD
    * Creates a new intake.
-=======
-   * Creates a new outtake.
->>>>>>> master
    */
   public Intake() {
 
