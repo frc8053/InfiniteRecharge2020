@@ -21,7 +21,6 @@ public class DefaultDriveCommand extends CommandBase {
   private DoubleSupplier leftY;
   private DoubleSupplier rightY;
   private DoubleSupplier rightX;
-  private Supplier<Boolean> isDriveBackward;
   private Supplier<Boolean> isHighSpeed;
   private Supplier<Boolean> isMidSpeed;
   private Supplier<Boolean> isLowSpeed;
