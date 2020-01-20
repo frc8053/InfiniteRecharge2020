@@ -8,10 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-<<<<<<< HEAD
 import edu.wpi.first.wpilibj.Encoder;
-=======
->>>>>>> master
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,22 +26,16 @@ public class DriveTrain extends SubsystemBase {
   private SpeedControllerGroup rightDrive;
   private DifferentialDrive myRobot;
 
-<<<<<<< HEAD
   private Encoder leftEncoder;
   private Encoder rightEncoder;
   
   private double reverse;
-=======
->>>>>>> master
   /***
    * 
    * <p>Initalizes drive motors and helper classes.</p>
    */
-<<<<<<< HEAD
   
 
-=======
->>>>>>> master
   public DriveTrain() {
     frontLeft = new WPI_VictorSPX(0);
     frontRight = new WPI_VictorSPX(1);
@@ -58,14 +49,11 @@ public class DriveTrain extends SubsystemBase {
     leftDrive = new SpeedControllerGroup(frontLeft, backLeft);
     rightDrive = new SpeedControllerGroup(frontRight, backRight);
     myRobot = new DifferentialDrive(leftDrive, rightDrive);
-<<<<<<< HEAD
 
     leftEncoder = new Encoder(0, 1);
     rightEncoder = new Encoder(2, 3);
 
     reverse = 1;
-=======
->>>>>>> master
   }
 
   @Override
@@ -73,19 +61,13 @@ public class DriveTrain extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-<<<<<<< HEAD
   public void arcadeDrive(double left, double right) {
     myRobot.arcadeDrive(left, right);
-=======
-  public void arcadeDrive(double forward, double rotation) {
-    myRobot.arcadeDrive(forward, rotation);
->>>>>>> master
   }
 
   public void tankDrive(double left, double right) {
     myRobot.tankDrive(left, right);
   }
-<<<<<<< HEAD
 
   public double leftEncoderValue() {
     return leftEncoder.getDistance();
@@ -99,6 +81,4 @@ public class DriveTrain extends SubsystemBase {
     return reverse;
   }
 
-=======
->>>>>>> master
 }
