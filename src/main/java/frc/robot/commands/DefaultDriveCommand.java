@@ -20,9 +20,9 @@ public class DefaultDriveCommand extends CommandBase {
   private DoubleSupplier leftY;
   private DoubleSupplier rightY;
   private DoubleSupplier rightX;
-  private Supplier<Boolean> isHighSpeed;
-  private Supplier<Boolean> isMidSpeed;
-  private Supplier<Boolean> isLowSpeed;
+  private Supplier<Boolean> isReverse;
+  private Supplier<Boolean> isLeftBrake;
+  private Supplier<Boolean> isRightBrake;
 
   private Supplier<Boolean> isDriveToggled;
   double speed;
@@ -38,15 +38,15 @@ public class DefaultDriveCommand extends CommandBase {
    * 
    * 
    * @param isDriveToggled Whether the toggle button has been released (basically pressed)
-   * @param isHighSpeed Whether Y has been released
-   * @param isMidSpeed Whether B has been released
-   * @param isLowSpeed Whether A has been released
+   * @param isReverse Whether A has been released
+   * @param isLeftBrake Whether left trigger is held
+   * @param isRightBrake Whether right trigger is held
    * 
    * @param driveTrain The driveTrain subsystem.
    */
   public DefaultDriveCommand(DoubleSupplier leftY, DoubleSupplier rightY, DoubleSupplier rightX, 
-                            Supplier<Boolean> isDriveToggled, Supplier<Boolean> isHighSpeed, 
-                            Supplier<Boolean> isMidSpeed,  Supplier<Boolean> isLowSpeed,
+                            Supplier<Boolean> isDriveToggled, Supplier<Boolean> isReverse, 
+                            Supplier<Boolean> isLeftBrake,  Supplier<Boolean> isRightBrake,
                             DriveTrain driveTrain) {
 
     this.driveTrain = driveTrain;
@@ -56,9 +56,9 @@ public class DefaultDriveCommand extends CommandBase {
     this.rightX = rightX;
 
     this.isDriveToggled = isDriveToggled;
-    this.isHighSpeed = isHighSpeed;
-    this.isMidSpeed = isMidSpeed;
-    this.isLowSpeed = isLowSpeed;
+    this.isReverse = isReverse;
+    this.isLeftBrake = isLeftBrake;
+    this.isRightBrake = isRightBrake;
     this.driveState = false;
     this.speed = 1;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -74,19 +74,24 @@ public class DefaultDriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (isHighSpeed.get()) {
+    if (!isLeftBrake.get() && !isRightBrake.get()) {
       speed = Constants.HIGH_SPEED;
     }
-    if (isMidSpeed.get()) {
+    if (isLeftBrake.get() || isRightBrake.get()) {
       speed = Constants.MID_SPEED;
     }
-    if (isLowSpeed.get()) {
+
+    if (isLeftBrake.get() && isRightBrake.get()) {
       speed = Constants.LOW_SPEED;
     }
+    
     if (isDriveToggled.get()) {
       driveState = !driveState;
     }
-    reverse = driveTrain.getReverse();
+    if (isReverse.get()) {
+      reverse = -reverse;
+    }
+
     if (driveState) {
       driveTrain.tankDrive(leftY.getAsDouble() * speed * reverse, 
                           rightY.getAsDouble() * speed * reverse);
@@ -101,6 +106,4 @@ public class DefaultDriveCommand extends CommandBase {
   public void end(boolean interrupted) {
     driveTrain.tankDrive(0, 0);
   }
-
-  
 }

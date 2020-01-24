@@ -39,7 +39,7 @@ public class DriveDistanceCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    driveTrain.leftEncoderReset(); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.

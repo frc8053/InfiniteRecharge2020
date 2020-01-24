@@ -19,4 +19,18 @@ public final class Constants {
   public static double HIGH_SPEED = 0.85;
   public static double MID_SPEED = 0.6;
   public static double LOW_SPEED = 0.4;
+  
+  public static final class Drive {
+    public static double DISTANCE_PER_PULSE = (6 * Math.PI / 1024);
+  }
+
+  public static final class DrivePid {
+    public static double PTURN = 1;
+    public static double ITURN = 0;
+    public static double DTURN = 0;
+    public static double TURN_TOLERANCE = 2;
+    public static double SPEED_TOLERANCE = 3;
+  }
 }
+
+

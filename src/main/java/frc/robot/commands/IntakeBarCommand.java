@@ -8,40 +8,45 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.Drive;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 
-public class DownPovCommand extends CommandBase {
-  private final DriveTrain driveTrain;
+public class IntakeBarCommand extends CommandBase {
+  private Intake intake;
+  
   /**
-   * Creates a new DownPovCommand.
-   * @param driveTrain the drive subsystem used
+   * Creates a new IntakeBarCommand.
+   * @param intake intake subsystem
    */
-
-  public DownPovCommand(DriveTrain driveTrain) {
+  
+  public IntakeBarCommand(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.driveTrain = driveTrain;
-    addRequirements(driveTrain);
+    this.intake = intake;
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {    
-    driveTrain.downPov();
+  public void initialize() {
+    intake.intakeBar(0.7);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    intake.intakeBar(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

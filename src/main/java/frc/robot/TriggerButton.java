@@ -5,17 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.triggers;
+package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * Add your docs here.
  */
-public class LeftTriggerButton extends Trigger {
+public class TriggerButton extends Trigger {
   private double triggerLeftValue;
 
-  public LeftTriggerButton(double triggerLeftValue) {
+  public TriggerButton(double triggerLeftValue) {
     this.triggerLeftValue = triggerLeftValue;
   }
 

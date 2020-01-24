@@ -11,15 +11,17 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.TriggerButton;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.DownPovCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeBarCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
-import frc.robot.triggers.LeftTriggerButton;
+
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -40,9 +42,13 @@ public class RobotContainer {
   private Intake intake;
 
   private ExampleCommand exampleAutoCommand;
+  private IntakeBarCommand intakeBarCommand;
+
   XboxController driverController;
+  JoystickButton rightBumper;
   POVButton povDown;
   Trigger leftTrigger;
+  Trigger rightTrigger;
   
   
 
@@ -58,23 +64,24 @@ public class RobotContainer {
 
     // Initalize commands
     exampleAutoCommand = new ExampleCommand(exampleSubsystem);
-
+    intakeBarCommand = new IntakeBarCommand(intake);
     // Initialize Gamepads
     
     driverController = new XboxController(0);
     povDown = new POVButton(driverController, 180);
-    leftTrigger = new LeftTriggerButton(driverController.getTriggerAxis(Hand.kLeft));
+    rightBumper = new JoystickButton(driverController, 6);
+    leftTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kLeft));
+    rightTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kRight));
     // Configure the button bindings
     // Set the default drive command to split-stick arcade drive
-    povDown.whenReleased(new DownPovCommand(driveTrain));
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
         () -> driverController.getY(Hand.kLeft),
         () -> driverController.getY(Hand.kRight), 
         () -> driverController.getX(Hand.kRight), 
         () -> driverController.getXButtonReleased(), 
-        () -> driverController.getYButtonReleased(),
-        () -> driverController.getBButtonReleased(),
         () -> driverController.getAButtonReleased(),
+        () -> leftTrigger.get(),
+        () -> rightTrigger.get(),
         driveTrain));
     configureButtonBindings();
   }
@@ -86,7 +93,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
+    rightBumper.whenHeld(intakeBarCommand);
   }
 
 

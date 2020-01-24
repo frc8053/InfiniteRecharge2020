@@ -8,10 +8,15 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Drive;
 
 public class DriveTrain extends SubsystemBase {
   /**
@@ -29,7 +34,7 @@ public class DriveTrain extends SubsystemBase {
   private Encoder leftEncoder;
   private Encoder rightEncoder;
   
-  private double reverse;
+  private Gyro gyro;
   /***
    * 
    * <p>Initalizes drive motors and helper classes.</p>
@@ -51,9 +56,11 @@ public class DriveTrain extends SubsystemBase {
     myRobot = new DifferentialDrive(leftDrive, rightDrive);
 
     leftEncoder = new Encoder(0, 1);
+    leftEncoder.setDistancePerPulse(Drive.DISTANCE_PER_PULSE);
     rightEncoder = new Encoder(2, 3);
+    rightEncoder.setDistancePerPulse(Drive.DISTANCE_PER_PULSE);
 
-    reverse = 1;
+    gyro = new ADXRS450_Gyro(SPI.Port.kMXP);    
   }
 
   @Override
@@ -69,16 +76,16 @@ public class DriveTrain extends SubsystemBase {
     myRobot.tankDrive(left, right);
   }
 
+  public void leftEncoderReset() {
+    leftEncoder.reset();
+  }
+
   public double leftEncoderValue() {
     return leftEncoder.getDistance();
   }
 
-  public void downPov() {
-    reverse = -reverse;
-  }
-
-  public double getReverse() {
-    return reverse;
+  public double getGyro() {
+    return gyro.getAngle();
   }
 
 }
