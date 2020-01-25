@@ -9,26 +9,22 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoPickupShootCommand extends SequentialCommandGroup {
+public class IntakeCommandGroup extends SequentialCommandGroup {
   /**
-   * Creates a new AutoPickupShootCommand.
+   * Creates a new IntakeCommandGroup.
    */
-  public AutoPickupShootCommand(DriveTrain driveTrain, Intake intake) {
+
+  public IntakeCommandGroup(double time, Intake intake) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveDistanceCommand(0.5, 0.5, 160, driveTrain)
-        .raceWith(new IntakeCommand(Constants.Intake.INTAKE_SPEED, 
-        Constants.Intake.CONVEYOR_SPEED, intake)),
-        new DriveDistanceCommand(-0.5, -0.5, -73.37, driveTrain),
-        new DriveTurnCommand(17.948, driveTrain),
-        new DriveDistanceCommand(-0.5, -0.5, 0, driveTrain)
+        new IntakeCommand(Constants.Intake.INTAKE_SPEED, 0, intake).withTimeout(time),
+        new IntakeCommand(Constants.Intake.INTAKE_SPEED, Constants.Intake.CONVEYOR_SPEED, intake)
     );
   }
 }

@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.triggers;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -13,15 +13,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * Add your docs here.
  */
 public class TriggerButton extends Trigger {
-  private double triggerLeftValue;
+  private double triggerValue;
 
-  public TriggerButton(double triggerLeftValue) {
-    this.triggerLeftValue = triggerLeftValue;
+  public TriggerButton(double triggerValue) {
+    this.triggerValue = triggerValue;
   }
 
+  /*
+  *sets whether trigger is activated
+  */
   @Override
   public boolean get() {
-    if (triggerLeftValue > 50) {
+    if (Math.abs(triggerValue) > 10) {
       return true;
     } else {
       return false;

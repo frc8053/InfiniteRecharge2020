@@ -8,40 +8,43 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.Drive;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
-public class IntakeBarCommand extends CommandBase {
+public class IntakeCommand extends CommandBase {
   private Intake intake;
-  
+  private double intakeSpeed;
+  private double conveyorSpeed;
   /**
-   * Creates a new IntakeBarCommand.
-   * @param intake intake subsystem
+   * Creates a new IntakeCommand.
+   * @param intake Intake subsystem used by command
    */
-  
-  public IntakeBarCommand(Intake intake) {
+
+  public IntakeCommand(double intakeSpeed, double conveyorSpeed, Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
+    this.intakeSpeed = intakeSpeed;
+    this.conveyorSpeed = conveyorSpeed;
     addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.intakeBar(0.7);
+    intake.intakeBar(intakeSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    intake.conveyorControl(conveyorSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     intake.intakeBar(0);
+    intake.conveyorControl(0);
   }
 
   // Returns true when the command should end.

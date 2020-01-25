@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
@@ -14,14 +16,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.TriggerButton;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.IntakeBarCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.IntakeCommandGroup;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
-
+import frc.robot.triggers.TriggerButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -42,10 +44,12 @@ public class RobotContainer {
   private Intake intake;
 
   private ExampleCommand exampleAutoCommand;
-  private IntakeBarCommand intakeBarCommand;
+  private IntakeCommand intakeCommand;
+  private IntakeCommandGroup intakeCommandGroup;
 
   XboxController driverController;
   JoystickButton rightBumper;
+  JoystickButton leftBumper;
   POVButton povDown;
   Trigger leftTrigger;
   Trigger rightTrigger;
@@ -64,12 +68,14 @@ public class RobotContainer {
 
     // Initalize commands
     exampleAutoCommand = new ExampleCommand(exampleSubsystem);
-    intakeBarCommand = new IntakeBarCommand(intake);
+    intakeCommand = new IntakeCommand(Constants.Intake.INTAKE_SPEED, 0, intake);
+    intakeCommandGroup = new IntakeCommandGroup(1, intake);
     // Initialize Gamepads
     
     driverController = new XboxController(0);
     povDown = new POVButton(driverController, 180);
     rightBumper = new JoystickButton(driverController, 6);
+    leftBumper = new JoystickButton(driverController, 5);
     leftTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kLeft));
     rightTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kRight));
     // Configure the button bindings
@@ -93,7 +99,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    rightBumper.whenHeld(intakeBarCommand);
+    rightBumper.whenHeld(intakeCommand);
+    leftBumper.whenHeld(intakeCommandGroup);
   }
 
 
