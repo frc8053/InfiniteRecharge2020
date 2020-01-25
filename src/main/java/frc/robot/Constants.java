@@ -36,6 +36,12 @@ public final class Constants {
     public static double INTAKE_SPEED = 0.7;
     public static double CONVEYOR_SPEED = 0.7;
   }
+
+  public static final class Shoot {
+    public static double SHOOT_LOW = 0.2;
+    public static double SHOOT_HIGH = 0.8;
+  }
+
 }
 
 

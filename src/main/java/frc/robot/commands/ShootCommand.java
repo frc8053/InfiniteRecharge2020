@@ -8,59 +8,45 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Shooter;
 
-public class DriveDistanceCommand extends CommandBase {
-  private DriveTrain driveTrain;
-  
-  private double left;
-  private double right;
-  private double distance;
-  
-  
+public class ShootCommand extends CommandBase {
   /**
-   * Creates a new DriveStraightCommand.
-   * @param left Speed of the left side of the robot
-   * @param right Speed of the right side of the robot
-   * @param distance Total distance the right encoder reads
-   * 
-   * @param driveTrain The DriveTrain subsystem used by this command
+   * Creates a new ShootCommand.
    */
 
-  public DriveDistanceCommand(double left, double right, double distance, DriveTrain driveTrain) {
+  private double speed;
+  private Shooter shooter;
+
+  public ShootCommand(double speed, Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.left = left;
-    this.right = right;
-    this.distance = distance;
-    this.driveTrain = driveTrain;
-    this.addRequirements(driveTrain);
+
+    this.speed = speed;
+    this.shooter = shooter;
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveTrain.leftEncoderReset(); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.tankDrive(left, right);
+
+    shooter.shoot(speed);
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveTrain.tankDrive(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (distance <= driveTrain.leftEncoderValue()) {
-      return true;
-    } else {
-      return false;
-    }
+    return false;
   }
 }
