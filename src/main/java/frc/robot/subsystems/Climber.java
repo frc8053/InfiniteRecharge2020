@@ -7,19 +7,22 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /**
  * Add your docs here.
  */
 public class Climber extends SubsystemBase {
 
   //Instance Variables
-  private miniMotor = new WPI_VictorSPX(9);
-  private 
+  private WPI_VictorSPX miniMotor;
+  private WPI_VictorSPX bagMotor;
 
   public Climber(){
-
-
+    miniMotor = new WPI_VictorSPX(9);
+    bagMotor = new WPI_VictorSPX(10);
 
   }
   
@@ -28,12 +31,28 @@ public class Climber extends SubsystemBase {
 
 
 
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+ @Override
+  public void periodic() {
+    // This method will be called once per scheduler run    
   }
 
+  /**
+   * Controls the small winch for the climber setup
+   * @param speed sets the speed of the motor [-1, 1]
+    */
+  public void smallWinch(double speed){
+    miniMotor.set(ControlMode.PercentOutput, speed);
+    
+  }
+
+  /**
+   * Controls the larger winch for the climber setup
+   * @param speed sets the speed of the motor [-1, 1]
+    */
+    public void largeWinch(double speed){
+      bagMotor.set(ControlMode.PercentOutput, speed);
+      
+    }
 
   /**
    * 
