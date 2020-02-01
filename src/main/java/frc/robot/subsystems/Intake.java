@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -19,6 +20,8 @@ public class Intake extends SubsystemBase {
   private WPI_VictorSPX conveyor2;
 
   private SpeedControllerGroup conveyor;
+
+  private final DigitalInput laserSwitch;
   /**
    * Creates a new intake.
    */
@@ -30,6 +33,8 @@ public class Intake extends SubsystemBase {
     conveyor2.setInverted(true);
 
     conveyor = new SpeedControllerGroup(conveyor1, conveyor2);
+
+    laserSwitch = new DigitalInput(7);
   }
 
   @Override
@@ -43,5 +48,9 @@ public class Intake extends SubsystemBase {
 
   public void conveyorControl(double speed) {
     conveyor.set(speed);
+  }
+
+  public boolean haveBall() {
+    return laserSwitch.get();
   }
 }

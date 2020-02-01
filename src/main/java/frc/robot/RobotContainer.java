@@ -14,12 +14,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.Shoot;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeCommandGroup;
-import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShootCommandGroup;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -53,6 +51,7 @@ public class RobotContainer {
   private ShootCommandGroup povDownCommand;
 
   XboxController driverController;
+  XboxController manipulatorController;
   JoystickButton rightBumper;
   JoystickButton leftBumper;
   POVButton povDown;
@@ -83,6 +82,7 @@ public class RobotContainer {
     // Initialize Gamepads
     
     driverController = new XboxController(0);
+    manipulatorController = new XboxController(1);
     povDown = new POVButton(driverController, 180);
     povUp = new POVButton(driverController, 0);
     rightBumper = new JoystickButton(driverController, 6);
