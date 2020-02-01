@@ -15,15 +15,18 @@ public class ClimbCommand extends CommandBase {
   
   private final Climber subsystem;
   
-  private double value;
+  private double power;
+  private final double max 0.3;
+  private final double deadband = 0.1;
 
   /**
    * Creates a new ClimbCommand.
    */
-  public ClimbCommand(double value, Climber subsystem) {
+  public ClimbCommand(double power, Climber subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
-    this.value = (Math.abs(value) < 0.3?0:value);
+    
+    this.power = (Math.abs(power*max) < deadband?0:power);
 
     addRequirements(subsystem);
   }
@@ -38,10 +41,10 @@ public class ClimbCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(value < 0){
-      subsystem.largeWinch(value);
+    if(power < 0){
+      subsystem.largeWinch(power*max);
     }else{
-      subsystem.smallWinch(value);
+      subsystem.smallWinch(power*max);
     }
   }
 
