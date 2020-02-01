@@ -7,24 +7,37 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class IntakeCommandGroup extends SequentialCommandGroup {
+public class PidShootCommandGroup extends SequentialCommandGroup {
+  Shooter shooter;
   /**
-   * Creates a new IntakeCommandGroup.
+   * Creates a new ShootCommandGroup.
    */
-
-  public IntakeCommandGroup(double time, Intake intake) {
+  
+  public PidShootCommandGroup(double rpm, Intake intake, Shooter shooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new IntakeCommand(Constants.Intake.INTAKE_SPEED, 0, intake).withTimeout(time),
-        new IntakeCommand(Constants.Intake.INTAKE_SPEED, Constants.Intake.CONVEYOR_SPEED, intake)
+        new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.1), 
+        new InstantCommand(() -> shooter.setSetpoint(rpm), shooter),
+        new InstantCommand(shooter::enable),
+        new WaitUntilCommand(shooter::reachedSetpoint),
+        new RunCommand(() -> intake.conveyorControl(0.2), intake)
     );
+    this.shooter = shooter;
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    new InstantCommand(shooter::disable);
   }
 }

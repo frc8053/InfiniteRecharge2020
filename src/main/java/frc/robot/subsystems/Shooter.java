@@ -62,12 +62,12 @@ public class Shooter extends PIDSubsystem {
     return shootEncoder.getRate();
   }
 
-  public void shoot(double speed) {
-    shooterGroup.set(speed);
+  public void setSetpoint(double setpoint) {
+    setSetpoint(setpoint);
   }
 
-  public void shootVoltage(double voltage, double setpoint) {
-    shooterGroup.setVoltage(voltage + shooterFeedForward.calculate(setpoint));
+  public void shoot(double speed) {
+    shooterGroup.set(speed);
   }
 
   public double getRpm() {

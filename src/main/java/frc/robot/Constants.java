@@ -32,7 +32,7 @@ public final class Constants {
     public static double SPEED_TOLERANCE = 3;
   }
 
-  public static final class Intake {
+  public static final class IntakeConstant {
     public static double INTAKE_SPEED = 0.7;
     public static double CONVEYOR_SPEED = 0.7;
   }
