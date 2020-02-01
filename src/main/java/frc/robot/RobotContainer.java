@@ -79,6 +79,7 @@ public class RobotContainer {
     intakeCommandGroup = new IntakeCommandGroup(1, intake);
     povDownCommand = new ShootCommandGroup(intake, Constants.Shoot.SHOOT_LOW, shooter);
     povUpCommand = new ShootCommandGroup(intake, Constants.Shoot.SHOOT_HIGH, shooter);
+    
     // Initialize Gamepads
     
     driverController = new XboxController(0);
@@ -98,6 +99,7 @@ public class RobotContainer {
         () -> driverController.getAButtonReleased(),
         () -> leftTrigger.get(),
         () -> rightTrigger.get(),
+        
         driveTrain));
     configureButtonBindings();
   }

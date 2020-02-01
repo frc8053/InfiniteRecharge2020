@@ -23,10 +23,11 @@ public class ClimbCommand extends CommandBase {
   public ClimbCommand(double value, Climber subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
-    this.value = (Math.abs(value) < 0.1?0:value);
+    this.value = (Math.abs(value) < 0.3?0:value);
 
     addRequirements(subsystem);
   }
+
 
   // Called when the command is initially scheduled.
   @Override
