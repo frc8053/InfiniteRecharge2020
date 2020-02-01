@@ -20,6 +20,9 @@ public class Climber extends SubsystemBase {
   private WPI_VictorSPX miniMotor;
   private WPI_VictorSPX bagMotor;
 
+  private final float miniWeight = 0.3f;
+  private final float bagWeight = 0.3f;
+
   public Climber(){
     miniMotor = new WPI_VictorSPX(9);
     bagMotor = new WPI_VictorSPX(10);
@@ -41,7 +44,7 @@ public class Climber extends SubsystemBase {
    * @param speed sets the speed of the motor [-1, 1]
     */
   public void smallWinch(double speed){
-    miniMotor.set(ControlMode.PercentOutput, speed);
+    miniMotor.set(ControlMode.PercentOutput, speed*miniWeight);
     
   }
 
@@ -50,7 +53,7 @@ public class Climber extends SubsystemBase {
    * @param speed sets the speed of the motor [-1, 1]
     */
     public void largeWinch(double speed){
-      bagMotor.set(ControlMode.PercentOutput, speed);
+      bagMotor.set(ControlMode.PercentOutput, speed*bagWeight);
       
     }
 
