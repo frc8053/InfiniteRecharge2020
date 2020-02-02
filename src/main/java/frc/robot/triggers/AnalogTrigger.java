@@ -15,10 +15,10 @@ import java.util.function.DoubleSupplier;
 /**
  * Add your docs here.
  */
-public class AnalogTrigger extends Trigger{
+public class AnalogTrigger extends Trigger {
 
-  private DoubleSupplier xSupplier;
-  private DoubleSupplier ySupplier;
+  private DoubleSupplier dxSupplier;
+  private DoubleSupplier dySupplier;
 
   private double deadBand = 0;
   private double max = 1;
@@ -26,18 +26,19 @@ public class AnalogTrigger extends Trigger{
   /**
   * Creates analog.
   */
-  public AnalogTrigger(DoubleSupplier xValue, DoubleSupplier yValue, double deadBand, double max) {
-    super(() -> ((deadify(xValue.getAsDouble(),deadBand) != 0 
-        || deadify(yValue.getAsDouble(), deadBand) != 0)));
+  public AnalogTrigger(DoubleSupplier dxValue, DoubleSupplier dyValue,
+                      double deadBand, double max) {
+    super(() -> ((deadify(dxValue.getAsDouble(),deadBand) != 0 
+        || deadify(dyValue.getAsDouble(), deadBand) != 0)));
 
-    xSupplier = xValue;
-    ySupplier = yValue;
+    dxSupplier = dxValue;
+    dySupplier = dyValue;
     this.deadBand = deadBand;
     this.max = max;
   }
 
-  public AnalogTrigger(DoubleSupplier xValue, DoubleSupplier yValue) {
-    this(xValue, yValue, 0, 1);
+  public AnalogTrigger(DoubleSupplier dxValue, DoubleSupplier dyValue) {
+    this(dxValue, dyValue, 0, 1);
   }
 
   /**
@@ -59,15 +60,15 @@ public class AnalogTrigger extends Trigger{
         () -> (controller.getY(hand)));
   }
 
-  public double getDX(){
-    return deadify(clamp(xSupplier.getAsDouble()));
+  public double getDX() {
+    return deadify(clamp(dxSupplier.getAsDouble()));
   }
 
-  public double getDY(){
-    return deadify(clamp(ySupplier.getAsDouble()));
+  public double getDY() {
+    return deadify(clamp(dySupplier.getAsDouble()));
   }
 
-  private double deadify(double value){
+  private double deadify(double value) {
     return deadify(value,deadBand);
   }
 
