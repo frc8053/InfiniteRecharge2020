@@ -17,7 +17,6 @@ import frc.robot.subsystems.DriveTrain;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class DriveTurnCommand extends PIDCommand {
   /**
-   * 
    * ^Y&
    * Creates a new DriveTurnCommand.
    */

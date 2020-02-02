@@ -7,26 +7,24 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
+import java.util.function.DoubleSupplier;
 
 public class ClimbCommand extends CommandBase {
   
   private final Climber subsystem;
   
-  private double power;
-  private final double max 0.3;
-  private final double deadband = 0.1;
+  private DoubleSupplier powerSupplier;
 
   /**
    * Creates a new ClimbCommand.
    */
-  public ClimbCommand(double power, Climber subsystem) {
+  public ClimbCommand(DoubleSupplier powerSupplier, Climber subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     
-    this.power = (Math.abs(power*max) < deadband?0:power);
+    this.powerSupplier = powerSupplier;
 
     addRequirements(subsystem);
   }
@@ -41,10 +39,10 @@ public class ClimbCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(power < 0){
-      subsystem.largeWinch(power*max);
-    }else{
-      subsystem.smallWinch(power*max);
+    if (powerSupplier.getAsDouble() < 0) {
+      subsystem.largeWinch(powerSupplier.getAsDouble());
+    } else {
+      subsystem.smallWinch(powerSupplier.getAsDouble());
     }
   }
 
