@@ -4,6 +4,7 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
+
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -35,7 +36,6 @@ public class DefaultDriveCommand extends CommandBase {
    * @param leftY The leftY joystick of driver gamepad
    * @param rightY The RightY joystick of driver gamepad
    * @param rightX rightX joystick of driver gamepad
-   * 
    * 
    * @param isDriveToggled Whether the toggle button has been released (basically pressed)
    * @param isReverse Whether A has been released

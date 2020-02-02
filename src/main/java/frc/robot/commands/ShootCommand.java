@@ -17,6 +17,8 @@ public class ShootCommand extends CommandBase {
   private Shooter shooter;
   /**
    * Creates a new ShootCommand.
+   * @param speed the speed of the shooter wheels
+   * @param shooter the shooter subsystem used
    */
   
   public ShootCommand(double speed, Shooter shooter) {

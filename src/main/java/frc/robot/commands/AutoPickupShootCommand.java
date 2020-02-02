@@ -24,14 +24,14 @@ public class AutoPickupShootCommand extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveDistanceCommand(0.5, 0.5, 160, driveTrain)
+        new DriveDistanceCommand(160, driveTrain)
         .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED, 
         IntakeConstant.CONVEYOR_SPEED, intake)),
-        new DriveDistanceCommand(-0.5, -0.5, -73.37, driveTrain),
+        new DriveDistanceCommand(-73.37, driveTrain),
         new DriveTurnCommand(17.948, driveTrain),
         new PidShootCommandGroup(3000, intake, shooter).withTimeout(6),
         new DriveTurnCommand(-17.948, driveTrain),
-        new DriveDistanceCommand(-0.5, -0.5, 114, driveTrain)
+        new DriveDistanceCommand(114, driveTrain)
         .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED,
         IntakeConstant.CONVEYOR_SPEED, intake))
     );

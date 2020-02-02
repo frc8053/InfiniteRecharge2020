@@ -13,17 +13,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.Shoot;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultIntakeCommand;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.PidShootCommandGroup;
+import frc.robot.commands.TestHighShootCommandGroup;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
@@ -43,16 +41,15 @@ public class RobotContainer {
   int rightHoriz = 4;
   int rightVert = 5;
 
-  
   private ExampleSubsystem exampleSubsystem;
   private DriveTrain driveTrain;
   private Intake intake;
   private Shooter shooter;
 
   private ExampleCommand exampleAutoCommand;
-  private PidShootCommandGroup highShootCommand;
+  private TestHighShootCommandGroup testHighShootCommand;
   private PidShootCommandGroup lowShootCommand;
-  private IntakeCommand intakeCommand;
+  private PidShootCommandGroup highShootCommand;
 
   XboxController driverController;
   JoystickButton driverRightBumper;
@@ -82,9 +79,9 @@ public class RobotContainer {
 
     // Initalize commands
     exampleAutoCommand = new ExampleCommand(exampleSubsystem);
-    intakeCommand = new IntakeCommand(Constants.IntakeConstant.INTAKE_SPEED, 0, intake);
-    lowShootCommand = new PidShootCommandGroup(Constants.Shoot.SHOOT_LOW, intake, shooter);
-    highShootCommand = new PidShootCommandGroup(Constants.Shoot.SHOOT_HIGH, intake, shooter);
+    lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, shooter);
+    highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, shooter);
+    testHighShootCommand = new TestHighShootCommandGroup(intake, shooter);
     
     // Initialize Gamepads
     driverController = new XboxController(0);
@@ -98,7 +95,8 @@ public class RobotContainer {
     manipulatorController = new XboxController(1);
     maniButtonA = new JoystickButton(manipulatorController, Button.kA.value);
     maniButtonX = new JoystickButton(manipulatorController, Button.kX.value);
-    // Configure the button bindings
+    maniButtonY = new JoystickButton(manipulatorController, Button.kY.value);
+    
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
         () -> driverController.getY(Hand.kLeft),
@@ -113,6 +111,7 @@ public class RobotContainer {
     intake.setDefaultCommand(new DefaultIntakeCommand(
         () -> manipulatorController.getY(Hand.kLeft),
         intake));
+    // Configure the button bindings
     configureButtonBindings();
   }
 
@@ -128,12 +127,10 @@ public class RobotContainer {
     //driverPovDown.whenHeld(povDownCommand);
     //driverPovUp.whenHeld(povUpCommand);
     maniButtonA.whenHeld(lowShootCommand);
-    maniButtonY.whenHeld(new SequentialCommandGroup(
-        new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.1), 
-        new InstantCommand(() -> shooter.shoot(1), shooter),
-        new WaitCommand(0.1),
-        new RunCommand(() -> intake.conveyorControl(0.2), intake)
-        ));
+    maniButtonY.whenHeld(testHighShootCommand)  
+        .whenReleased(new InstantCommand(
+            () -> shooter.shoot(0), shooter));
+    maniButtonX.whenHeld(highShootCommand);                                 
   }
 
 

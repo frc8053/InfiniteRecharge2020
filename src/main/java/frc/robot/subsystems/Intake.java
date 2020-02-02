@@ -30,7 +30,8 @@ public class Intake extends SubsystemBase {
     intakeBar = new WPI_VictorSPX(4);
     conveyor1 = new WPI_VictorSPX(5);
     conveyor2 = new WPI_VictorSPX(6);
-    conveyor2.setInverted(true);
+    conveyor2.setInverted(false);
+    conveyor1.setInverted(true);
 
     conveyor = new SpeedControllerGroup(conveyor1, conveyor2);
 

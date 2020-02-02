@@ -31,9 +31,10 @@ public class Shooter extends PIDSubsystem {
    * Creates a new Shooter.
    */
   public Shooter() {
-    super(new PIDController(0, 1, 0));
+    super(new PIDController(0, 0.01, 0));
     getController().setTolerance(10);
     shooterLeft = new WPI_VictorSPX(7);
+    shooterLeft.setInverted(true);
     shooterRight = new WPI_VictorSPX(8);
 
     shootEncoder = new Encoder(4,5);    
@@ -43,13 +44,12 @@ public class Shooter extends PIDSubsystem {
     shooterGroup = new SpeedControllerGroup(shooterLeft, shooterRight);
 
     shooterFeedForward = new SimpleMotorFeedforward(Shoot.KS, Shoot.KV);
-
-    shooterLeft.setInverted(true);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
   }
 
   @Override
@@ -63,7 +63,7 @@ public class Shooter extends PIDSubsystem {
   }
 
   public void setSetpoint(double setpoint) {
-    setSetpoint(setpoint);
+    getController().setSetpoint(setpoint);
   }
 
   public void shoot(double speed) {

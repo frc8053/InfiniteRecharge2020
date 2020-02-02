@@ -16,6 +16,8 @@ public class IntakeCommand extends CommandBase {
   private double conveyorSpeed;
   /**
    * Creates a new IntakeCommand.
+   * @param intakeSpeed the speed of the intake bar
+   * @param conveyorSpeed the speed of the conveyor
    * @param intake Intake subsystem used by command
    */
 

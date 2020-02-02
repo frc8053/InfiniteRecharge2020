@@ -17,10 +17,11 @@ import frc.robot.subsystems.DriveTrain;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class DriveTurnCommand extends PIDCommand {
   /**
-   * 
-   * ^Y&
    * Creates a new DriveTurnCommand.
+   * @param targetAngle the target angle to turn to
+   * @param driveTrain the driveTrain subsystem used
    */
+
   public DriveTurnCommand(double targetAngle, DriveTrain driveTrain) {
     super(
         // The controller that the command will use
@@ -38,7 +39,7 @@ public class DriveTurnCommand extends PIDCommand {
     
     // Configure additional PID options by calling `getController` here.
     getController().enableContinuousInput(-180, 180);
-    getController().setTolerance(DrivePid.TURN_TOLERANCE, DrivePid.SPEED_TOLERANCE);
+    getController().setTolerance(DrivePid.TURN_TOLERANCE);
   }
 
   // Returns true when the command should end.

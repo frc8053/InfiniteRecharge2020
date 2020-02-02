@@ -10,40 +10,38 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class PidShootCommandGroup extends SequentialCommandGroup {
-  Shooter shooter;
+
+public class TestHighShootCommandGroup extends SequentialCommandGroup {
   Intake intake;
+  Shooter shooter;
   /**
-   * Creates a new ShootCommandGroup.
-   * @param rpm the target speed of the wheels
-   * @param intake the intake subsystem used
-   * @param shooter the shooter subsystem used
+   * Creates a new testHighShootCommandGroup.
    */
   
-  public PidShootCommandGroup(double rpm, Intake intake, Shooter shooter) {
+  public TestHighShootCommandGroup(Intake intake, Shooter shooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
         new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.1), 
-        new InstantCommand(() -> shooter.setSetpoint(rpm), shooter),
-        new InstantCommand(shooter::enable),
-        new WaitUntilCommand(shooter::reachedSetpoint),
-        new RunCommand(() -> intake.conveyorControl(0.2), intake)
+        new InstantCommand(() -> shooter.shoot(1), shooter),
+        new WaitCommand(0.2),
+        new RunCommand(() -> intake.conveyorControl(1), intake)
     );
-    this.shooter = shooter;
     this.intake = intake;
-  }
+    this.shooter = shooter;
 
+  }
+  
   @Override
   public void end(boolean interrupted) {
-    new InstantCommand(shooter::disable);
     new InstantCommand(() -> intake.conveyorControl(0), intake);
+    new InstantCommand(() -> shooter.shoot(0), shooter);
   }
 }

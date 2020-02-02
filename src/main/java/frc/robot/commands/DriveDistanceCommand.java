@@ -7,45 +7,40 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.subsystems.DriveTrain;
 
-public class DriveDistanceCommand extends CommandBase {
+public class DriveDistanceCommand extends PIDCommand {
   private DriveTrain driveTrain;
-  
-  private double left;
-  private double right;
-  private double distance;
-  
   
   /**
    * Creates a new DriveStraightCommand.
-   * @param left Speed of the left side of the robot
-   * @param right Speed of the right side of the robot
    * @param distance Total distance the right encoder reads
-   * 
    * @param driveTrain The DriveTrain subsystem used by this command
    */
 
-  public DriveDistanceCommand(double left, double right, double distance, DriveTrain driveTrain) {
+  public DriveDistanceCommand(double distance, DriveTrain driveTrain) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.left = left;
-    this.right = right;
-    this.distance = distance;
+    super(
+        new PIDController(1, 0, 0),
+        //input
+        driveTrain::leftEncoderValue,
+        //setpoint
+        distance,
+        //output
+        output -> {
+          driveTrain.tankDrive(output, output);
+        },
+        driveTrain
+    );
     this.driveTrain = driveTrain;
-    this.addRequirements(driveTrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     driveTrain.leftEncoderReset(); 
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    driveTrain.tankDrive(left, right);
   }
 
   // Called once the command ends or is interrupted.
@@ -57,10 +52,11 @@ public class DriveDistanceCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (distance <= driveTrain.leftEncoderValue()) {
+    if (getController().atSetpoint()) {
       return true;
     } else {
       return false;
     }
+    
   }
 }
