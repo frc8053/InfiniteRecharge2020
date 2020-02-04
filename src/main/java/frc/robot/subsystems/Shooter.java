@@ -32,7 +32,7 @@ public class Shooter extends PIDSubsystem {
    * Creates a new Shooter.
    */
   public Shooter() {
-    super(new PIDController(0, 0.01, 0));
+    super(new PIDController(0.2, 0, 0));
     getController().setTolerance(10);
     shooterLeft = new WPI_VictorSPX(7);
     shooterLeft.setInverted(true);
@@ -51,7 +51,6 @@ public class Shooter extends PIDSubsystem {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter RPM", shootEncoder.getRate());
-    
   }
 
   @Override

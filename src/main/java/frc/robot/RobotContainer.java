@@ -130,7 +130,7 @@ public class RobotContainer {
     maniButtonY.whenHeld(testHighShootCommand)  
         .whenReleased(new InstantCommand(
             () -> shooter.shoot(0), shooter));
-    maniButtonX.whenHeld(highShootCommand);                                 
+    maniButtonX.whenHeld(highShootCommand);                       
   }
 
 
