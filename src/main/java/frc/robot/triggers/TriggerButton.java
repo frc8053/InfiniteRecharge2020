@@ -24,7 +24,7 @@ public class TriggerButton extends Trigger {
   */
   @Override
   public boolean get() {
-    if (Math.abs(triggerValue) > 10) {
+    if (Math.abs(triggerValue) > 0.5) {
       return true;
     } else {
       return false;

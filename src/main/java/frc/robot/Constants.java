@@ -21,7 +21,7 @@ public final class Constants {
   public static double LOW_SPEED = 0.4;
   
   public static final class Drive {
-    public static double DISTANCE_PER_PULSE = (6 * Math.PI / 1024);
+    public static double DISTANCE_PER_PULSE = (6 * Math.PI / 2048);
   }
 
   public static final class DrivePid {
@@ -40,6 +40,10 @@ public final class Constants {
   public static final class Shoot {
     public static double SHOOT_LOW = 0.2;
     public static double SHOOT_HIGH = 0.8;
+    public static double SHOOTRATE = 1 / 2048;
+    public static double FAST_RPM = 3000;
+    public static double KS = 1;
+    public static double KV = 1;
   }
 
 }

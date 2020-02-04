@@ -14,17 +14,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.Shoot;
+import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeCommandGroup;
-import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShootCommandGroup;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.triggers.AnalogTrigger;
 import frc.robot.triggers.TriggerButton;
 
 /**
@@ -45,20 +46,24 @@ public class RobotContainer {
   private DriveTrain driveTrain;
   private Intake intake;
   private Shooter shooter;
+  private Climber climber;
 
   private ExampleCommand exampleAutoCommand;
   private IntakeCommand intakeCommand;
+  private ClimbCommand climbCommand;
   private IntakeCommandGroup intakeCommandGroup;
   private ShootCommandGroup povUpCommand;
   private ShootCommandGroup povDownCommand;
 
   XboxController driverController;
+  XboxController manipulatorController;
   JoystickButton rightBumper;
   JoystickButton leftBumper;
   POVButton povDown;
   POVButton povUp;
   Trigger leftTrigger;
   Trigger rightTrigger;
+  AnalogTrigger analogTrigger;
   
   
 
@@ -72,6 +77,7 @@ public class RobotContainer {
     driveTrain = new DriveTrain();
     intake = new Intake();
     shooter = new Shooter();
+    climber = new Climber();    
 
     // Initalize commands
     exampleAutoCommand = new ExampleCommand(exampleSubsystem);
@@ -79,15 +85,19 @@ public class RobotContainer {
     intakeCommandGroup = new IntakeCommandGroup(1, intake);
     povDownCommand = new ShootCommandGroup(intake, Constants.Shoot.SHOOT_LOW, shooter);
     povUpCommand = new ShootCommandGroup(intake, Constants.Shoot.SHOOT_HIGH, shooter);
+    
     // Initialize Gamepads
     
     driverController = new XboxController(0);
+    manipulatorController = new XboxController(1);
     povDown = new POVButton(driverController, 180);
     povUp = new POVButton(driverController, 0);
     rightBumper = new JoystickButton(driverController, 6);
     leftBumper = new JoystickButton(driverController, 5);
     leftTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kLeft));
     rightTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kRight));
+    analogTrigger = new AnalogTrigger(manipulatorController, Hand.kRight);
+
     // Configure the button bindings
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
@@ -98,7 +108,10 @@ public class RobotContainer {
         () -> driverController.getAButtonReleased(),
         () -> leftTrigger.get(),
         () -> rightTrigger.get(),
+        
         driveTrain));
+    climbCommand = new ClimbCommand(analogTrigger::getDY, climber);
+        
     configureButtonBindings();
   }
 
@@ -113,6 +126,7 @@ public class RobotContainer {
     leftBumper.whenHeld(intakeCommandGroup);
     povDown.whenHeld(povDownCommand);
     povUp.whenHeld(povUpCommand);
+    analogTrigger.whileActiveOnce(climbCommand);
   }
 
 
