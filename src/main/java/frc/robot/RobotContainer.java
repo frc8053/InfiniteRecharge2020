@@ -126,7 +126,7 @@ public class RobotContainer {
     leftBumper.whenHeld(intakeCommandGroup);
     povDown.whenHeld(povDownCommand);
     povUp.whenHeld(povUpCommand);
-    analogTrigger.whenActive(climbCommand);
+    analogTrigger.whileActiveOnce(climbCommand);
   }
 
 
