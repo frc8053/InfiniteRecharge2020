@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.Shoot;
 
@@ -31,9 +32,10 @@ public class Shooter extends PIDSubsystem {
    * Creates a new Shooter.
    */
   public Shooter() {
-    super(new PIDController(0, 1, 0));
+    super(new PIDController(0.2, 0, 0));
     getController().setTolerance(10);
     shooterLeft = new WPI_VictorSPX(7);
+    shooterLeft.setInverted(true);
     shooterRight = new WPI_VictorSPX(8);
 
     shootEncoder = new Encoder(4,5);    
@@ -43,13 +45,12 @@ public class Shooter extends PIDSubsystem {
     shooterGroup = new SpeedControllerGroup(shooterLeft, shooterRight);
 
     shooterFeedForward = new SimpleMotorFeedforward(Shoot.KS, Shoot.KV);
-
-    shooterLeft.setInverted(true);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shooter RPM", shootEncoder.getRate());
   }
 
   @Override
@@ -62,12 +63,12 @@ public class Shooter extends PIDSubsystem {
     return shootEncoder.getRate();
   }
 
-  public void shoot(double speed) {
-    shooterGroup.set(speed);
+  public void setSetpoint(double setpoint) {
+    getController().setSetpoint(setpoint);
   }
 
-  public void shootVoltage(double voltage, double setpoint) {
-    shooterGroup.setVoltage(voltage + shooterFeedForward.calculate(setpoint));
+  public void shoot(double speed) {
+    shooterGroup.set(speed);
   }
 
   public double getRpm() {

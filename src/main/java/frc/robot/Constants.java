@@ -32,7 +32,7 @@ public final class Constants {
     public static double SPEED_TOLERANCE = 3;
   }
 
-  public static final class Intake {
+  public static final class IntakeConstant {
     public static double INTAKE_SPEED = 0.7;
     public static double CONVEYOR_SPEED = 0.7;
   }
@@ -41,6 +41,7 @@ public final class Constants {
     public static double SHOOT_LOW = 0.2;
     public static double SHOOT_HIGH = 0.8;
     public static double SHOOTRATE = 1 / 2048;
+    public static double SLOW_RPM = 1000;
     public static double FAST_RPM = 3000;
     public static double KS = 1;
     public static double KV = 1;

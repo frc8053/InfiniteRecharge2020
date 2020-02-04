@@ -8,25 +8,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Intake;
+import java.util.function.DoubleSupplier;
 
-public class ShootCommand extends CommandBase {
-  
-
-  private double speed;
-  private Shooter shooter;
+public class DefaultIntakeCommand extends CommandBase {
+  private DoubleSupplier speed;
+  private Intake intake;
   /**
-   * Creates a new ShootCommand.
-   * @param speed the speed of the shooter wheels
-   * @param shooter the shooter subsystem used
+   * Creates a new DefaultIntakeCommand.
+   * @param speed speed of the intake bar (*0.8) and conveyor (*0.82)
+   * @param intake the intake subsystem used
    */
   
-  public ShootCommand(double speed, Shooter shooter) {
+  public DefaultIntakeCommand(DoubleSupplier speed, Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-
     this.speed = speed;
-    this.shooter = shooter;
-
+    this.intake = intake;
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -37,8 +35,13 @@ public class ShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    shooter.shoot(speed);
+    intake.intakeBar(speed.getAsDouble() * 0.8);
+    //if (intake.haveBall()) {
+    //intake.conveyorControl(IntakeConstant.CONVEYOR_SPEED);
+    //} else {
+    //intake.conveyorControl(0);
+    //}
+    intake.conveyorControl(speed.getAsDouble() * 0.82);
   }
 
   // Called once the command ends or is interrupted.

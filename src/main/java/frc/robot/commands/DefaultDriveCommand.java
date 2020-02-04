@@ -37,7 +37,6 @@ public class DefaultDriveCommand extends CommandBase {
    * @param rightY The RightY joystick of driver gamepad
    * @param rightX rightX joystick of driver gamepad
    * 
-   * 
    * @param isDriveToggled Whether the toggle button has been released (basically pressed)
    * @param isReverse Whether A has been released
    * @param isLeftBrake Whether left trigger is held

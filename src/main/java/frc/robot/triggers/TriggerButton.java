@@ -15,6 +15,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class TriggerButton extends Trigger {
   private double triggerValue;
 
+  /**
+   * Turns the trigger on the controller into a button.
+   * @param triggerValue value of the trigger
+   */
   public TriggerButton(double triggerValue) {
     this.triggerValue = triggerValue;
   }
@@ -24,7 +28,7 @@ public class TriggerButton extends Trigger {
   */
   @Override
   public boolean get() {
-    if (Math.abs(triggerValue) > 0.5) {
+    if (Math.abs(triggerValue) > 0.8) {
       return true;
     } else {
       return false;

@@ -16,8 +16,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
   private WPI_VictorSPX intakeBar;
-  private WPI_VictorSPX conveyor1;
-  private WPI_VictorSPX conveyor2;
+  private WPI_VictorSPX leftConveyor;
+  private WPI_VictorSPX rightConveyor;
 
   private SpeedControllerGroup conveyor;
 
@@ -28,11 +28,12 @@ public class Intake extends SubsystemBase {
 
   public Intake() {
     intakeBar = new WPI_VictorSPX(4);
-    conveyor1 = new WPI_VictorSPX(5);
-    conveyor2 = new WPI_VictorSPX(6);
-    conveyor2.setInverted(true);
+    leftConveyor = new WPI_VictorSPX(5);
+    rightConveyor = new WPI_VictorSPX(6);
+    leftConveyor.setInverted(true);
+    rightConveyor.setInverted(false);
 
-    conveyor = new SpeedControllerGroup(conveyor1, conveyor2);
+    conveyor = new SpeedControllerGroup(leftConveyor, rightConveyor);
 
     laserSwitch = new DigitalInput(7);
   }
@@ -53,4 +54,6 @@ public class Intake extends SubsystemBase {
   public boolean haveBall() {
     return laserSwitch.get();
   }
+
+  
 }

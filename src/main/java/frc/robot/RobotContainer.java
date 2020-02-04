@@ -10,16 +10,19 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.Shoot;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.DefaultIntakeCommand;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.IntakeCommandGroup;
-import frc.robot.commands.ShootCommandGroup;
+import frc.robot.commands.PidShootCommandGroup;
+import frc.robot.commands.TestHighShootCommandGroup;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -41,7 +44,6 @@ public class RobotContainer {
   int rightHoriz = 4;
   int rightVert = 5;
 
-  
   private ExampleSubsystem exampleSubsystem;
   private DriveTrain driveTrain;
   private Intake intake;
@@ -49,23 +51,26 @@ public class RobotContainer {
   private Climber climber;
 
   private ExampleCommand exampleAutoCommand;
-  private IntakeCommand intakeCommand;
+  private TestHighShootCommandGroup testHighShootCommand;
+  private PidShootCommandGroup lowShootCommand;
+  private PidShootCommandGroup highShootCommand;
   private ClimbCommand climbCommand;
-  private IntakeCommandGroup intakeCommandGroup;
-  private ShootCommandGroup povUpCommand;
-  private ShootCommandGroup povDownCommand;
 
   XboxController driverController;
+  JoystickButton driverRightBumper;
+  JoystickButton driverLeftBumper;
+  POVButton driverPovDown;
+  POVButton driverPovUp;
+  Trigger driverLeftTrigger;
+  Trigger driverRightTrigger;
+  
   XboxController manipulatorController;
-  JoystickButton rightBumper;
-  JoystickButton leftBumper;
-  POVButton povDown;
-  POVButton povUp;
-  Trigger leftTrigger;
-  Trigger rightTrigger;
+  JoystickButton maniButtonY;
+  JoystickButton maniButtonA;
+  JoystickButton maniButtonX;
+  Trigger maniLeftTrigger;
+  Trigger maniRightTrigger;
   AnalogTrigger analogTrigger;
-  
-  
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -81,24 +86,27 @@ public class RobotContainer {
 
     // Initalize commands
     exampleAutoCommand = new ExampleCommand(exampleSubsystem);
-    intakeCommand = new IntakeCommand(Constants.Intake.INTAKE_SPEED, 0, intake);
-    intakeCommandGroup = new IntakeCommandGroup(1, intake);
-    povDownCommand = new ShootCommandGroup(intake, Constants.Shoot.SHOOT_LOW, shooter);
-    povUpCommand = new ShootCommandGroup(intake, Constants.Shoot.SHOOT_HIGH, shooter);
+    lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, shooter);
+    highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, shooter);
+    testHighShootCommand = new TestHighShootCommandGroup(intake, shooter);
     
     // Initialize Gamepads
-    
     driverController = new XboxController(0);
+    driverPovDown = new POVButton(driverController, 180);
+    driverPovUp = new POVButton(driverController, 0);
+    driverRightBumper = new JoystickButton(driverController, Button.kBumperRight.value);
+    driverLeftBumper = new JoystickButton(driverController, Button.kBumperLeft.value);
+    driverLeftTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kLeft));
+    driverRightTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kRight));
+    
     manipulatorController = new XboxController(1);
-    povDown = new POVButton(driverController, 180);
-    povUp = new POVButton(driverController, 0);
-    rightBumper = new JoystickButton(driverController, 6);
-    leftBumper = new JoystickButton(driverController, 5);
-    leftTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kLeft));
-    rightTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kRight));
     analogTrigger = new AnalogTrigger(manipulatorController, Hand.kRight);
 
     // Configure the button bindings
+    maniButtonA = new JoystickButton(manipulatorController, Button.kA.value);
+    maniButtonX = new JoystickButton(manipulatorController, Button.kX.value);
+    maniButtonY = new JoystickButton(manipulatorController, Button.kY.value);
+    
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
         () -> driverController.getY(Hand.kLeft),
@@ -106,12 +114,15 @@ public class RobotContainer {
         () -> driverController.getX(Hand.kRight), 
         () -> driverController.getXButtonReleased(), 
         () -> driverController.getAButtonReleased(),
-        () -> leftTrigger.get(),
-        () -> rightTrigger.get(),
-        
+        () -> driverLeftTrigger.get(),
+        () -> driverRightTrigger.get(),
         driveTrain));
     climbCommand = new ClimbCommand(analogTrigger::getDY, climber);
-        
+
+    intake.setDefaultCommand(new DefaultIntakeCommand(
+        () -> manipulatorController.getY(Hand.kLeft),
+        intake));
+    // Configure the button bindings
     configureButtonBindings();
   }
 
@@ -122,11 +133,17 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    rightBumper.whenHeld(intakeCommand);
-    leftBumper.whenHeld(intakeCommandGroup);
-    povDown.whenHeld(povDownCommand);
-    povUp.whenHeld(povUpCommand);
-    analogTrigger.whileActiveOnce(climbCommand);
+    
+    //driverRightBumper.whenHeld(intakeCommand);
+    //driverLeftBumper.whenHeld(intakeCommandGroup);
+    //driverPovDown.whenHeld(povDownCommand);
+    //driverPovUp.whenHeld(povUpCommand);
+    maniButtonA.whenHeld(lowShootCommand);
+    maniButtonY.whenHeld(testHighShootCommand)  
+        .whenReleased(new InstantCommand(
+            () -> shooter.shoot(0), shooter));
+    maniButtonX.whenHeld(highShootCommand);         
+    analogTrigger.whileActiveOnce(climbCommand);              
   }
 
 
