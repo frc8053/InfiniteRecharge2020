@@ -44,6 +44,7 @@ public class ClimbCommand extends CommandBase {
     } else {
       subsystem.smallWinch(powerSupplier.getAsDouble());
     }
+    System.out.println("Analog Trigger Works");
   }
 
   // Called once the command ends or is interrupted.

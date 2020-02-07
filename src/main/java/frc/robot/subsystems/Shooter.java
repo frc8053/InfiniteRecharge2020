@@ -27,6 +27,8 @@ public class Shooter extends PIDSubsystem {
 
   private SpeedControllerGroup shooterGroup;
 
+  private double setpoint;
+
 
   /**
    * Creates a new Shooter.
@@ -43,7 +45,8 @@ public class Shooter extends PIDSubsystem {
     shootEncoder.setDistancePerPulse(Shoot.SHOOTRATE);
 
     shooterGroup = new SpeedControllerGroup(shooterLeft, shooterRight);
-
+    setpoint = 3000;
+    getController().setSetpoint(setpoint);
     shooterFeedForward = new SimpleMotorFeedforward(Shoot.KS, Shoot.KV);
   }
 
@@ -64,7 +67,12 @@ public class Shooter extends PIDSubsystem {
   }
 
   public void setSetpoint(double setpoint) {
-    getController().setSetpoint(setpoint);
+    //if (setpoint != 0){
+      //this.setpoint = setpoint;
+    //} else {
+      //this.setpoint = 3000;
+    //}
+    //getController().setSetpoint(this.setpoint);
   }
 
   public void shoot(double speed) {
@@ -72,7 +80,8 @@ public class Shooter extends PIDSubsystem {
   }
 
   public double getRpm() {
-    return shootEncoder.getRate();
+    //return shootEncoder.getRate();
+    return 2;
   }
 
   public boolean reachedSetpoint() {

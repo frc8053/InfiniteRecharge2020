@@ -11,21 +11,25 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Shoot;
+import frc.robot.commands.AutoLeftShootCommandGroup;
+import frc.robot.commands.AutoRightDumpCommandGroup;
+import frc.robot.commands.AutoRightShootCommandGroup;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultIntakeCommand;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.PidShootCommandGroup;
 import frc.robot.commands.TestHighShootCommandGroup;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.triggers.AnalogTrigger;
@@ -44,13 +48,14 @@ public class RobotContainer {
   int rightHoriz = 4;
   int rightVert = 5;
 
-  private ExampleSubsystem exampleSubsystem;
   private DriveTrain driveTrain;
   private Intake intake;
   private Shooter shooter;
   private Climber climber;
 
-  private ExampleCommand exampleAutoCommand;
+  private AutoLeftShootCommandGroup autoLeftShootCommandGroup;
+  private AutoRightShootCommandGroup autoRightShootCommandGroup;
+  private AutoRightDumpCommandGroup autoRightDumpCommandGroup;
   private TestHighShootCommandGroup testHighShootCommand;
   private PidShootCommandGroup lowShootCommand;
   private PidShootCommandGroup highShootCommand;
@@ -72,20 +77,23 @@ public class RobotContainer {
   Trigger maniRightTrigger;
   AnalogTrigger analogTrigger;
 
+  SendableChooser<Command> autoChooser;
+  
+
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
     // Initalize subsystems
-    exampleSubsystem = new ExampleSubsystem();
     driveTrain = new DriveTrain();
     intake = new Intake();
     shooter = new Shooter();
     climber = new Climber();    
 
     // Initalize commands
-    exampleAutoCommand = new ExampleCommand(exampleSubsystem);
+    autoLeftShootCommandGroup = new AutoLeftShootCommandGroup(driveTrain, intake, shooter);
+    autoRightShootCommandGroup = new AutoRightShootCommandGroup(driveTrain, intake, shooter);
+    autoRightDumpCommandGroup = new AutoRightDumpCommandGroup(driveTrain, intake, shooter);
     lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, shooter);
     highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, shooter);
     testHighShootCommand = new TestHighShootCommandGroup(intake, shooter);
@@ -143,7 +151,17 @@ public class RobotContainer {
         .whenReleased(new InstantCommand(
             () -> shooter.shoot(0), shooter));
     maniButtonX.whenHeld(highShootCommand);         
-    analogTrigger.whileActiveOnce(climbCommand);              
+    analogTrigger.whileActiveOnce(climbCommand);          
+    
+    autoChooser = new SendableChooser<Command>();
+    autoChooser.setDefaultOption("Auto Left Shoot", autoLeftShootCommandGroup);
+    autoChooser.addOption("Auto Middle Shoot", autoLeftShootCommandGroup);
+    autoChooser.addOption("Auto Middle Dump", autoLeftShootCommandGroup);
+    autoChooser.addOption("Auto Right Shoot", autoRightShootCommandGroup);
+    autoChooser.addOption("Auto Right Dump", autoRightDumpCommandGroup);
+    Shuffleboard.getTab("SmartDashboard")
+      .add("Auto Chooser", autoChooser)
+      .withWidget(BuiltInWidgets.kComboBoxChooser);
   }
 
 
@@ -154,6 +172,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return exampleAutoCommand;
+    return autoChooser.getSelected();
   }
 }
