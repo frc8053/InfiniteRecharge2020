@@ -19,9 +19,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.Climb;
 import frc.robot.Constants.Shoot;
+import frc.robot.commands.AutoLeftDumpCommandGroup;
 import frc.robot.commands.AutoLeftShootCommandGroup;
-import frc.robot.commands.AutoRightDumpCommandGroup;
 import frc.robot.commands.AutoRightShootCommandGroup;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DefaultDriveCommand;
@@ -53,9 +54,9 @@ public class RobotContainer {
   private Shooter shooter;
   private Climber climber;
 
-  private AutoLeftShootCommandGroup autoLeftShootCommandGroup;
   private AutoRightShootCommandGroup autoRightShootCommandGroup;
-  private AutoRightDumpCommandGroup autoRightDumpCommandGroup;
+  private AutoLeftShootCommandGroup autoLeftShootCommandGroup;
+  private AutoLeftDumpCommandGroup autoLeftDumpCommandGroup;
   private TestHighShootCommandGroup testHighShootCommand;
   private PidShootCommandGroup lowShootCommand;
   private PidShootCommandGroup highShootCommand;
@@ -91,12 +92,13 @@ public class RobotContainer {
     climber = new Climber();    
 
     // Initalize commands
-    autoLeftShootCommandGroup = new AutoLeftShootCommandGroup(driveTrain, intake, shooter);
     autoRightShootCommandGroup = new AutoRightShootCommandGroup(driveTrain, intake, shooter);
-    autoRightDumpCommandGroup = new AutoRightDumpCommandGroup(driveTrain, intake, shooter);
+    autoLeftShootCommandGroup = new AutoLeftShootCommandGroup(driveTrain, intake, shooter);
+    autoLeftDumpCommandGroup = new AutoLeftDumpCommandGroup(driveTrain, intake, shooter);
     lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, shooter);
     highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, shooter);
     testHighShootCommand = new TestHighShootCommandGroup(intake, shooter);
+    climbCommand = new ClimbCommand(Climb.CLIMB_SPEED, climber);
     
     // Initialize Gamepads
     driverController = new XboxController(0);
@@ -108,7 +110,7 @@ public class RobotContainer {
     driverRightTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kRight));
     
     manipulatorController = new XboxController(1);
-    analogTrigger = new AnalogTrigger(manipulatorController, Hand.kRight);
+    
 
     // Configure the button bindings
     maniButtonA = new JoystickButton(manipulatorController, Button.kA.value);
@@ -125,7 +127,6 @@ public class RobotContainer {
         () -> driverLeftTrigger.get(),
         () -> driverRightTrigger.get(),
         driveTrain));
-    climbCommand = new ClimbCommand(analogTrigger::getDY, climber);
 
     intake.setDefaultCommand(new DefaultIntakeCommand(
         () -> manipulatorController.getY(Hand.kLeft),
@@ -150,15 +151,14 @@ public class RobotContainer {
     maniButtonY.whenHeld(testHighShootCommand)  
         .whenReleased(new InstantCommand(
             () -> shooter.shoot(0), shooter));
-    maniButtonX.whenHeld(highShootCommand);         
-    analogTrigger.whileActiveOnce(climbCommand);          
+    maniButtonX.whenHeld(highShootCommand);                   
     
     autoChooser = new SendableChooser<Command>();
-    autoChooser.setDefaultOption("Auto Left Shoot", autoLeftShootCommandGroup);
+    autoChooser.setDefaultOption("Auto Right Shoot", autoRightShootCommandGroup);
     autoChooser.addOption("Auto Middle Shoot", autoLeftShootCommandGroup);
-    autoChooser.addOption("Auto Middle Dump", autoLeftShootCommandGroup);
-    autoChooser.addOption("Auto Right Shoot", autoRightShootCommandGroup);
-    autoChooser.addOption("Auto Right Dump", autoRightDumpCommandGroup);
+    autoChooser.addOption("Auto Middle Dump", autoRightShootCommandGroup);
+    autoChooser.addOption("Auto Left Shoot", autoLeftShootCommandGroup);
+    autoChooser.addOption("Auto Left Dump", autoLeftDumpCommandGroup);
     Shuffleboard.getTab("SmartDashboard")
       .add("Auto Chooser", autoChooser)
       .withWidget(BuiltInWidgets.kComboBoxChooser);

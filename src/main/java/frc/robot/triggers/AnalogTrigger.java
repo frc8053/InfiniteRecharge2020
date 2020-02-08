@@ -28,7 +28,7 @@ public class AnalogTrigger extends Trigger {
   */
   public AnalogTrigger(DoubleSupplier dxValue, DoubleSupplier dyValue,
                       double deadBand, double max) {
-    super(() -> ((deadify(dxValue.getAsDouble(),deadBand) != 0 
+    super(() -> ((deadify(dxValue.getAsDouble(), deadBand) != 0 
         || deadify(dyValue.getAsDouble(), deadBand) != 0)));
 
     dxSupplier = dxValue;

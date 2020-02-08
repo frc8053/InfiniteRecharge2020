@@ -26,7 +26,6 @@ public class DriveTrain extends SubsystemBase {
   private final WPI_VictorSPX frontRight;
   private final WPI_VictorSPX backLeft;
   private final WPI_VictorSPX backRight;
-
   private final SpeedControllerGroup leftDrive;
   private final SpeedControllerGroup rightDrive;
   private final DifferentialDrive myRobot;
@@ -54,7 +53,6 @@ public class DriveTrain extends SubsystemBase {
     leftDrive = new SpeedControllerGroup(frontLeft, backLeft);
     rightDrive = new SpeedControllerGroup(frontRight, backRight);
     myRobot = new DifferentialDrive(leftDrive, rightDrive);
-
     leftEncoder = new Encoder(0, 1);
     leftEncoder.setDistancePerPulse(Drive.DISTANCE_PER_PULSE);
     rightEncoder = new Encoder(2, 3);

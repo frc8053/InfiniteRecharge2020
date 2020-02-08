@@ -47,6 +47,9 @@ public final class Constants {
     public static double KV = 1;
   }
 
+  public static final class Climb {
+    public static double CLIMB_SPEED = 0.8;
+  }
 }
 
 

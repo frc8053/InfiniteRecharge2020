@@ -9,24 +9,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
-import java.util.function.DoubleSupplier;
 
 public class ClimbCommand extends CommandBase {
   
-  private final Climber subsystem;
+  private final Climber climber;
   
-  private DoubleSupplier powerSupplier;
+  private double speed;
 
   /**
    * Creates a new ClimbCommand.
    */
-  public ClimbCommand(DoubleSupplier powerSupplier, Climber subsystem) {
+  public ClimbCommand(double speed, Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.subsystem = subsystem;
+    this.climber = climber;
     
-    this.powerSupplier = powerSupplier;
+    this.speed = speed;
 
-    addRequirements(subsystem);
+    addRequirements(climber);
   }
 
 
@@ -39,12 +38,7 @@ public class ClimbCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (powerSupplier.getAsDouble() < 0) {
-      subsystem.largeWinch(powerSupplier.getAsDouble());
-    } else {
-      subsystem.smallWinch(powerSupplier.getAsDouble());
-    }
-    System.out.println("Analog Trigger Works");
+    climber.climbWinch(speed);
   }
 
   // Called once the command ends or is interrupted.

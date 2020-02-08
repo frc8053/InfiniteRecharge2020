@@ -15,11 +15,11 @@ import frc.robot.subsystems.Shooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoRightDumpCommandGroup extends SequentialCommandGroup {
+public class AutoLeftDumpCommandGroup extends SequentialCommandGroup {
   /**
    * Creates a new AutoRightDumpCommandGroup.
    */
-  public AutoRightDumpCommandGroup(DriveTrain driveTrain, Intake intake, Shooter shooter) {
+  public AutoLeftDumpCommandGroup(DriveTrain driveTrain, Intake intake, Shooter shooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(

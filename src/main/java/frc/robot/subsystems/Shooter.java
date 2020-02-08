@@ -66,13 +66,9 @@ public class Shooter extends PIDSubsystem {
     return shootEncoder.getRate();
   }
 
+  @Override
   public void setSetpoint(double setpoint) {
-    //if (setpoint != 0){
-      //this.setpoint = setpoint;
-    //} else {
-      //this.setpoint = 3000;
-    //}
-    //getController().setSetpoint(this.setpoint);
+    super.setSetpoint(setpoint);
   }
 
   public void shoot(double speed) {
