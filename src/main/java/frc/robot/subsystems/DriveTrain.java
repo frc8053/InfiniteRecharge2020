@@ -15,8 +15,10 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Drive;
+import frc.robot.commands.SwitchDrive;
 
 public class DriveTrain extends SubsystemBase {
   /**
@@ -32,6 +34,12 @@ public class DriveTrain extends SubsystemBase {
 
   private final Encoder leftEncoder;
   private final Encoder rightEncoder;
+
+  private Boolean switchDrive;
+  private double reverse;
+
+  private String driver;
+  private String reversed;
 
   private final Gyro gyro;
 
@@ -58,12 +66,21 @@ public class DriveTrain extends SubsystemBase {
     rightEncoder = new Encoder(2, 3);
     rightEncoder.setDistancePerPulse(Drive.DISTANCE_PER_PULSE);
 
+    switchDrive = false;
+    reverse = 1;
+
     gyro = new ADXRS450_Gyro(SPI.Port.kMXP);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (switchDrive) {
+      driver = "Chris";
+    } else {
+      driver = "Trey";
+    }
+    SmartDashboard.putString("Driver", driver);
   }
 
   public void arcadeDrive(final double left, final double right) {
@@ -81,7 +98,22 @@ public class DriveTrain extends SubsystemBase {
   public double leftEncoderValue() {
     return leftEncoder.getDistance();
   }
+  
+  public void switchDrive() {
+    switchDrive = !switchDrive;
+  }
 
+  public Boolean getDriver() {
+    return switchDrive;
+  }
+  
+  public void switchReverse() {
+    reverse = -reverse;
+  }
+
+  public double getReverse() {
+    return reverse;
+  }
   /**
    * returns gyro value.
    * @return the rotational value of the gyroscope

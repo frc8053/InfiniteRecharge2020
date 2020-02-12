@@ -30,7 +30,8 @@ public class TestHighShootCommandGroup extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.3), 
+        new InstantCommand(() -> shooter.shoot(-0.2)), 
+        new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.3),
         new InstantCommand(() -> intake.conveyorControl(0), intake),
         new InstantCommand(() -> shooter.shoot(1), shooter),
         new WaitCommand(2),

@@ -28,6 +28,8 @@ import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultIntakeCommand;
 import frc.robot.commands.PidShootCommandGroup;
+import frc.robot.commands.ReverseCommand;
+import frc.robot.commands.SwitchDrive;
 import frc.robot.commands.TestHighShootCommandGroup;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
@@ -124,13 +126,16 @@ public class RobotContainer {
         () -> driverController.getX(Hand.kRight), 
         () -> driverController.getXButtonReleased(), 
         () -> driverController.getAButtonReleased(),
-        () -> driverLeftTrigger.get(),
-        () -> driverRightTrigger.get(),
+        () -> driverController.getBButtonReleased(),
+        () -> driverController.getYButtonReleased(),
+        () -> Math.abs(driverController.getTriggerAxis(Hand.kLeft)) > 0.2,
+        () -> Math.abs(driverController.getTriggerAxis(Hand.kRight)) > 0.2,
         driveTrain));
 
     intake.setDefaultCommand(new DefaultIntakeCommand(
         () -> manipulatorController.getY(Hand.kLeft),
-        intake));
+        intake,
+        shooter));
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -147,6 +152,8 @@ public class RobotContainer {
     //driverLeftBumper.whenHeld(intakeCommandGroup);
     //driverPovDown.whenHeld(povDownCommand);
     //driverPovUp.whenHeld(povUpCommand);
+    driverPovUp.whenHeld(new SwitchDrive(driveTrain));
+    driverPovDown.whenHeld(new ReverseCommand(driveTrain));
     maniButtonA.whenHeld(lowShootCommand);
     maniButtonY.whenHeld(testHighShootCommand)  
         .whenReleased(new InstantCommand(
