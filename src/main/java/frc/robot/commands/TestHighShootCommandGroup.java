@@ -23,7 +23,7 @@ public class TestHighShootCommandGroup extends SequentialCommandGroup {
   Intake intake;
   Shooter shooter;
   /**
-   * Creates a new testHighShootCommandGroup.
+   * A temporary test command to shoot for the high goal.
    */
   
   public TestHighShootCommandGroup(Intake intake, Shooter shooter) {

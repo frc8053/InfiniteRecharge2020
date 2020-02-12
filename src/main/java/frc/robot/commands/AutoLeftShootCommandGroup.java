@@ -17,7 +17,11 @@ import frc.robot.subsystems.Shooter;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class AutoLeftShootCommandGroup extends SequentialCommandGroup {
   /**
-   * Creates a new AutoRightShootCommandGroup.
+   * Auto that starts and the Left side of the field and shoots into the high goal.
+   * 
+   * @param driveTrain the driveTrain subsystem used
+   * @param intake the intake subsystem used
+   * @param shooter the shooter subsystem used
    */
   public AutoLeftShootCommandGroup(DriveTrain driveTrain, Intake intake, Shooter shooter) {
     // Add your commands in the super() call, e.g.

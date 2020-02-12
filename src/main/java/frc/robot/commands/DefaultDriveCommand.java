@@ -36,7 +36,8 @@ public class DefaultDriveCommand extends CommandBase {
   String reversed;
 
   /**
-   * Creates a new default drive command.
+   * Drives the robot using the joysticks on the gamepad. Can
+   * be tank or arcade drive.
    *
    * @param leftY The leftY joystick of driver gamepad
    * @param rightY The RightY joystick of driver gamepad
@@ -44,6 +45,8 @@ public class DefaultDriveCommand extends CommandBase {
    * 
    * @param isDriveToggled Whether the toggle button has been released (basically pressed)
    * @param isAReleased Whether A has been released
+   * @param isBReleased Whether B has been released
+   * @param isYReleased Whether Y has been released
    * @param isLeftBrake Whether left trigger is held
    * @param isRightBrake Whether right trigger is held
    * 
@@ -111,7 +114,7 @@ public class DefaultDriveCommand extends CommandBase {
     if (isDriveToggled.get()) {
       driveState = !driveState;
     }
-    if (isDriveToggled.get()) {
+    if (driveState) {
       driveMode = "Tank Drive";
     } else {
       driveMode = "Arcade Drive";

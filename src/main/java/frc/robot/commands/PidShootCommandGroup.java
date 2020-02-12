@@ -21,7 +21,8 @@ public class PidShootCommandGroup extends SequentialCommandGroup {
   Shooter shooter;
   Intake intake;
   /**
-   * Creates a new ShootCommandGroup.
+   * Shoots balls at the specified rpm using a PID control system.
+   * 
    * @param rpm the target speed of the wheels
    * @param intake the intake subsystem used
    * @param shooter the shooter subsystem used

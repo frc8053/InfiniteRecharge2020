@@ -15,7 +15,8 @@ public class IntakeCommand extends CommandBase {
   private double intakeSpeed;
   private double conveyorSpeed;
   /**
-   * Creates a new IntakeCommand.
+   * Command to use the intake bar and conveyor.
+   * 
    * @param intakeSpeed the speed of the intake bar
    * @param conveyorSpeed the speed of the conveyor
    * @param intake Intake subsystem used by command
@@ -33,12 +34,13 @@ public class IntakeCommand extends CommandBase {
   @Override
   public void initialize() {
     intake.intakeBar(intakeSpeed);
+    intake.conveyorControl(conveyorSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.conveyorControl(conveyorSpeed);
+    
   }
 
   // Called once the command ends or is interrupted.

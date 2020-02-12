@@ -45,6 +45,10 @@ public final class Constants {
     public static double FAST_RPM = 3000;
     public static double KS = 1;
     public static double KV = 1;
+    public static double PSHOOT = 0.2;
+    public static double ISHOOT = 0;
+    public static double DSHOOT = 0;
+    public static double SHOOT_TOLERANCE = 10;
   }
 
   public static final class Climb {

@@ -16,7 +16,8 @@ public class ColorWheel extends SubsystemBase {
   WPI_VictorSPX spinner;
 
   /**
-   * Creates a new ColorWheel.
+   * The color wheel subsytem containing the color sensor and motor necessary to turn
+   * the control panal.
    */
   public ColorWheel() {
     spinner = new WPI_VictorSPX(11);

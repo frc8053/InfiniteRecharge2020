@@ -17,6 +17,7 @@ public class TriggerButton extends Trigger {
 
   /**
    * Turns the trigger on the controller into a button.
+   * 
    * @param triggerValue value of the trigger
    */
   public TriggerButton(double triggerValue) {

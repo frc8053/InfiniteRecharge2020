@@ -31,11 +31,12 @@ public class Shooter extends PIDSubsystem {
 
 
   /**
-   * Creates a new Shooter.
+   * The shooter PID subsystem contains the necessary motors and sensors needed
+   * to accurately fire balls.
    */
   public Shooter() {
-    super(new PIDController(0.2, 0, 0));
-    getController().setTolerance(10);
+    super(new PIDController(Shoot.PSHOOT, Shoot.ISHOOT, Shoot.DSHOOT));
+    getController().setTolerance(Shoot.SHOOT_TOLERANCE);
     shooterLeft = new WPI_VictorSPX(7);
     shooterLeft.setInverted(true);
     shooterRight = new WPI_VictorSPX(8);

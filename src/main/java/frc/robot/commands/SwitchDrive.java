@@ -13,7 +13,9 @@ import frc.robot.subsystems.DriveTrain;
 public class SwitchDrive extends CommandBase {
   private DriveTrain driveTrain;
   /**
-   * Creates a new switchDrive.
+   * Switches the drive controls.
+   * 
+   * @param driveTrain the driveTrain subsystem used
    */
   
   public SwitchDrive(DriveTrain driveTrain) {

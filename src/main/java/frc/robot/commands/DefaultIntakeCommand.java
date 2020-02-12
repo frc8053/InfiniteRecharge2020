@@ -18,9 +18,12 @@ public class DefaultIntakeCommand extends CommandBase {
   private Intake intake;
   private Shooter shooter;
   /**
-   * Creates a new DefaultIntakeCommand.
+   * Moves the intake and conveyor based on joystick input. 
+   * The shooter wheels spin the opposite way.
+   * 
    * @param speed speed of the intake bar (*0.8) and conveyor (*0.82)
    * @param intake the intake subsystem used
+   * @param shooter the shooter subsystem used
    */
   
   public DefaultIntakeCommand(DoubleSupplier speed, Intake intake, Shooter shooter) {

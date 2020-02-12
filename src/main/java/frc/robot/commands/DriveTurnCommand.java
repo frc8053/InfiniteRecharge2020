@@ -17,7 +17,8 @@ import frc.robot.subsystems.DriveTrain;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class DriveTurnCommand extends PIDCommand {
   /**
-   * Creates a new DriveTurnCommand.
+   * Turns the robot to the specified degree.
+   * 
    * @param targetAngle the target angle to turn to
    * @param driveTrain the driveTrain subsystem used
    */

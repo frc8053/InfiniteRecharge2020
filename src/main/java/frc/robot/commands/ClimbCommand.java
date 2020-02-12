@@ -17,7 +17,10 @@ public class ClimbCommand extends CommandBase {
   private double speed;
 
   /**
-   * Creates a new ClimbCommand.
+   * Runs the climb motor at the set speed.
+   * 
+   * @param speed the speed of the climber
+   * @param climber the climber subsystem
    */
   public ClimbCommand(double speed, Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.

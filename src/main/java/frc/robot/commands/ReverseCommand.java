@@ -13,7 +13,9 @@ import frc.robot.subsystems.DriveTrain;
 public class ReverseCommand extends CommandBase {
   private final DriveTrain driveTrain;
   /**
-   * Creates a new ReverseCommand.
+   * Changes direction of the drive when active.
+   * 
+   * @param driveTrain the driveTrain subsystem used
    */
   
   public ReverseCommand(DriveTrain driveTrain) {

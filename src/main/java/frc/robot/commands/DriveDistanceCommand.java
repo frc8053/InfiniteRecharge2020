@@ -15,7 +15,8 @@ public class DriveDistanceCommand extends PIDCommand {
   private DriveTrain driveTrain;
   
   /**
-   * Creates a new DriveStraightCommand.
+   * Drives forward a certain distance.
+   * 
    * @param distance Total distance the right encoder reads
    * @param driveTrain The DriveTrain subsystem used by this command
    */

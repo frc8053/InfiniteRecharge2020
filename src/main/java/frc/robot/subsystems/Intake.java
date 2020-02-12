@@ -23,7 +23,8 @@ public class Intake extends SubsystemBase {
 
   private final DigitalInput laserSwitch;
   /**
-   * Creates a new intake.
+   * The intake subsystem containing motors and sensors necessary to intake balls
+   * and move them into the position to shoot.
    */
 
   public Intake() {
