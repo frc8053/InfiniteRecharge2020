@@ -76,6 +76,7 @@ public class RobotContainer {
   JoystickButton maniButtonY;
   JoystickButton maniButtonA;
   JoystickButton maniButtonX;
+  JoystickButton maniButtonB;
   Trigger maniLeftTrigger;
   Trigger maniRightTrigger;
   AnalogTrigger analogTrigger;
@@ -118,6 +119,7 @@ public class RobotContainer {
     maniButtonA = new JoystickButton(manipulatorController, Button.kA.value);
     maniButtonX = new JoystickButton(manipulatorController, Button.kX.value);
     maniButtonY = new JoystickButton(manipulatorController, Button.kY.value);
+    maniButtonB = new JoystickButton(manipulatorController, Button.kB.value);
     
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
@@ -147,18 +149,14 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
-    //driverRightBumper.whenHeld(intakeCommand);
-    //driverLeftBumper.whenHeld(intakeCommandGroup);
-    //driverPovDown.whenHeld(povDownCommand);
-    //driverPovUp.whenHeld(povUpCommand);
     driverPovUp.whenHeld(new SwitchDrive(driveTrain));
     driverPovDown.whenHeld(new ReverseCommand(driveTrain));
     maniButtonA.whenHeld(lowShootCommand);
     maniButtonY.whenHeld(testHighShootCommand)  
         .whenReleased(new InstantCommand(
             () -> shooter.shoot(0), shooter));
-    maniButtonX.whenHeld(highShootCommand);                   
+    maniButtonX.whenHeld(highShootCommand);   
+    maniButtonB.whenHeld(climbCommand);                
     
     autoChooser = new SendableChooser<Command>();
     autoChooser.setDefaultOption("Auto Right Shoot", autoRightShootCommandGroup);

@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Drive;
-import frc.robot.commands.SwitchDrive;
 
 public class DriveTrain extends SubsystemBase {
   /**
@@ -39,7 +38,6 @@ public class DriveTrain extends SubsystemBase {
   private double reverse;
 
   private String driver;
-  private String reversed;
 
   private final Gyro gyro;
 
