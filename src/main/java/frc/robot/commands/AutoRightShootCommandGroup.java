@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.IntakeConstant;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.LeftShooter;
+import frc.robot.subsystems.RightShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -23,9 +24,11 @@ public class AutoRightShootCommandGroup extends SequentialCommandGroup {
    * 
    * @param driveTrain the driveTrain subsystem used
    * @param intake the intake subsytem used
-   * @param shooter the shooter subsystem used
+   * @param leftShooter the ;eft shooter subsystem used
+   * @param rightShooter the right Shooter subsystem used
    */
-  public AutoRightShootCommandGroup(DriveTrain driveTrain, Intake intake, Shooter shooter) {
+  public AutoRightShootCommandGroup(DriveTrain driveTrain, Intake intake, 
+                                    LeftShooter leftShooter, RightShooter rightShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
@@ -34,7 +37,7 @@ public class AutoRightShootCommandGroup extends SequentialCommandGroup {
         IntakeConstant.CONVEYOR_SPEED, intake)),
         new DriveDistanceCommand(-73.37, driveTrain),
         new DriveTurnCommand(20.3603, driveTrain),
-        new PidShootCommandGroup(3000, intake, shooter).withTimeout(6),
+        new PidShootCommandGroup(3000, intake, leftShooter, rightShooter).withTimeout(6),
         new DriveTurnCommand(-20.3603, driveTrain),
         new DriveDistanceCommand(114, driveTrain)
         .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED,

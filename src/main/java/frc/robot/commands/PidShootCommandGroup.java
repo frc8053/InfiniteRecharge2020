@@ -12,39 +12,48 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.LeftShooter;
+import frc.robot.subsystems.RightShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class PidShootCommandGroup extends SequentialCommandGroup {
-  Shooter shooter;
+  LeftShooter leftShooter;
+  RightShooter rightShooter;
   Intake intake;
   /**
    * Shoots balls at the specified rpm using a PID control system.
    * 
    * @param rpm the target speed of the wheels
    * @param intake the intake subsystem used
-   * @param shooter the shooter subsystem used
+   * @param leftShooter the left shooter subsystem used
+   * @param rightShooter the right shooter subsystem used
    */
   
-  public PidShootCommandGroup(double rpm, Intake intake, Shooter shooter) {
+  public PidShootCommandGroup(double rpm, Intake intake, LeftShooter leftShooter, 
+                              RightShooter rightShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
         new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.1), 
-        new InstantCommand(() -> shooter.setSetpoint(rpm), shooter),
-        new InstantCommand(shooter::enable),
-        new WaitUntilCommand(shooter::reachedSetpoint),
+        new InstantCommand(() -> leftShooter.setSetpoint(rpm), leftShooter),
+        new InstantCommand(() -> rightShooter.setSetpoint(rpm), rightShooter),
+        new InstantCommand(leftShooter::enable),
+        new InstantCommand(rightShooter::enable),
+        new WaitUntilCommand(() -> (leftShooter.reachedSetpoint() 
+                                    && rightShooter.reachedSetpoint())),
         new RunCommand(() -> intake.conveyorControl(0.2), intake)
     );
-    this.shooter = shooter;
+    this.leftShooter = leftShooter;
+    this.rightShooter = rightShooter;
     this.intake = intake;
   }
 
   @Override
   public void end(boolean interrupted) {
-    new InstantCommand(shooter::disable);
+    new InstantCommand(leftShooter::disable);
+    new InstantCommand(rightShooter::disable);
     new InstantCommand(() -> intake.conveyorControl(0), intake);
   }
 }

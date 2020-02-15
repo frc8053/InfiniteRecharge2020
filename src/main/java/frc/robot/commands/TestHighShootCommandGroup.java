@@ -13,7 +13,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.LeftShooter;
+import frc.robot.subsystems.RightShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,33 +22,38 @@ import frc.robot.subsystems.Shooter;
 
 public class TestHighShootCommandGroup extends SequentialCommandGroup {
   Intake intake;
-  Shooter shooter;
+  LeftShooter leftShooter;
+  RightShooter rightShooter;
   /**
    * A temporary test command to shoot for the high goal.
    */
   
-  public TestHighShootCommandGroup(Intake intake, Shooter shooter) {
+  public TestHighShootCommandGroup(Intake intake, LeftShooter leftShooter, 
+                                  RightShooter rightShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new InstantCommand(() -> shooter.shoot(-0.2)), 
+        new InstantCommand(() -> leftShooter.shoot(-0.2), leftShooter),
+        new InstantCommand(() -> rightShooter.shoot(-0.2), rightShooter), 
         new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.3),
         new InstantCommand(() -> intake.conveyorControl(0), intake),
-        new InstantCommand(() -> shooter.shoot(1), shooter),
+        new InstantCommand(() -> leftShooter.shoot(1), leftShooter),
+        new InstantCommand(() -> rightShooter.shoot(1), rightShooter),
         new WaitCommand(2),
         new ParallelCommandGroup(
           new IntakeCommand(0.8, 0.87, intake)
         )
     );
     this.intake = intake;
-    this.shooter = shooter;
-
+    this.leftShooter = leftShooter;
+    this.rightShooter = rightShooter;
   }
   
   @Override
   public void end(boolean interrupted) {
     new InstantCommand(() -> intake.conveyorControl(0), intake);
-    new InstantCommand(() -> shooter.shoot(0), shooter);
+    new InstantCommand(() -> leftShooter.shoot(0), leftShooter);
+    new InstantCommand(() -> rightShooter.shoot(0), rightShooter);
     new InstantCommand(() -> intake.intakeBar(0), intake);
   }
 }

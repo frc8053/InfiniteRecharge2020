@@ -59,15 +59,15 @@ public class DriveTrain extends SubsystemBase {
     leftDrive = new SpeedControllerGroup(frontLeft, backLeft);
     rightDrive = new SpeedControllerGroup(frontRight, backRight);
     myRobot = new DifferentialDrive(leftDrive, rightDrive);
-    leftEncoder = new Encoder(0, 1);
+    leftEncoder = new Encoder(8, 9);
     leftEncoder.setDistancePerPulse(Drive.DISTANCE_PER_PULSE);
-    rightEncoder = new Encoder(2, 3);
+    rightEncoder = new Encoder(7, 6);
     rightEncoder.setDistancePerPulse(Drive.DISTANCE_PER_PULSE);
 
     switchDrive = false;
     reverse = 1;
 
-    gyro = new ADXRS450_Gyro(SPI.Port.kMXP);
+    gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
   }
 
   @Override

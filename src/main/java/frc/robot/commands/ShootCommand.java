@@ -8,13 +8,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.LeftShooter;
 
 public class ShootCommand extends CommandBase {
   
 
   private double speed;
-  private Shooter shooter;
+  private LeftShooter shooter;
   /**
    * Spins the shoot motors.
    * 
@@ -22,7 +22,7 @@ public class ShootCommand extends CommandBase {
    * @param shooter the shooter subsystem used
    */
   
-  public ShootCommand(double speed, Shooter shooter) {
+  public ShootCommand(double speed, LeftShooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.speed = speed;

@@ -8,24 +8,22 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.Shoot;
 
-public class Shooter extends PIDSubsystem {
+public class LeftShooter extends PIDSubsystem {
 
   private WPI_VictorSPX shooterLeft;
-  private WPI_VictorSPX shooterRight;
 
-  private Encoder shootEncoder;
+  private final Encoder shootLeftEncoder;
 
   private SimpleMotorFeedforward shooterFeedForward;
-
-  private SpeedControllerGroup shooterGroup;
 
   private double setpoint;
 
@@ -34,18 +32,16 @@ public class Shooter extends PIDSubsystem {
    * The shooter PID subsystem contains the necessary motors and sensors needed
    * to accurately fire balls.
    */
-  public Shooter() {
+  public LeftShooter() {
     super(new PIDController(Shoot.PSHOOT, Shoot.ISHOOT, Shoot.DSHOOT));
     getController().setTolerance(Shoot.SHOOT_TOLERANCE);
     shooterLeft = new WPI_VictorSPX(7);
     shooterLeft.setInverted(true);
-    shooterRight = new WPI_VictorSPX(8);
 
-    shootEncoder = new Encoder(4,5);    
+    shootLeftEncoder = new Encoder(1,0, true, CounterBase.EncodingType.k2X);   
 
-    shootEncoder.setDistancePerPulse(Shoot.SHOOTRATE);
+    shootLeftEncoder.setDistancePerPulse(Shoot.SHOOTRATE);
 
-    shooterGroup = new SpeedControllerGroup(shooterLeft, shooterRight);
     setpoint = 3000;
     getController().setSetpoint(setpoint);
     shooterFeedForward = new SimpleMotorFeedforward(Shoot.KS, Shoot.KV);
@@ -54,17 +50,17 @@ public class Shooter extends PIDSubsystem {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Shooter RPM", shootEncoder.getRate());
+    SmartDashboard.putNumber("Left Shooter RPM", shootLeftEncoder.getDistance());
   }
 
   @Override
   protected void useOutput(double output, double setpoint) {
-    shooterGroup.setVoltage(output + shooterFeedForward.calculate(setpoint));
+    shooterLeft.setVoltage(output + shooterFeedForward.calculate(setpoint));
   }
 
   @Override
   protected double getMeasurement() {
-    return shootEncoder.getRate();
+    return shootLeftEncoder.getRate();
   }
 
   @Override
@@ -73,12 +69,11 @@ public class Shooter extends PIDSubsystem {
   }
 
   public void shoot(double speed) {
-    shooterGroup.set(speed);
+    shooterLeft.set(speed);
   }
 
   public double getRpm() {
-    //return shootEncoder.getRate();
-    return 2;
+    return shootLeftEncoder.getRate();
   }
 
   public boolean reachedSetpoint() {

@@ -19,6 +19,7 @@ public class ColorWheel extends SubsystemBase {
    * The color wheel subsytem containing the color sensor and motor necessary to turn
    * the control panal.
    */
+  
   public ColorWheel() {
     spinner = new WPI_VictorSPX(11);
   }

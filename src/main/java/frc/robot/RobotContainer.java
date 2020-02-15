@@ -34,7 +34,8 @@ import frc.robot.commands.TestHighShootCommandGroup;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.LeftShooter;
+import frc.robot.subsystems.RightShooter;
 import frc.robot.triggers.AnalogTrigger;
 import frc.robot.triggers.TriggerButton;
 
@@ -53,7 +54,8 @@ public class RobotContainer {
 
   private DriveTrain driveTrain;
   private Intake intake;
-  private Shooter shooter;
+  private LeftShooter leftShooter;
+  private RightShooter rightShooter;
   private Climber climber;
 
   private AutoRightShootCommandGroup autoRightShootCommandGroup;
@@ -91,16 +93,20 @@ public class RobotContainer {
     // Initalize subsystems
     driveTrain = new DriveTrain();
     intake = new Intake();
-    shooter = new Shooter();
+    leftShooter = new LeftShooter();
+    rightShooter = new RightShooter();
     climber = new Climber();    
 
     // Initalize commands
-    autoRightShootCommandGroup = new AutoRightShootCommandGroup(driveTrain, intake, shooter);
-    autoLeftShootCommandGroup = new AutoLeftShootCommandGroup(driveTrain, intake, shooter);
-    autoLeftDumpCommandGroup = new AutoLeftDumpCommandGroup(driveTrain, intake, shooter);
-    lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, shooter);
-    highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, shooter);
-    testHighShootCommand = new TestHighShootCommandGroup(intake, shooter);
+    autoRightShootCommandGroup = new AutoRightShootCommandGroup(driveTrain, intake, 
+                                                                leftShooter, rightShooter);
+    autoLeftShootCommandGroup = new AutoLeftShootCommandGroup(driveTrain, intake, 
+                                                              leftShooter, rightShooter);
+    autoLeftDumpCommandGroup = new AutoLeftDumpCommandGroup(driveTrain, intake, 
+                                                            leftShooter, rightShooter);
+    lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, leftShooter, rightShooter);
+    highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, leftShooter, rightShooter);
+    testHighShootCommand = new TestHighShootCommandGroup(intake, leftShooter, rightShooter);
     climbCommand = new ClimbCommand(Climb.CLIMB_SPEED, climber);
     
     // Initialize Gamepads
@@ -137,7 +143,8 @@ public class RobotContainer {
     intake.setDefaultCommand(new DefaultIntakeCommand(
         () -> manipulatorController.getY(Hand.kLeft),
         intake,
-        shooter));
+        leftShooter,
+        rightShooter));
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -154,7 +161,7 @@ public class RobotContainer {
     maniButtonA.whenHeld(lowShootCommand);
     maniButtonY.whenHeld(testHighShootCommand)  
         .whenReleased(new InstantCommand(
-            () -> shooter.shoot(0), shooter));
+            () -> leftShooter.shoot(0), leftShooter));
     maniButtonX.whenHeld(highShootCommand);   
     maniButtonB.whenHeld(climbCommand);                
     

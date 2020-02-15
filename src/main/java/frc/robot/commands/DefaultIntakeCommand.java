@@ -9,29 +9,33 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.LeftShooter;
+import frc.robot.subsystems.RightShooter;
 
 import java.util.function.DoubleSupplier;
 
 public class DefaultIntakeCommand extends CommandBase {
   private DoubleSupplier speed;
   private Intake intake;
-  private Shooter shooter;
+  private LeftShooter leftShooter;
+  private RightShooter rightShooter;
   /**
    * Moves the intake and conveyor based on joystick input. 
    * The shooter wheels spin the opposite way.
    * 
    * @param speed speed of the intake bar (*0.8) and conveyor (*0.82)
    * @param intake the intake subsystem used
-   * @param shooter the shooter subsystem used
+   * @param leftShooter the shooter subsystem used
    */
   
-  public DefaultIntakeCommand(DoubleSupplier speed, Intake intake, Shooter shooter) {
+  public DefaultIntakeCommand(DoubleSupplier speed, Intake intake,
+                              LeftShooter leftShooter, RightShooter rightShooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.speed = speed;
     this.intake = intake;
-    this.shooter = shooter;
-    addRequirements(intake, shooter);
+    this.leftShooter = leftShooter;
+    this.rightShooter = rightShooter;
+    addRequirements(intake, leftShooter, rightShooter);
   }
 
   // Called when the command is initially scheduled.
@@ -49,7 +53,8 @@ public class DefaultIntakeCommand extends CommandBase {
     //intake.conveyorControl(0);
     //}
     intake.conveyorControl(speed.getAsDouble() * 0.5);
-    shooter.shoot(Math.abs(speed.getAsDouble()) * -0.3);
+    leftShooter.shoot(Math.abs(speed.getAsDouble()) * -0.3);
+    rightShooter.shoot(Math.abs(speed.getAsDouble()) * -0.3);
   }
 
   // Called once the command ends or is interrupted.

@@ -10,7 +10,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.LeftShooter;
+import frc.robot.subsystems.RightShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,15 +22,16 @@ public class AutoLeftShootCommandGroup extends SequentialCommandGroup {
    * 
    * @param driveTrain the driveTrain subsystem used
    * @param intake the intake subsystem used
-   * @param shooter the shooter subsystem used
+   * @param leftShooter the shooter subsystem used
    */
-  public AutoLeftShootCommandGroup(DriveTrain driveTrain, Intake intake, Shooter shooter) {
+  public AutoLeftShootCommandGroup(DriveTrain driveTrain, Intake intake, 
+                                  LeftShooter leftShooter, RightShooter rightShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
         new DriveDistanceCommand(112, driveTrain),
         new DriveTurnCommand(46.888, driveTrain),
-        new PidShootCommandGroup(2500, intake, shooter)
+        new PidShootCommandGroup(2500, intake, leftShooter, rightShooter)
     );
   }
 }
