@@ -36,11 +36,14 @@ public class PidShootCommandGroup extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.1), 
+        //new InstantCommand(() -> leftShooter.shoot(-0.2), leftShooter),
+        //new InstantCommand(() -> rightShooter.shoot(-0.2), rightShooter),
+        new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.3), 
+        new InstantCommand(() -> intake.conveyorControl(0), intake),
         new InstantCommand(() -> leftShooter.setSetpoint(rpm), leftShooter),
         new InstantCommand(() -> rightShooter.setSetpoint(rpm), rightShooter),
-        new InstantCommand(leftShooter::enable),
-        new InstantCommand(rightShooter::enable),
+        new InstantCommand(leftShooter::enable, leftShooter),
+        new InstantCommand(rightShooter::enable, rightShooter),
         new WaitUntilCommand(() -> (leftShooter.reachedSetpoint() 
                                     && rightShooter.reachedSetpoint())),
         new RunCommand(() -> intake.conveyorControl(0.2), intake)

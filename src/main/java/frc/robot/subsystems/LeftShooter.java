@@ -27,6 +27,10 @@ public class LeftShooter extends PIDSubsystem {
 
   private double setpoint;
 
+  private double clicks;
+
+  private double rate;
+
 
   /**
    * The shooter PID subsystem contains the necessary motors and sensors needed
@@ -38,7 +42,7 @@ public class LeftShooter extends PIDSubsystem {
     shooterLeft = new WPI_VictorSPX(7);
     shooterLeft.setInverted(true);
 
-    shootLeftEncoder = new Encoder(1,0, true, CounterBase.EncodingType.k2X);   
+    shootLeftEncoder = new Encoder(0,1, true, CounterBase.EncodingType.k4X);   
 
     shootLeftEncoder.setDistancePerPulse(Shoot.SHOOTRATE);
 
@@ -50,22 +54,26 @@ public class LeftShooter extends PIDSubsystem {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Left Shooter RPM", shootLeftEncoder.getDistance());
+    clicks = shootLeftEncoder.get();
+    rate = shootLeftEncoder.getRate() * 60;
+    SmartDashboard.putNumber("Left Shooter CLicks", clicks);
+    SmartDashboard.putNumber("Left Shooter RPM", rate);
   }
 
   @Override
   protected void useOutput(double output, double setpoint) {
-    shooterLeft.setVoltage(output + shooterFeedForward.calculate(setpoint));
+    shooterLeft.setVoltage(output + (12.0 / 5000.0) * setpoint);
   }
 
   @Override
   protected double getMeasurement() {
-    return shootLeftEncoder.getRate();
+    return rate;
   }
 
   @Override
   public void setSetpoint(double setpoint) {
     super.setSetpoint(setpoint);
+    this.setpoint = setpoint;
   }
 
   public void shoot(double speed) {
@@ -77,6 +85,6 @@ public class LeftShooter extends PIDSubsystem {
   }
 
   public boolean reachedSetpoint() {
-    return getController().atSetpoint();
+    return Math.abs(this.setpoint - rate) < 50;
   }
 }

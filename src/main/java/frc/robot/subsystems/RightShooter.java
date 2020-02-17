@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.CounterBase;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -31,6 +30,9 @@ public class RightShooter extends PIDSubsystem {
 
   private double setpoint;
 
+  private double clicks;
+  private double rate;
+
 
   /**
    * The shooter PID subsystem contains the necessary motors and sensors needed
@@ -41,7 +43,7 @@ public class RightShooter extends PIDSubsystem {
     getController().setTolerance(Shoot.SHOOT_TOLERANCE);
     shooterRight = new WPI_VictorSPX(8);
 
-    shootRightEncoder = new Encoder(3, 2, false, CounterBase.EncodingType.k2X);    
+    shootRightEncoder = new Encoder(2, 3, false, CounterBase.EncodingType.k4X);    
 
     //shootRightEncoder = new DutyCycleEncoder(3);
     
@@ -55,17 +57,21 @@ public class RightShooter extends PIDSubsystem {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Right Shooter RPM", shootRightEncoder.getDistance());
+    clicks = shootRightEncoder.get();
+    rate = shootRightEncoder.getRate() * 60;
+    SmartDashboard.putNumber("Right Shooter Clicks", clicks);
+    SmartDashboard.putNumber("Right Shooter RPM", rate);
   }
 
   @Override
   protected void useOutput(double output, double setpoint) {
-    shooterRight.setVoltage(output + shooterFeedForward.calculate(setpoint));
+    shooterRight.setVoltage(output + (12.0 / 5000.0) * setpoint);
+    System.out.println(setpoint);
   }
 
   @Override
   protected double getMeasurement() {
-    return shootRightEncoder.getRate();
+    return rate;
   }
 
   @Override
@@ -82,6 +88,6 @@ public class RightShooter extends PIDSubsystem {
   }
 
   public boolean reachedSetpoint() {
-    return getController().atSetpoint();
+    return Math.abs(this.setpoint - rate) < 50;
   }
 }

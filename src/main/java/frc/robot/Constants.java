@@ -40,7 +40,7 @@ public final class Constants {
   public static final class Shoot {
     public static double SHOOT_LOW = 0.2;
     public static double SHOOT_HIGH = 0.8;
-    public static double SHOOTRATE = 1 / 2048;
+    public static double SHOOTRATE = 1.0 / 2048.0;
     public static double SLOW_RPM = 1000;
     public static double FAST_RPM = 3000;
     public static double KS = 1;
