@@ -55,8 +55,10 @@ public class PidShootCommandGroup extends SequentialCommandGroup {
 
   @Override
   public void end(boolean interrupted) {
-    new InstantCommand(leftShooter::disable);
-    new InstantCommand(rightShooter::disable);
+    super.end(interrupted);
+    new InstantCommand(leftShooter::disable, leftShooter);
+    new InstantCommand(rightShooter::disable, rightShooter);
     new InstantCommand(() -> intake.conveyorControl(0), intake);
+    System.out.println("disabled the shooters" + this.runsWhenDisabled());
   }
 }

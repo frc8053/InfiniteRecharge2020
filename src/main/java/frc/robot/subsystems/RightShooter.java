@@ -57,6 +57,7 @@ public class RightShooter extends PIDSubsystem {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    super.periodic();
     clicks = shootRightEncoder.get();
     rate = shootRightEncoder.getRate() * 60;
     SmartDashboard.putNumber("Right Shooter Clicks", clicks);
@@ -64,9 +65,14 @@ public class RightShooter extends PIDSubsystem {
   }
 
   @Override
+public void enable() {
+    super.enable();
+    System.out.println("enabeling the right thing");
+  }
+
+  @Override
   protected void useOutput(double output, double setpoint) {
-    shooterRight.setVoltage(output + (12.0 / 5000.0) * setpoint);
-    System.out.println(setpoint);
+    shooterRight.setVoltage(output + ((12.0 / 5000.0) * setpoint));
   }
 
   @Override
