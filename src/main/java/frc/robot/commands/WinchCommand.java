@@ -8,27 +8,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Winch;
 
-public class ClimbCommand extends CommandBase {
+public class WinchCommand extends CommandBase {
   
-  private final Climber climber;
+  private final Winch subsystem;
   
-  private double speed;
-
   /**
-   * Runs the climb motor at the set speed.
-   * 
-   * @param speed the speed of the climber
-   * @param climber the climber subsystem
+   * Creates a new Elevatorommand.
    */
-  public ClimbCommand(double speed, Climber climber) {
+  public WinchCommand(Winch subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.climber = climber;
-    
-    this.speed = speed;
-
-    addRequirements(climber);
+    this.subsystem = subsystem;
+  
+    addRequirements(subsystem);
   }
 
 
@@ -41,12 +34,13 @@ public class ClimbCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.climbWinch(speed);
+    subsystem.winchControl(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    subsystem.winchControl(0);
   }
 
   // Returns true when the command should end.

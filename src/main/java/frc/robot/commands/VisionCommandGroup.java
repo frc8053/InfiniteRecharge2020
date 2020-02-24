@@ -8,33 +8,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.modules.ChameleonVision;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LeftShooter;
-import frc.robot.subsystems.RightShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoLeftDumpCommandGroup extends SequentialCommandGroup {
+public class VisionCommandGroup extends SequentialCommandGroup {
   /**
-   * Auto that starts on the left and dumps balls into the low goal.
-   * 
-   * @param driveTrain the driveTrain subsystem used
-   * @param intake the intake subsystem used
-   * @param leftShooter the shooter subsystem used
+   * Creates a new VisionCommandGroup.
    */
-  public AutoLeftDumpCommandGroup(DriveTrain driveTrain, Intake intake, 
-                                  LeftShooter leftShooter, RightShooter rightShooter) {
+  public VisionCommandGroup(ChameleonVision chameleonVision, DriveTrain driveTrain) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveTurnCommand(25.707, driveTrain),
-        new DriveDistanceCommand(248.983, driveTrain),
-        new DriveTurnCommand(90 - 25.707, driveTrain),
-        new DriveDistanceCommand(12, driveTrain),
-        //new PidShootCommandGroup(1000, intake, leftShooter, rightShooter)
-        new TestHighShootCommandGroup(0.5, 0.5, intake, leftShooter, rightShooter)
+        new DriveTurnCommand(chameleonVision.getRotation().yaw, driveTrain),
+        new DriveDistanceCommand(chameleonVision.getDistance() - 200, driveTrain)
     );
   }
 }

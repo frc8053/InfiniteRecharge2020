@@ -9,21 +9,30 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 /**
 * Add your docs here.
 */
-public class Climber extends SubsystemBase {
+public class Elevator extends SubsystemBase {
 
   //Instance Variables
-  private WPI_VictorSPX climbWinch;
+  private WPI_VictorSPX motor;
+  private final double weight = 0.3;
+  private Encoder encoder;
 
   /**
-   * Instantiate Climber Subsystem.g
+   * Instantiate Elevator Subsystem.
    */
-  public Climber() {
-    climbWinch = new WPI_VictorSPX(9);
+  public Elevator() {
+    motor = new WPI_VictorSPX(9);
+    motor.setInverted(true);
+    encoder = new Encoder(8, 9, false, EncodingType.k4X);
+    encoder.setDistancePerPulse(Constants.Elevator.DISTANCE_PER_PULSE);
   }
   
 
@@ -32,11 +41,21 @@ public class Climber extends SubsystemBase {
     // This method will be called once per scheduler run    
   }
 
+  public double getDistance() {
+    return encoder.getDistance() + Constants.Elevator.HEIGHT;
+  }
+
+
   /**
-   * Controls the winch for the climber setup.
+   * Controls the small winch for the climber setup.
    * @param speed sets the speed of the motor [-1, 1]
     */
-  public void climbWinch(double speed) {
-    climbWinch.set(ControlMode.PercentOutput, speed);
+  public void motorControl(double speed) {
+    motor.set(ControlMode.PercentOutput, speed * weight);
+    
   }
+
+  /**
+   * 
+   */
 }

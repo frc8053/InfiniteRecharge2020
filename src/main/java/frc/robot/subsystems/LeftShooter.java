@@ -7,8 +7,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -41,8 +41,9 @@ public class LeftShooter extends PIDSubsystem {
     getController().setTolerance(Shoot.SHOOT_TOLERANCE);
     shooterLeft = new WPI_VictorSPX(7);
     shooterLeft.setInverted(true);
+    shooterLeft.setNeutralMode(NeutralMode.Coast);
 
-    shootLeftEncoder = new Encoder(0,1, true, CounterBase.EncodingType.k4X);   
+    shootLeftEncoder = new Encoder(0, 1, true, CounterBase.EncodingType.k4X);   
 
     shootLeftEncoder.setDistancePerPulse(Shoot.SHOOTRATE);
 
@@ -54,11 +55,11 @@ public class LeftShooter extends PIDSubsystem {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    super.periodic();
     clicks = shootLeftEncoder.get();
     rate = shootLeftEncoder.getRate() * 60;
     SmartDashboard.putNumber("Left Shooter CLicks", clicks);
     SmartDashboard.putNumber("Left Shooter RPM", rate);
+    super.periodic();
   }
 
   @Override

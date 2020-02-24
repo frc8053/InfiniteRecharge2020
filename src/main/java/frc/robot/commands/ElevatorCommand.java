@@ -7,58 +7,52 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.Constants;
+import frc.robot.subsystems.Elevator;
 
-public class DriveDistanceCommand extends PIDCommand {
-  private DriveTrain driveTrain;
+public class ElevatorCommand extends CommandBase {
   
-  /**
-   * Drives forward a certain distance.
-   * 
-   * @param distance Total distance the right encoder reads
-   * @param driveTrain The DriveTrain subsystem used by this command
-   */
+  private final Elevator subsystem;
+  private final DoubleSupplier ds;
 
-  public DriveDistanceCommand(double distance, DriveTrain driveTrain) {
+  /**
+   * Creates a new Elevatorommand.
+   */
+  public ElevatorCommand(DoubleSupplier power, Elevator subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    super(
-        new PIDController(0.2, 0, 0),
-        //input
-        driveTrain::leftEncoderValue,
-        //setpoint
-        distance,
-        //output
-        output -> {
-          driveTrain.tankDrive(-output, -output);
-        },
-        driveTrain
-    );
-    this.driveTrain = driveTrain;
-    getController().setTolerance(5);
+    
+    this.subsystem = subsystem;
+    ds = power;
+
+    addRequirements(subsystem);
   }
+
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveTrain.leftEncoderReset(); 
+
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    subsystem.motorControl(ds.getAsDouble() * 0.95);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveTrain.tankDrive(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (getController().atSetpoint()) {
-      return true;
-    } else {
-      return false;
-    }
-    
+    return false;
   }
 }

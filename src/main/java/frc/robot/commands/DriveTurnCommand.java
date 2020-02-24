@@ -16,6 +16,7 @@ import frc.robot.subsystems.DriveTrain;
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class DriveTurnCommand extends PIDCommand {
+  DriveTrain driveTrain;
   /**
    * Turns the robot to the specified degree.
    * 
@@ -37,12 +38,21 @@ public class DriveTurnCommand extends PIDCommand {
           driveTrain.arcadeDrive(0, output);
         },
         driveTrain);
-    
+    this.driveTrain = driveTrain;
     // Configure additional PID options by calling `getController` here.
     getController().enableContinuousInput(-180, 180);
     getController().setTolerance(DrivePid.TURN_TOLERANCE);
   }
 
+  @Override
+  public void initialize() {
+    driveTrain.resetGyro();
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    driveTrain.tankDrive(0, 0);
+  }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

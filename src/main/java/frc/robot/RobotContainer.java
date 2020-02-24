@@ -19,23 +19,31 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.Climb;
 import frc.robot.Constants.Shoot;
 import frc.robot.commands.AutoLeftDumpCommandGroup;
 import frc.robot.commands.AutoLeftShootCommandGroup;
+import frc.robot.commands.AutoMidDumpCommand;
+import frc.robot.commands.AutoMidShootCommand;
 import frc.robot.commands.AutoRightShootCommandGroup;
-import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultIntakeCommand;
+import frc.robot.commands.DriveDistanceCommand;
+import frc.robot.commands.DriveTurnCommand;
+import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.PidShootCommandGroup;
 import frc.robot.commands.ReverseCommand;
 import frc.robot.commands.SwitchDrive;
 import frc.robot.commands.TestHighShootCommandGroup;
-import frc.robot.subsystems.Climber;
+import frc.robot.commands.VisionCommandGroup;
+import frc.robot.commands.WinchCommand;
+import frc.robot.modules.ChameleonVision;
+import frc.robot.modules.Pipelines;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LeftShooter;
 import frc.robot.subsystems.RightShooter;
+import frc.robot.subsystems.Winch;
 import frc.robot.triggers.AnalogTrigger;
 import frc.robot.triggers.TriggerButton;
 
@@ -56,17 +64,26 @@ public class RobotContainer {
   private Intake intake;
   private LeftShooter leftShooter;
   private RightShooter rightShooter;
-  private Climber climber;
+  private Elevator elevator;
+  private Winch winch;
 
   private AutoRightShootCommandGroup autoRightShootCommandGroup;
+  private AutoMidShootCommand autoMidShootCommand;
+  private AutoMidDumpCommand autoMidDumpCommand;
   private AutoLeftShootCommandGroup autoLeftShootCommandGroup;
   private AutoLeftDumpCommandGroup autoLeftDumpCommandGroup;
+  private VisionCommandGroup visionCommandGroup;
   private TestHighShootCommandGroup testHighShootCommand;
+  private TestHighShootCommandGroup testLowShootCommand;
   private PidShootCommandGroup lowShootCommand;
   private PidShootCommandGroup highShootCommand;
-  private ClimbCommand climbCommand;
+  private WinchCommand winchCommand;
+  private DriveDistanceCommand testDriveDistanceCommand;
+  private DriveTurnCommand testDriveTurnCommand;
 
   XboxController driverController;
+  JoystickButton driverButtonA;
+  JoystickButton driverButtonX;
   JoystickButton driverRightBumper;
   JoystickButton driverLeftBumper;
   POVButton driverPovDown;
@@ -79,9 +96,12 @@ public class RobotContainer {
   JoystickButton maniButtonA;
   JoystickButton maniButtonX;
   JoystickButton maniButtonB;
+  JoystickButton maniRightBumper;
   Trigger maniLeftTrigger;
   Trigger maniRightTrigger;
   AnalogTrigger analogTrigger;
+
+  ChameleonVision chameleonVision;
 
   SendableChooser<Command> autoChooser;
   
@@ -90,27 +110,40 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    chameleonVision = new ChameleonVision("camera", Pipelines.DEFAULT);
+
     // Initalize subsystems
     driveTrain = new DriveTrain();
     intake = new Intake();
     leftShooter = new LeftShooter();
     rightShooter = new RightShooter();
-    climber = new Climber();    
+    elevator = new Elevator(); 
+    winch = new Winch();  
 
     // Initalize commands
     autoRightShootCommandGroup = new AutoRightShootCommandGroup(driveTrain, intake, 
                                                                 leftShooter, rightShooter);
+    autoMidShootCommand = new AutoMidShootCommand(driveTrain, intake, leftShooter, rightShooter);
+    autoMidDumpCommand = new AutoMidDumpCommand(driveTrain, intake, leftShooter, rightShooter);
     autoLeftShootCommandGroup = new AutoLeftShootCommandGroup(driveTrain, intake, 
                                                               leftShooter, rightShooter);
     autoLeftDumpCommandGroup = new AutoLeftDumpCommandGroup(driveTrain, intake, 
                                                             leftShooter, rightShooter);
+    visionCommandGroup = new VisionCommandGroup(chameleonVision, driveTrain);
     lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, leftShooter, rightShooter);
     highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, leftShooter, rightShooter);
-    testHighShootCommand = new TestHighShootCommandGroup(intake, leftShooter, rightShooter);
-    climbCommand = new ClimbCommand(Climb.CLIMB_SPEED, climber);
+    testHighShootCommand = new TestHighShootCommandGroup(1, 2, intake, leftShooter, rightShooter);
+    testLowShootCommand = new TestHighShootCommandGroup(0.3, 0.3, intake, 
+                                                        leftShooter, rightShooter);
+    winchCommand = new WinchCommand(winch);
+    testDriveDistanceCommand = new DriveDistanceCommand(18, driveTrain);
+    testDriveTurnCommand = new DriveTurnCommand(90, driveTrain);
     
-    // Initialize Gamepads
+    // Initialize Driver Controller and Buttons
     driverController = new XboxController(0);
+
+    driverButtonA = new JoystickButton(driverController, Button.kA.value);
+    driverButtonX = new JoystickButton(driverController, Button.kX.value);
     driverPovDown = new POVButton(driverController, 180);
     driverPovUp = new POVButton(driverController, 0);
     driverRightBumper = new JoystickButton(driverController, Button.kBumperRight.value);
@@ -118,14 +151,16 @@ public class RobotContainer {
     driverLeftTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kLeft));
     driverRightTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kRight));
     
-    manipulatorController = new XboxController(1);
     
 
-    // Configure the button bindings
+    // Initialize Manipulator Controller and Buttons
+    manipulatorController = new XboxController(1);
+
     maniButtonA = new JoystickButton(manipulatorController, Button.kA.value);
     maniButtonX = new JoystickButton(manipulatorController, Button.kX.value);
     maniButtonY = new JoystickButton(manipulatorController, Button.kY.value);
     maniButtonB = new JoystickButton(manipulatorController, Button.kB.value);
+    maniRightBumper = new JoystickButton(manipulatorController, Button.kBumperRight.value);
     
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
@@ -145,6 +180,9 @@ public class RobotContainer {
         intake,
         leftShooter,
         rightShooter));
+    elevator.setDefaultCommand(new ElevatorCommand(
+        () -> manipulatorController.getY(Hand.kRight),
+        elevator));
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -158,17 +196,22 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driverPovUp.whenHeld(new SwitchDrive(driveTrain));
     driverPovDown.whenHeld(new ReverseCommand(driveTrain));
-    maniButtonA.whenHeld(lowShootCommand);
+    driverButtonA.whenHeld(visionCommandGroup);
+    driverButtonX.whenReleased(new InstantCommand(() -> driveTrain.turnOnLight(), driveTrain));
+    maniButtonA.whenHeld(testLowShootCommand);
     maniButtonY.whenHeld(testHighShootCommand)  
         .whenReleased(new InstantCommand(
             () -> leftShooter.shoot(0), leftShooter));
-    maniButtonX.whenHeld(highShootCommand);   
-    maniButtonB.whenHeld(climbCommand);                
+    maniRightBumper.whenHeld(winchCommand);
+    maniButtonX.whenHeld(testDriveDistanceCommand);
+    maniButtonB.whenHeld(testDriveTurnCommand);
+
+    //maniButtonX.whenHeld(highShootCommand);                   
     
     autoChooser = new SendableChooser<Command>();
     autoChooser.setDefaultOption("Auto Right Shoot", autoRightShootCommandGroup);
-    autoChooser.addOption("Auto Middle Shoot", autoLeftShootCommandGroup);
-    autoChooser.addOption("Auto Middle Dump", autoRightShootCommandGroup);
+    autoChooser.addOption("Auto Middle Shoot", autoMidShootCommand);
+    autoChooser.addOption("Auto Middle Dump", autoMidDumpCommand);
     autoChooser.addOption("Auto Left Shoot", autoLeftShootCommandGroup);
     autoChooser.addOption("Auto Left Dump", autoLeftDumpCommandGroup);
     Shuffleboard.getTab("SmartDashboard")

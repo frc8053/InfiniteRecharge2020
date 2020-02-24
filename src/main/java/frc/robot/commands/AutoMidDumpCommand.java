@@ -16,25 +16,21 @@ import frc.robot.subsystems.RightShooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoLeftDumpCommandGroup extends SequentialCommandGroup {
+public class AutoMidDumpCommand extends SequentialCommandGroup {
   /**
-   * Auto that starts on the left and dumps balls into the low goal.
-   * 
-   * @param driveTrain the driveTrain subsystem used
-   * @param intake the intake subsystem used
-   * @param leftShooter the shooter subsystem used
+   * Creates a new AutoMidDump.
    */
-  public AutoLeftDumpCommandGroup(DriveTrain driveTrain, Intake intake, 
-                                  LeftShooter leftShooter, RightShooter rightShooter) {
+  public AutoMidDumpCommand(DriveTrain driveTrain, Intake intake, LeftShooter leftShooter, 
+                            RightShooter rightShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveTurnCommand(25.707, driveTrain),
-        new DriveDistanceCommand(248.983, driveTrain),
-        new DriveTurnCommand(90 - 25.707, driveTrain),
-        new DriveDistanceCommand(12, driveTrain),
-        //new PidShootCommandGroup(1000, intake, leftShooter, rightShooter)
-        new TestHighShootCommandGroup(0.5, 0.5, intake, leftShooter, rightShooter)
-    );
+          new DriveTurnCommand(-40.26042879358, driveTrain),
+          new DriveDistanceCommand(104.8334989399857816, driveTrain),
+          new DriveTurnCommand(40.260428793580, driveTrain),
+          new DriveDistanceCommand(42, driveTrain),
+          //new PidShootCommandGroup(1000, intake, leftShooter)
+          new TestHighShootCommandGroup(0.4, 0.5, intake, leftShooter, rightShooter)
+          );
   }
 }

@@ -85,7 +85,7 @@ public class DefaultDriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (driveTrain.getDriver()) {
+    /*if (driveTrain.getDriver()) {
       if (isAReleased.get()) {
         speed = Constants.LOW_SPEED;
       }
@@ -96,24 +96,26 @@ public class DefaultDriveCommand extends CommandBase {
         speed = Constants.HIGH_SPEED;
       }
       reverse = driveTrain.getReverse();
-    } else {
-      if (!isLeftBrake.get() && !isRightBrake.get()) {
-        speed = Constants.HIGH_SPEED;
-      }
-      if (isLeftBrake.get() || isRightBrake.get()) {
-        speed = Constants.MID_SPEED;
-      }
+    } else { */
 
-      if (isLeftBrake.get() && isRightBrake.get()) {
-        speed = Constants.LOW_SPEED;
-      }
-      if (isAReleased.get()) {
-        reverse = -reverse;
-      }
+    if (!isLeftBrake.get() && !isRightBrake.get()) {
+      speed = Constants.HIGH_SPEED;
     }
-    if (isDriveToggled.get()) {
-      driveState = !driveState;
+    if (isLeftBrake.get() || isRightBrake.get()) {
+      speed = Constants.MID_SPEED;
     }
+
+    if (isLeftBrake.get() && isRightBrake.get()) {
+      speed = Constants.LOW_SPEED;
+    }
+    //if (isAReleased.get()) {
+    //reverse = -reverse;
+    //}
+    reverse = 1;
+    driveState = false;
+    //if (isDriveToggled.get()) {
+    //driveState = !driveState;
+    //}
     if (driveState) {
       driveMode = "Tank Drive";
     } else {

@@ -36,7 +36,7 @@ public class Intake extends SubsystemBase {
 
     conveyor = new SpeedControllerGroup(leftConveyor, rightConveyor);
 
-    laserSwitch = new DigitalInput(5);
+    laserSwitch = new DigitalInput(10);
   }
 
   @Override

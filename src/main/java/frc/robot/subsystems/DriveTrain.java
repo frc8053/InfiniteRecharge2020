@@ -10,8 +10,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
@@ -31,6 +33,7 @@ public class DriveTrain extends SubsystemBase {
   private final SpeedControllerGroup rightDrive;
   private final DifferentialDrive myRobot;
 
+  private final Solenoid visionLight;
   private final Encoder leftEncoder;
   private final Encoder rightEncoder;
 
@@ -56,20 +59,23 @@ public class DriveTrain extends SubsystemBase {
     backLeft.setInverted(true);
     backRight.setInverted(true);
 
+    visionLight = new Solenoid(0);
+
     leftDrive = new SpeedControllerGroup(frontLeft, backLeft);
     rightDrive = new SpeedControllerGroup(frontRight, backRight);
     myRobot = new DifferentialDrive(leftDrive, rightDrive);
-    leftEncoder = new Encoder(8, 9);
+    leftEncoder = new Encoder(4, 5, false, EncodingType.k4X);
     leftEncoder.setDistancePerPulse(Drive.DISTANCE_PER_PULSE);
-    rightEncoder = new Encoder(7, 6);
+    rightEncoder = new Encoder(6, 7);
     rightEncoder.setDistancePerPulse(Drive.DISTANCE_PER_PULSE);
 
     switchDrive = false;
     reverse = 1;
 
     gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
+    gyro.calibrate();
   }
-
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -79,6 +85,9 @@ public class DriveTrain extends SubsystemBase {
       driver = "Trey";
     }
     SmartDashboard.putString("Driver", driver);
+    SmartDashboard.putNumber("Drive Encoder", leftEncoder.getDistance());
+    SmartDashboard.putNumber("Yaw", gyro.getAngle());
+    SmartDashboard.putNumber("Modified Yaw", getGyro());
   }
 
   public void arcadeDrive(final double left, final double right) {
@@ -112,6 +121,10 @@ public class DriveTrain extends SubsystemBase {
   public double getReverse() {
     return reverse;
   }
+
+  public void turnOnLight() {
+    visionLight.set(!visionLight.get());
+  }
   /**
    * returns gyro value.
    * @return the rotational value of the gyroscope
@@ -120,9 +133,17 @@ public class DriveTrain extends SubsystemBase {
   public double getGyro() {
     if (gyro.getAngle() > 180) {
       return gyro.getAngle() - 360;
-    } else {
+    } else if (Math.abs(gyro.getAngle()) < 180) {
       return gyro.getAngle();
+    } else if (gyro.getAngle() < -180) {
+      return gyro.getAngle() + 360;
+    } else {
+      return 0;
     }
+  }
+  
+  public void resetGyro() {
+    gyro.reset();
   }
 
 }

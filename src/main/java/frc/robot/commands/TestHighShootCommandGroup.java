@@ -28,8 +28,8 @@ public class TestHighShootCommandGroup extends SequentialCommandGroup {
    * A temporary test command to shoot for the high goal.
    */
   
-  public TestHighShootCommandGroup(Intake intake, LeftShooter leftShooter, 
-                                  RightShooter rightShooter) {
+  public TestHighShootCommandGroup(double speed, double time, Intake intake, 
+                                  LeftShooter leftShooter, RightShooter rightShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
@@ -37,9 +37,9 @@ public class TestHighShootCommandGroup extends SequentialCommandGroup {
         new InstantCommand(() -> rightShooter.shoot(-0.2), rightShooter), 
         new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.3),
         new InstantCommand(() -> intake.conveyorControl(0), intake),
-        new InstantCommand(() -> leftShooter.shoot(1), leftShooter),
-        new InstantCommand(() -> rightShooter.shoot(1), rightShooter),
-        new WaitCommand(2),
+        new InstantCommand(() -> leftShooter.shoot(speed), leftShooter),
+        new InstantCommand(() -> rightShooter.shoot(speed), rightShooter),
+        new WaitCommand(time),
         new ParallelCommandGroup(
           new IntakeCommand(0.8, 0.87, intake)
         )

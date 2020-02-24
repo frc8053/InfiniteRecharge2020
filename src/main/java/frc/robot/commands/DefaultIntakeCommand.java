@@ -52,9 +52,9 @@ public class DefaultIntakeCommand extends CommandBase {
     //} else {
     //intake.conveyorControl(0);
     //}
-    intake.conveyorControl(speed.getAsDouble() * 0.5);
-    leftShooter.shoot(Math.abs(speed.getAsDouble()) * -0.3);
-    rightShooter.shoot(Math.abs(speed.getAsDouble()) * -0.3);
+    intake.conveyorControl(speed.getAsDouble() * 0.55);
+    leftShooter.shoot(Math.abs(speed.getAsDouble()) * -0.15);
+    rightShooter.shoot(Math.abs(speed.getAsDouble()) * -0.15);
   }
 
   // Called once the command ends or is interrupted.
