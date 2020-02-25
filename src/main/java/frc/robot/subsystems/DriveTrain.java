@@ -7,8 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
@@ -17,9 +18,16 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Drive;
+import frc.robot.modules.ChameleonVision;
+import frc.robot.modules.Pipelines;
+
+import java.util.Map;
 
 public class DriveTrain extends SubsystemBase {
   /**
@@ -33,6 +41,8 @@ public class DriveTrain extends SubsystemBase {
   private final SpeedControllerGroup rightDrive;
   private final DifferentialDrive myRobot;
 
+  private final ChameleonVision vision;
+
   private final Solenoid visionLight;
   private final Encoder leftEncoder;
   private final Encoder rightEncoder;
@@ -43,6 +53,12 @@ public class DriveTrain extends SubsystemBase {
   private String driver;
 
   private final Gyro gyro;
+
+  private ShuffleboardTab parameterTab;
+  private NetworkTableEntry maxSpeed;
+  private NetworkTableEntry brakeReduction;
+
+  private double speed;
 
   /**
    * Initalizes drive motors and helper classes.
@@ -55,9 +71,15 @@ public class DriveTrain extends SubsystemBase {
     backLeft = new WPI_VictorSPX(2);
     backRight = new WPI_VictorSPX(3);
     frontLeft.setInverted(true);
+    frontLeft.setNeutralMode(NeutralMode.Brake);
     frontRight.setInverted(true);
+    frontRight.setNeutralMode(NeutralMode.Brake);
     backLeft.setInverted(true);
+    backLeft.setNeutralMode(NeutralMode.Brake);
     backRight.setInverted(true);
+    backRight.setNeutralMode(NeutralMode.Brake);
+
+    vision = new ChameleonVision("camera", Pipelines.DEFAULT);
 
     visionLight = new Solenoid(0);
 
@@ -74,6 +96,19 @@ public class DriveTrain extends SubsystemBase {
 
     gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
     gyro.calibrate();
+
+    parameterTab = Shuffleboard.getTab("Parameter Tab");
+    maxSpeed = parameterTab.add("Max Drive Speed", 1)
+      .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1))
+      .getEntry();
+    brakeReduction = parameterTab.add("Brake Reduction", 0.5)
+      .withWidget(BuiltInWidgets.kNumberSlider)
+      .withProperties(Map.of("min", 0, "max", maxSpeed.getDouble(1)))
+      .getEntry();
+    Shuffleboard.getTab("Electrical Tab")
+      .add("Left Voltage", frontLeft.getMotorOutputVoltage());
+    Shuffleboard.getTab("Electrical Tab")
+      .add("Right Voltage", frontRight.getMotorOutputVoltage());
   }
   
   @Override
@@ -88,6 +123,7 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Drive Encoder", leftEncoder.getDistance());
     SmartDashboard.putNumber("Yaw", gyro.getAngle());
     SmartDashboard.putNumber("Modified Yaw", getGyro());
+    
   }
 
   public void arcadeDrive(final double left, final double right) {
@@ -96,6 +132,14 @@ public class DriveTrain extends SubsystemBase {
 
   public void tankDrive(final double left, final double right) {
     myRobot.tankDrive(left, right);
+  }
+
+  public double getDriveSpeed() {
+    return maxSpeed.getDouble(1);
+  }
+
+  public double getBrakeReduction() {
+    return brakeReduction.getDouble(0.5);
   }
 
   public void leftEncoderReset() {
@@ -125,6 +169,22 @@ public class DriveTrain extends SubsystemBase {
   public void turnOnLight() {
     visionLight.set(!visionLight.get());
   }
+
+  public double getVisionYaw() {
+    return vision.getRotation().yaw;
+  }
+
+  public void toggleDriverMode(boolean isDriverMode) {
+    vision.setDriverMode(isDriverMode);
+  }
+
+  public boolean getDriverMode() {
+    return vision.isDriverMode();
+  }
+
+  public double getVisionDistance() {
+    return 75.25 / Math.tan(vision.getRotation().pitch); 
+  }
   /**
    * returns gyro value.
    * @return the rotational value of the gyroscope
@@ -132,11 +192,11 @@ public class DriveTrain extends SubsystemBase {
 
   public double getGyro() {
     if (gyro.getAngle() > 180) {
-      return gyro.getAngle() - 360;
+      return -(gyro.getAngle() - 360);
     } else if (Math.abs(gyro.getAngle()) < 180) {
-      return gyro.getAngle();
+      return -(gyro.getAngle());
     } else if (gyro.getAngle() < -180) {
-      return gyro.getAngle() + 360;
+      return -(gyro.getAngle() + 360);
     } else {
       return 0;
     }

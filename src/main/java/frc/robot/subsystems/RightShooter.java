@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.Shoot;
@@ -53,6 +54,8 @@ public class RightShooter extends PIDSubsystem {
     setpoint = 3000;
     getController().setSetpoint(setpoint);
     shooterFeedForward = new SimpleMotorFeedforward(Shoot.KS, Shoot.KV);
+    Shuffleboard.getTab("Electrical Tab")
+      .add("Right Shooter Voltage", shooterRight.getMotorOutputVoltage());
   }
 
   @Override
@@ -62,6 +65,7 @@ public class RightShooter extends PIDSubsystem {
     rate = shootRightEncoder.getRate() * 60;
     SmartDashboard.putNumber("Right Shooter Clicks", clicks);
     SmartDashboard.putNumber("Right Shooter RPM", rate);
+    
     super.periodic();
   }
 

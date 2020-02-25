@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -37,11 +38,16 @@ public class Intake extends SubsystemBase {
     conveyor = new SpeedControllerGroup(leftConveyor, rightConveyor);
 
     laserSwitch = new DigitalInput(10);
+    Shuffleboard.getTab("Electrical Tab")
+      .add("Conveyor Voltage", leftConveyor.getMotorOutputVoltage());
+    Shuffleboard.getTab("Electrical Tab")
+      .add("Intake Bar Volatage", intakeBar.getMotorOutputVoltage());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
   }
 
   public void intakeBar(double speed) {

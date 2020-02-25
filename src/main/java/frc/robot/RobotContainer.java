@@ -101,17 +101,12 @@ public class RobotContainer {
   Trigger maniRightTrigger;
   AnalogTrigger analogTrigger;
 
-  ChameleonVision chameleonVision;
-
   SendableChooser<Command> autoChooser;
-  
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    chameleonVision = new ChameleonVision("camera", Pipelines.DEFAULT);
-
     // Initalize subsystems
     driveTrain = new DriveTrain();
     intake = new Intake();
@@ -129,14 +124,14 @@ public class RobotContainer {
                                                               leftShooter, rightShooter);
     autoLeftDumpCommandGroup = new AutoLeftDumpCommandGroup(driveTrain, intake, 
                                                             leftShooter, rightShooter);
-    visionCommandGroup = new VisionCommandGroup(chameleonVision, driveTrain);
+    visionCommandGroup = new VisionCommandGroup(driveTrain);
     lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, leftShooter, rightShooter);
     highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, leftShooter, rightShooter);
     testHighShootCommand = new TestHighShootCommandGroup(1, 2, intake, leftShooter, rightShooter);
     testLowShootCommand = new TestHighShootCommandGroup(0.3, 0.3, intake, 
                                                         leftShooter, rightShooter);
     winchCommand = new WinchCommand(winch);
-    testDriveDistanceCommand = new DriveDistanceCommand(18, driveTrain);
+    testDriveDistanceCommand = new DriveDistanceCommand(50, driveTrain);
     testDriveTurnCommand = new DriveTurnCommand(90, driveTrain);
     
     // Initialize Driver Controller and Buttons
@@ -214,7 +209,7 @@ public class RobotContainer {
     autoChooser.addOption("Auto Middle Dump", autoMidDumpCommand);
     autoChooser.addOption("Auto Left Shoot", autoLeftShootCommandGroup);
     autoChooser.addOption("Auto Left Dump", autoLeftDumpCommandGroup);
-    Shuffleboard.getTab("SmartDashboard")
+    Shuffleboard.getTab("Driver Tab")
       .add("Auto Chooser", autoChooser)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
   }

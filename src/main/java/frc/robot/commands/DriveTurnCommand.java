@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.DrivePid;
 import frc.robot.subsystems.DriveTrain;
@@ -47,12 +48,20 @@ public class DriveTurnCommand extends PIDCommand {
   @Override
   public void initialize() {
     driveTrain.resetGyro();
+    super.initialize();
+  }
+
+  @Override
+  public void execute() {
+    SmartDashboard.putNumber("Turn Error", getController().getPositionError());
+    super.execute();
   }
 
   @Override
   public void end(boolean interrupted) {
     driveTrain.tankDrive(0, 0);
   }
+  
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

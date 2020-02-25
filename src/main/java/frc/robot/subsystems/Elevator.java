@@ -9,9 +9,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -21,7 +21,7 @@ import frc.robot.Constants;
 public class Elevator extends SubsystemBase {
 
   //Instance Variables
-  private WPI_VictorSPX motor;
+  private WPI_VictorSPX elevatorMotor;
   private final double weight = 0.3;
   private Encoder encoder;
 
@@ -29,16 +29,19 @@ public class Elevator extends SubsystemBase {
    * Instantiate Elevator Subsystem.
    */
   public Elevator() {
-    motor = new WPI_VictorSPX(9);
-    motor.setInverted(true);
+    elevatorMotor = new WPI_VictorSPX(9);
+    elevatorMotor.setInverted(true);
     encoder = new Encoder(8, 9, false, EncodingType.k4X);
     encoder.setDistancePerPulse(Constants.Elevator.DISTANCE_PER_PULSE);
+    Shuffleboard.getTab("Electrical Tab") 
+      .add("Elevator Voltage", elevatorMotor.getMotorOutputVoltage()); 
   }
   
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run    
+    // This method will be called once per scheduler run  
+    
   }
 
   public double getDistance() {
@@ -51,7 +54,7 @@ public class Elevator extends SubsystemBase {
    * @param speed sets the speed of the motor [-1, 1]
     */
   public void motorControl(double speed) {
-    motor.set(ControlMode.PercentOutput, speed * weight);
+    elevatorMotor.set(ControlMode.PercentOutput, speed * weight);
     
   }
 

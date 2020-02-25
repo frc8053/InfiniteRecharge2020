@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain; 
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -99,14 +98,18 @@ public class DefaultDriveCommand extends CommandBase {
     } else { */
 
     if (!isLeftBrake.get() && !isRightBrake.get()) {
-      speed = Constants.HIGH_SPEED;
+      speed = driveTrain.getDriveSpeed();
     }
     if (isLeftBrake.get() || isRightBrake.get()) {
-      speed = Constants.MID_SPEED;
+      speed = driveTrain.getDriveSpeed() - driveTrain.getBrakeReduction();
     }
 
     if (isLeftBrake.get() && isRightBrake.get()) {
-      speed = Constants.LOW_SPEED;
+      speed = driveTrain.getDriveSpeed() - (2 * driveTrain.getBrakeReduction());
+    }
+
+    if (!driveTrain.getDriverMode()) {
+      driveTrain.toggleDriverMode(true);
     }
     //if (isAReleased.get()) {
     //reverse = -reverse;

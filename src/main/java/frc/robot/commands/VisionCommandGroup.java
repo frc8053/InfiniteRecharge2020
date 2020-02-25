@@ -8,22 +8,31 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.modules.ChameleonVision;
 import frc.robot.subsystems.DriveTrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class VisionCommandGroup extends SequentialCommandGroup {
+  DriveTrain driveTrain;
+
   /**
    * Creates a new VisionCommandGroup.
    */
-  public VisionCommandGroup(ChameleonVision chameleonVision, DriveTrain driveTrain) {
+  public VisionCommandGroup(DriveTrain driveTrain) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveTurnCommand(chameleonVision.getRotation().yaw, driveTrain),
-        new DriveDistanceCommand(chameleonVision.getDistance() - 200, driveTrain)
+        new DriveTurnCommand(driveTrain.getVisionYaw(), driveTrain)
+    //new DriveDistanceCommand(driveTrain.getVisionDistance() - 200, driveTrain)
+
     );
+    this.driveTrain = driveTrain;
+  }
+
+  @Override
+  public void initialize() {
+    driveTrain.toggleDriverMode(false);
+    super.initialize();
   }
 }

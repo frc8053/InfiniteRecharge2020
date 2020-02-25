@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.subsystems.DriveTrain;
 
@@ -24,7 +25,7 @@ public class DriveDistanceCommand extends PIDCommand {
   public DriveDistanceCommand(double distance, DriveTrain driveTrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     super(
-        new PIDController(0.2, 0, 0),
+        new PIDController(0.3, 0.014, 0.06),
         //input
         driveTrain::leftEncoderValue,
         //setpoint
@@ -36,13 +37,20 @@ public class DriveDistanceCommand extends PIDCommand {
         driveTrain
     );
     this.driveTrain = driveTrain;
-    getController().setTolerance(5);
+    getController().setTolerance(0.5);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     driveTrain.leftEncoderReset(); 
+    super.initialize();
+  }
+
+  @Override
+  public void execute() {
+    SmartDashboard.putNumber("Drive Error", getController().getPositionError());
+    super.execute();
   }
 
   // Called once the command ends or is interrupted.

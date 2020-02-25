@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.Shoot;
@@ -50,6 +51,8 @@ public class LeftShooter extends PIDSubsystem {
     setpoint = 3000;
     getController().setSetpoint(setpoint);
     shooterFeedForward = new SimpleMotorFeedforward(Shoot.KS, Shoot.KV);
+    Shuffleboard.getTab("Electrical Tab")
+      .add("Left Shooter Voltage", shooterLeft.getMotorOutputVoltage());
   }
 
   @Override
@@ -59,10 +62,11 @@ public class LeftShooter extends PIDSubsystem {
     rate = shootLeftEncoder.getRate() * 60;
     SmartDashboard.putNumber("Left Shooter CLicks", clicks);
     SmartDashboard.putNumber("Left Shooter RPM", rate);
+    
     super.periodic();
   }
 
-  @Override
+@Override
 public void enable() {
     super.enable();
     System.out.println("enabeling the left thing: " + super.isEnabled());
