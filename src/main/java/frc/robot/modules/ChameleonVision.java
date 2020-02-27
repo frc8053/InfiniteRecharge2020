@@ -53,12 +53,8 @@ public class ChameleonVision {
     return new Rotational(pitch.getDouble(0.0), yaw.getDouble(0.0));
   }
 
-  public double getDistance() {
-    return 75.25 / Math.tan(getRotation().pitch); 
-  }
-
   public void setDriverMode(boolean enabled) {
-    driverMode.setValue(enabled);
+    driverMode.setBoolean(enabled);
   }
 
   public boolean isDriverMode() {

@@ -41,7 +41,8 @@ public class DriveTrain extends SubsystemBase {
   private final SpeedControllerGroup rightDrive;
   private final DifferentialDrive myRobot;
 
-  private final ChameleonVision vision;
+  private final ChameleonVision shootVision;
+  private final ChameleonVision intakeVision;
 
   private final Solenoid visionLight;
   private final Encoder leftEncoder;
@@ -79,7 +80,8 @@ public class DriveTrain extends SubsystemBase {
     backRight.setInverted(true);
     backRight.setNeutralMode(NeutralMode.Brake);
 
-    vision = new ChameleonVision("camera", Pipelines.DEFAULT);
+    shootVision = new ChameleonVision("Shooter Cam", Pipelines.DRIVER);
+    intakeVision = new ChameleonVision("Intake Cam", Pipelines.DRIVER);
 
     visionLight = new Solenoid(0);
 
@@ -105,10 +107,6 @@ public class DriveTrain extends SubsystemBase {
       .withWidget(BuiltInWidgets.kNumberSlider)
       .withProperties(Map.of("min", 0, "max", maxSpeed.getDouble(1)))
       .getEntry();
-    Shuffleboard.getTab("Electrical Tab")
-      .add("Left Voltage", frontLeft.getMotorOutputVoltage());
-    Shuffleboard.getTab("Electrical Tab")
-      .add("Right Voltage", frontRight.getMotorOutputVoltage());
   }
   
   @Override
@@ -123,7 +121,10 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Drive Encoder", leftEncoder.getDistance());
     SmartDashboard.putNumber("Yaw", gyro.getAngle());
     SmartDashboard.putNumber("Modified Yaw", getGyro());
-    
+    SmartDashboard.putNumber("Left Voltage", frontLeft.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Right Voltage", frontRight.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Distance to Goal", getVisionDistance());
+    SmartDashboard.putNumber("Vision Yaw", getVisionYaw());
   }
 
   public void arcadeDrive(final double left, final double right) {
@@ -139,7 +140,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getBrakeReduction() {
-    return brakeReduction.getDouble(0.5);
+    return brakeReduction.getDouble(0.33);
   }
 
   public void leftEncoderReset() {
@@ -171,19 +172,27 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getVisionYaw() {
-    return vision.getRotation().yaw;
+    return shootVision.getRotation().yaw;
   }
 
   public void toggleDriverMode(boolean isDriverMode) {
-    vision.setDriverMode(isDriverMode);
+    shootVision.setDriverMode(isDriverMode);
+  }
+
+  public boolean findTarget() {
+    return shootVision.isValidFrame();
   }
 
   public boolean getDriverMode() {
-    return vision.isDriverMode();
+    return shootVision.isDriverMode();
+  }
+
+  public void setPipeline(double pipeline) {
+    shootVision.setVisionPipeline(pipeline);
   }
 
   public double getVisionDistance() {
-    return 75.25 / Math.tan(vision.getRotation().pitch); 
+    return 75.25 / Math.tan(shootVision.getRotation().pitch); 
   }
   /**
    * returns gyro value.

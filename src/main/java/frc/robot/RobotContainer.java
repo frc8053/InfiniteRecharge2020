@@ -96,6 +96,7 @@ public class RobotContainer {
   JoystickButton maniButtonA;
   JoystickButton maniButtonX;
   JoystickButton maniButtonB;
+  JoystickButton maniLeftBumper;
   JoystickButton maniRightBumper;
   Trigger maniLeftTrigger;
   Trigger maniRightTrigger;
@@ -155,6 +156,7 @@ public class RobotContainer {
     maniButtonX = new JoystickButton(manipulatorController, Button.kX.value);
     maniButtonY = new JoystickButton(manipulatorController, Button.kY.value);
     maniButtonB = new JoystickButton(manipulatorController, Button.kB.value);
+    maniLeftBumper = new JoystickButton(manipulatorController, Button.kBumperLeft.value);
     maniRightBumper = new JoystickButton(manipulatorController, Button.kBumperRight.value);
     
     // Set the default drive command to split-stick arcade drive
@@ -197,6 +199,11 @@ public class RobotContainer {
     maniButtonY.whenHeld(testHighShootCommand)  
         .whenReleased(new InstantCommand(
             () -> leftShooter.shoot(0), leftShooter));
+    maniLeftBumper.whenHeld(new InstantCommand(
+        () -> winch.winchControl(-1), winch))
+        .whenReleased(new InstantCommand(
+            () -> winch.winchControl(0)
+        ));
     maniRightBumper.whenHeld(winchCommand);
     maniButtonX.whenHeld(testDriveDistanceCommand);
     maniButtonB.whenHeld(testDriveTurnCommand);

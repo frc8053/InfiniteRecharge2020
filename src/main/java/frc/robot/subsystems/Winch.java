@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -20,22 +21,19 @@ public class Winch extends SubsystemBase {
 
   //Instance Variables
   private WPI_VictorSPX winch;
-  private final double weight = 0.3;
 
   /**
    * Instantiate Elevator Subsystem.
    */
   public Winch() {
     winch = new WPI_VictorSPX(10);
-    Shuffleboard.getTab("Electrical Tab")
-      .add("Winch Voltage", winch.getMotorOutputVoltage());
   }
   
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-        
+    SmartDashboard.putNumber("Winch Voltage", winch.getMotorOutputVoltage());    
   }
 
   /**
@@ -43,7 +41,7 @@ public class Winch extends SubsystemBase {
    * @param speed sets the speed of the motor [-1, 1]
     */
   public void winchControl(double speed) {
-    winch.set(ControlMode.PercentOutput, speed * weight);
+    winch.set(ControlMode.PercentOutput, speed);
     
   }
   

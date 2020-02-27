@@ -54,8 +54,6 @@ public class RightShooter extends PIDSubsystem {
     setpoint = 3000;
     getController().setSetpoint(setpoint);
     shooterFeedForward = new SimpleMotorFeedforward(Shoot.KS, Shoot.KV);
-    Shuffleboard.getTab("Electrical Tab")
-      .add("Right Shooter Voltage", shooterRight.getMotorOutputVoltage());
   }
 
   @Override
@@ -65,7 +63,7 @@ public class RightShooter extends PIDSubsystem {
     rate = shootRightEncoder.getRate() * 60;
     SmartDashboard.putNumber("Right Shooter Clicks", clicks);
     SmartDashboard.putNumber("Right Shooter RPM", rate);
-    
+    SmartDashboard.putNumber("Right Shooter Voltage", shooterRight.getMotorOutputVoltage());
     super.periodic();
   }
 

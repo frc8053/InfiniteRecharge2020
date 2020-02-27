@@ -8,6 +8,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.modules.Pipelines;
 import frc.robot.subsystems.DriveTrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -23,9 +25,9 @@ public class VisionCommandGroup extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveTurnCommand(driveTrain.getVisionYaw(), driveTrain)
+        new WaitUntilCommand(driveTrain::findTarget),
+        new VisionTurnCommand(driveTrain)
     //new DriveDistanceCommand(driveTrain.getVisionDistance() - 200, driveTrain)
-
     );
     this.driveTrain = driveTrain;
   }
@@ -33,6 +35,7 @@ public class VisionCommandGroup extends SequentialCommandGroup {
   @Override
   public void initialize() {
     driveTrain.toggleDriverMode(false);
+    driveTrain.setPipeline(Pipelines.DEFAULT);
     super.initialize();
   }
 }

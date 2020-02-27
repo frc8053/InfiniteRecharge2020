@@ -51,8 +51,6 @@ public class LeftShooter extends PIDSubsystem {
     setpoint = 3000;
     getController().setSetpoint(setpoint);
     shooterFeedForward = new SimpleMotorFeedforward(Shoot.KS, Shoot.KV);
-    Shuffleboard.getTab("Electrical Tab")
-      .add("Left Shooter Voltage", shooterLeft.getMotorOutputVoltage());
   }
 
   @Override
@@ -62,6 +60,7 @@ public class LeftShooter extends PIDSubsystem {
     rate = shootLeftEncoder.getRate() * 60;
     SmartDashboard.putNumber("Left Shooter CLicks", clicks);
     SmartDashboard.putNumber("Left Shooter RPM", rate);
+    SmartDashboard.putNumber("Left Shooter Voltage", shooterLeft.getMotorOutputVoltage());
     
     super.periodic();
   }
