@@ -36,8 +36,8 @@ public class ChameleonVision {
   public ChameleonVision(String camera, double pipelinex) {
     NetworkTableInstance netTables = NetworkTableInstance.getDefault();
     NetworkTable ctable = netTables.getTable("chameleon-vision").getSubTable(camera);
-    pitch = ctable.getEntry("pitch");
-    yaw = ctable.getEntry("yaw");
+    pitch = ctable.getEntry("targetPitch");
+    yaw = ctable.getEntry("targetYaw");
     pipeline = ctable.getEntry("pipeline");
     timestamp = ctable.getEntry("timestamp");
     driverMode = ctable.getEntry("driver_mode");
@@ -54,7 +54,7 @@ public class ChameleonVision {
   }
 
   public void setDriverMode(boolean enabled) {
-    driverMode.setValue(enabled);
+    driverMode.setBoolean(enabled);
   }
 
   public boolean isDriverMode() {
