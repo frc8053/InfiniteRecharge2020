@@ -36,8 +36,6 @@ import frc.robot.commands.SwitchDrive;
 import frc.robot.commands.TestHighShootCommandGroup;
 import frc.robot.commands.VisionCommandGroup;
 import frc.robot.commands.WinchCommand;
-import frc.robot.modules.ChameleonVision;
-import frc.robot.modules.Pipelines;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -74,6 +72,7 @@ public class RobotContainer {
   private AutoLeftDumpCommandGroup autoLeftDumpCommandGroup;
   private VisionCommandGroup visionCommandGroup;
   private TestHighShootCommandGroup testHighShootCommand;
+  private TestHighShootCommandGroup testMidShootCommand;
   private TestHighShootCommandGroup testLowShootCommand;
   private PidShootCommandGroup lowShootCommand;
   private PidShootCommandGroup highShootCommand;
@@ -98,6 +97,7 @@ public class RobotContainer {
   JoystickButton maniButtonB;
   JoystickButton maniLeftBumper;
   JoystickButton maniRightBumper;
+  POVButton maniPovUp;
   Trigger maniLeftTrigger;
   Trigger maniRightTrigger;
   AnalogTrigger analogTrigger;
@@ -129,6 +129,7 @@ public class RobotContainer {
     lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, leftShooter, rightShooter);
     highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, leftShooter, rightShooter);
     testHighShootCommand = new TestHighShootCommandGroup(1, 2, intake, leftShooter, rightShooter);
+    testMidShootCommand = new TestHighShootCommandGroup(.9, 1.5, intake, leftShooter, rightShooter);
     testLowShootCommand = new TestHighShootCommandGroup(0.3, 0.3, intake, 
                                                         leftShooter, rightShooter);
     winchCommand = new WinchCommand(winch);
@@ -158,6 +159,7 @@ public class RobotContainer {
     maniButtonB = new JoystickButton(manipulatorController, Button.kB.value);
     maniLeftBumper = new JoystickButton(manipulatorController, Button.kBumperLeft.value);
     maniRightBumper = new JoystickButton(manipulatorController, Button.kBumperRight.value);
+    maniPovUp = new POVButton(manipulatorController, 0);
     
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
@@ -193,17 +195,19 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driverPovUp.whenHeld(new SwitchDrive(driveTrain));
     driverPovDown.whenHeld(new ReverseCommand(driveTrain));
-    driverButtonA.whenHeld(visionCommandGroup);
-    driverButtonX.whenReleased(new InstantCommand(() -> driveTrain.turnOnLight(), driveTrain));
+    driverRightBumper.whenHeld(visionCommandGroup);
+    driverButtonX.whenReleased(new InstantCommand(() -> driveTrain.toggleOnLight(), driveTrain));
     maniButtonA.whenHeld(testLowShootCommand);
+    maniButtonB.whenHeld(testMidShootCommand);
     maniButtonY.whenHeld(testHighShootCommand)  
         .whenReleased(new InstantCommand(
             () -> leftShooter.shoot(0), leftShooter));
-    maniLeftBumper.whenHeld(new InstantCommand(
+    maniPovUp.whenHeld(new InstantCommand(
         () -> winch.winchControl(-1), winch))
         .whenReleased(new InstantCommand(
             () -> winch.winchControl(0)
         ));
+    maniLeftBumper.whenHeld(visionCommandGroup);
     maniRightBumper.whenHeld(winchCommand);
     maniButtonX.whenHeld(testDriveDistanceCommand);
     maniButtonB.whenHeld(testDriveTurnCommand);

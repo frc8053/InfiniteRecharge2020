@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.Shoot;
@@ -65,7 +64,7 @@ public class LeftShooter extends PIDSubsystem {
     super.periodic();
   }
 
-@Override
+  @Override
 public void enable() {
     super.enable();
     System.out.println("enabeling the left thing: " + super.isEnabled());

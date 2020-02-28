@@ -17,7 +17,7 @@ import frc.robot.subsystems.DriveTrain;
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class VisionTurnCommand extends PIDCommand {
-  DriveTrain driveTrain;
+  private DriveTrain driveTrain;
   /**
    * Turns the robot to the specified degree.
    * 
@@ -47,12 +47,13 @@ public class VisionTurnCommand extends PIDCommand {
   @Override
   public void initialize() {
     driveTrain.resetGyro();
-    getController().setSetpoint(driveTrain.getVisionYaw());
     super.initialize();
+    m_setpoint = () -> driveTrain.getVisionYaw();
   }
-
+  
   @Override
   public void execute() {
+    SmartDashboard.putNumber("vision pid setpoint", getController().getSetpoint());
     super.execute();
   }
 

@@ -103,9 +103,9 @@ public class DriveTrain extends SubsystemBase {
     maxSpeed = parameterTab.add("Max Drive Speed", 1)
       .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1))
       .getEntry();
-    brakeReduction = parameterTab.add("Brake Reduction", 0.5)
+    brakeReduction = parameterTab.add("Brake Reduction", 0.33)
       .withWidget(BuiltInWidgets.kNumberSlider)
-      .withProperties(Map.of("min", 0, "max", maxSpeed.getDouble(1)))
+      .withProperties(Map.of("min", 0, "max", 0.5))
       .getEntry();
   }
   
@@ -124,6 +124,7 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Left Voltage", frontLeft.getMotorOutputVoltage());
     SmartDashboard.putNumber("Right Voltage", frontRight.getMotorOutputVoltage());
     SmartDashboard.putNumber("Distance to Goal", getVisionDistance());
+    SmartDashboard.putBoolean("Good to Shoot", getVisionDistance() > 200);
     SmartDashboard.putNumber("Vision Yaw", getVisionYaw());
   }
 
@@ -167,8 +168,12 @@ public class DriveTrain extends SubsystemBase {
     return reverse;
   }
 
-  public void turnOnLight() {
+  public void toggleOnLight() {
     visionLight.set(!visionLight.get());
+  }
+
+  public void turnOnLight(boolean lightOn) {
+    visionLight.set(!lightOn);
   }
 
   public double getVisionYaw() {
@@ -187,7 +192,7 @@ public class DriveTrain extends SubsystemBase {
     return shootVision.isDriverMode();
   }
 
-  public void setPipeline(double pipeline) {
+  public void setShootPipeline(double pipeline) {
     shootVision.setVisionPipeline(pipeline);
   }
 

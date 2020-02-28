@@ -36,10 +36,11 @@ public class AutoRightShootCommandGroup extends SequentialCommandGroup {
         .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED, 
         IntakeConstant.CONVEYOR_SPEED, intake)),
         new DriveDistanceCommand(-73.37, driveTrain),
-        new DriveTurnCommand(20.3603, driveTrain),
+        new DriveTurnCommand(22.48, driveTrain),
+        //new VisionCommandGroup(driveTrain),
         //new PidShootCommandGroup(3000, intake, leftShooter, rightShooter).withTimeout(6),
-        new TestHighShootCommandGroup(0.9, 2, intake, leftShooter, rightShooter).withTimeout(4),
-        new DriveTurnCommand(-20.3603, driveTrain),
+        new TestHighShootCommandGroup(0.95, 2, intake, leftShooter, rightShooter).withTimeout(4),
+        new DriveTurnCommand(-22.48, driveTrain),
         new DriveDistanceCommand(114, driveTrain)
         .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED,
         IntakeConstant.CONVEYOR_SPEED, intake))

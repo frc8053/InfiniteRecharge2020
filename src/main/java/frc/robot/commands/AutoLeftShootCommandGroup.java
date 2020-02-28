@@ -29,10 +29,12 @@ public class AutoLeftShootCommandGroup extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveDistanceCommand(112, driveTrain),
-        new DriveTurnCommand(46.888, driveTrain),
+        new DriveTurnCommand(-19.335, driveTrain),
+        new DriveDistanceCommand(151.017, driveTrain),
+        new DriveTurnCommand(84.285, driveTrain),
         //new PidShootCommandGroup(2500, intake, leftShooter, rightShooter)
-        new TestHighShootCommandGroup(0.8, 1.75, intake, leftShooter, rightShooter)
+        //new VisionCommandGroup(driveTrain);
+        new TestHighShootCommandGroup(0.95, 1.75, intake, leftShooter, rightShooter)
     );
   }
 }

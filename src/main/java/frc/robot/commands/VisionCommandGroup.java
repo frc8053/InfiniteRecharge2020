@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.modules.Pipelines;
@@ -16,7 +17,7 @@ import frc.robot.subsystems.DriveTrain;
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class VisionCommandGroup extends SequentialCommandGroup {
-  DriveTrain driveTrain;
+  private DriveTrain driveTrain;
 
   /**
    * Creates a new VisionCommandGroup.
@@ -25,8 +26,9 @@ public class VisionCommandGroup extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new WaitUntilCommand(driveTrain::findTarget),
-        new VisionTurnCommand(driveTrain)
+        new InstantCommand(() -> driveTrain.turnOnLight(false), driveTrain),
+        //new WaitUntilCommand(driveTrain::findTarget),
+        new BasicVisionCommand(driveTrain)
     //new DriveDistanceCommand(driveTrain.getVisionDistance() - 200, driveTrain)
     );
     this.driveTrain = driveTrain;
@@ -35,7 +37,15 @@ public class VisionCommandGroup extends SequentialCommandGroup {
   @Override
   public void initialize() {
     driveTrain.toggleDriverMode(false);
-    driveTrain.setPipeline(Pipelines.DEFAULT);
+    driveTrain.setShootPipeline(Pipelines.DEFAULT);
     super.initialize();
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    driveTrain.turnOnLight(true);
+    driveTrain.toggleDriverMode(true);
+    driveTrain.setShootPipeline(Pipelines.DRIVER);
+    super.end(interrupted);
   }
 }

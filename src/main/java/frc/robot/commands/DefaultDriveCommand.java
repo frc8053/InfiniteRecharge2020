@@ -112,7 +112,7 @@ public class DefaultDriveCommand extends CommandBase {
 
     if (!driveTrain.getDriverMode()) {
       driveTrain.toggleDriverMode(true);
-      driveTrain.setPipeline(Pipelines.DRIVER);
+      driveTrain.setShootPipeline(Pipelines.DRIVER);
     }
     //if (isAReleased.get()) {
     //reverse = -reverse;

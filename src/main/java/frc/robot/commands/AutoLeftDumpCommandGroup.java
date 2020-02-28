@@ -29,9 +29,9 @@ public class AutoLeftDumpCommandGroup extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveTurnCommand(25.707, driveTrain),
-        new DriveDistanceCommand(248.983, driveTrain),
-        new DriveTurnCommand(90 - 25.707, driveTrain),
+        new DriveTurnCommand(23.4946, driveTrain),
+        new DriveDistanceCommand(228.26352227, driveTrain),
+        new DriveTurnCommand(90 - 23.4946, driveTrain),
         new DriveDistanceCommand(12, driveTrain),
         //new PidShootCommandGroup(1000, intake, leftShooter, rightShooter)
         new TestHighShootCommandGroup(0.5, 0.5, intake, leftShooter, rightShooter)

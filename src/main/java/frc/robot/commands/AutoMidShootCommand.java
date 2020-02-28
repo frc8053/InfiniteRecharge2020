@@ -28,7 +28,8 @@ public class AutoMidShootCommand extends SequentialCommandGroup {
           new DriveDistanceCommand(-90.498964082468922, driveTrain),
           new DriveTurnCommand(-48.471614533921, driveTrain),
           //new PidShootCommandGroup(/*help*/0, intake, shooter)
-          new TestHighShootCommandGroup(0.8, 2, intake, leftShooter, rightShooter)
+          //new VisionCommandGroup(driveTrain),
+          new TestHighShootCommandGroup(0.95, 2, intake, leftShooter, rightShooter)
           );
   }
 }

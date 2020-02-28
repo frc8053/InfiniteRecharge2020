@@ -19,9 +19,9 @@ import frc.robot.subsystems.RightShooter;
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class PidShootCommandGroup extends SequentialCommandGroup {
-  LeftShooter leftShooter;
-  RightShooter rightShooter;
-  Intake intake;
+  private LeftShooter leftShooter;
+  private RightShooter rightShooter;
+  private Intake intake;
   /**
    * Shoots balls at the specified rpm using a PID control system.
    * 
