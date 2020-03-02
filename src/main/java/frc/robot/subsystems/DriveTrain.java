@@ -59,7 +59,7 @@ public class DriveTrain extends SubsystemBase {
   private NetworkTableEntry maxSpeed;
   private NetworkTableEntry brakeReduction;
 
-  private double speed;
+  private String shootDistance;
 
   /**
    * Initalizes drive motors and helper classes.
@@ -117,6 +117,17 @@ public class DriveTrain extends SubsystemBase {
     } else {
       driver = "Trey";
     }
+    if (getVisionPitch() > 2) {
+      shootDistance = "Too Close";
+    }
+    if (getVisionPitch() < -2) {
+      shootDistance = "Too Far";
+    }
+    if (Math.abs(getVisionPitch()) < 2) {
+      shootDistance = "Good";
+    }
+  
+    SmartDashboard.putString("Good to Shoot", shootDistance);
     SmartDashboard.putString("Driver", driver);
     SmartDashboard.putNumber("Drive Encoder", leftEncoder.getDistance());
     SmartDashboard.putNumber("Yaw", gyro.getAngle());
@@ -124,7 +135,6 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Left Voltage", frontLeft.getMotorOutputVoltage());
     SmartDashboard.putNumber("Right Voltage", frontRight.getMotorOutputVoltage());
     SmartDashboard.putNumber("Distance to Goal", getVisionDistance());
-    SmartDashboard.putBoolean("Good to Shoot", getVisionDistance() > 200);
     SmartDashboard.putNumber("Vision Yaw", getVisionYaw());
   }
 
@@ -173,7 +183,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void turnOnLight(boolean lightOn) {
-    visionLight.set(!lightOn);
+    visionLight.set(lightOn);
   }
 
   public double getVisionYaw() {
@@ -193,11 +203,29 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void setShootPipeline(double pipeline) {
-    shootVision.setVisionPipeline(pipeline);
+    shootVision.setVisionPipeline(Pipelines.DEFAULT);
+  }
+
+  /**
+   * Sets the intake cam driverMode settings.
+   * @param driverMode whether driver mode should be turned on or off
+  */
+  public void setIntakeDriverMode(boolean driverMode) {
+    intakeVision.setDriverMode(driverMode);
+    if (driverMode) {
+      intakeVision.setVisionPipeline(Pipelines.DRIVER);
+    } else {
+      intakeVision.setVisionPipeline(Pipelines.DEFAULT);
+    }
+  }
+
+  public double getVisionPitch() {
+    //return 75.25 / Math.tan(shootVision.getRotation().pitch + 30); 
+    return shootVision.getRotation().pitch;
   }
 
   public double getVisionDistance() {
-    return 75.25 / Math.tan(shootVision.getRotation().pitch); 
+    return 75.25 * Math.tan(shootVision.getRotation().pitch + 20.618809296);
   }
   /**
    * returns gyro value.
@@ -220,4 +248,5 @@ public class DriveTrain extends SubsystemBase {
     gyro.reset();
   }
 
+  
 }

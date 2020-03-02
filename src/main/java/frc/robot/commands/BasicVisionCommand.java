@@ -13,6 +13,8 @@ import frc.robot.subsystems.DriveTrain;
 public class BasicVisionCommand extends CommandBase {
   private DriveTrain driveTrain;
   private boolean finished;
+  private boolean isTurning;
+  private boolean isTurnNegative;
 
   /**
    * Basic command to turn to vision target.
@@ -28,19 +30,38 @@ public class BasicVisionCommand extends CommandBase {
   @Override
   public void initialize() {
     finished = false;
+    isTurning = false;
+    isTurnNegative = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (driveTrain.getVisionYaw() > 0.5) {
-      driveTrain.arcadeDrive(0, -0.45);
+      if (isTurning && isTurnNegative) {
+        driveTrain.arcadeDrive(0, 0);
+        isTurning = false;
+        finished = true;
+        return;
+      }
+      isTurning = true;
+      driveTrain.arcadeDrive(0, -0.52);
     }
+    
     if (driveTrain.getVisionYaw() < -0.5) {
-      driveTrain.arcadeDrive(0, 0.45);
+      if (isTurning && !isTurnNegative) {
+        driveTrain.arcadeDrive(0, 0);
+        isTurning = false;
+        finished = true;
+        return;
+      }
+      isTurnNegative = true;
+      isTurning = true;
+      driveTrain.arcadeDrive(0, 0.52);
     } 
     if (Math.abs(driveTrain.getVisionYaw()) < 0.5) {
       driveTrain.arcadeDrive(0, 0);
+      isTurning = false;
       finished = true;
     }
   }

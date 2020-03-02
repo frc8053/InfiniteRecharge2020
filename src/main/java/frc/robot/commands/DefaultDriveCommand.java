@@ -30,11 +30,12 @@ public class DefaultDriveCommand extends CommandBase {
   private Supplier<Boolean> isRightBrake;
 
   private Supplier<Boolean> isDriveToggled;
-  double speed;
-  double reverse;
-  boolean driveState;
-  String driveMode;
-  String reversed;
+  private double speed;
+  private double reverse;
+  private boolean driveState;
+  private String driveMode;
+  private String reversed;
+  private String shootDistance;
 
   /**
    * Drives the robot using the joysticks on the gamepad. Can
@@ -81,6 +82,9 @@ public class DefaultDriveCommand extends CommandBase {
   @Override
   public void initialize() {
     reverse = 1;
+    driveTrain.setIntakeDriverMode(true);
+    driveTrain.setShootPipeline(Pipelines.DEFAULT);
+    driveTrain.turnOnLight(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -112,11 +116,9 @@ public class DefaultDriveCommand extends CommandBase {
 
     if (!driveTrain.getDriverMode()) {
       driveTrain.toggleDriverMode(true);
-      driveTrain.setShootPipeline(Pipelines.DRIVER);
+      //driveTrain.setShootPipeline(Pipelines.DRIVER);
     }
-    //if (isAReleased.get()) {
-    //reverse = -reverse;
-    //}
+    
     reverse = 1;
     driveState = false;
     //if (isDriveToggled.get()) {
@@ -134,6 +136,7 @@ public class DefaultDriveCommand extends CommandBase {
     }
     SmartDashboard.putString("Drive Mode", driveMode);
     SmartDashboard.putString("Direction", reversed);
+ 
     if (driveState) {
       driveTrain.tankDrive(leftY.getAsDouble() * speed * reverse, 
                           rightY.getAsDouble() * speed * reverse);

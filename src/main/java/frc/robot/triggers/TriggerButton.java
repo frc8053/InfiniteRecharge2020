@@ -7,21 +7,26 @@
 
 package frc.robot.triggers;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * Add your docs here.
  */
 public class TriggerButton extends Trigger {
-  private double triggerValue;
+  private XboxController joystick;
+  private Hand hand;
 
   /**
    * Turns the trigger on the controller into a button.
    * 
-   * @param triggerValue value of the trigger
+   * @param joystick value of the trigger
    */
-  public TriggerButton(double triggerValue) {
-    this.triggerValue = triggerValue;
+  public TriggerButton(XboxController joystick, Hand hand) {
+    this.joystick = joystick;
+    this.hand = hand;
   }
 
   /*
@@ -29,7 +34,7 @@ public class TriggerButton extends Trigger {
   */
   @Override
   public boolean get() {
-    if (Math.abs(triggerValue) > 0.8) {
+    if (Math.abs(joystick.getTriggerAxis(hand)) > 0.8) {
       return true;
     } else {
       return false;

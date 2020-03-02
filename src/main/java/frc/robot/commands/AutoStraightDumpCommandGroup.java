@@ -16,25 +16,17 @@ import frc.robot.subsystems.RightShooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoLeftShootCommandGroup extends SequentialCommandGroup {
+public class AutoStraightDumpCommandGroup extends SequentialCommandGroup {
   /**
-   * Auto that starts and the Left side of the field and shoots into the high goal.
-   * 
-   * @param driveTrain the driveTrain subsystem used
-   * @param intake the intake subsystem used
-   * @param leftShooter the shooter subsystem used
+   * Creates a new AutoStraightDumpCommandGroup.
    */
-  public AutoLeftShootCommandGroup(DriveTrain driveTrain, Intake intake, 
-                                  LeftShooter leftShooter, RightShooter rightShooter) {
+  public AutoStraightDumpCommandGroup(DriveTrain driveTrain, Intake intake, 
+                                      LeftShooter leftShooter, RightShooter rightShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveTurnCommand(-19.335, driveTrain),
-        new DriveDistanceCommand(-151.017, driveTrain),
-        new DriveTurnCommand(84.285, driveTrain),
-        //new PidShootCommandGroup(2500, intake, leftShooter, rightShooter)
-        //new VisionCommandGroup(driveTrain);
-        new TestHighShootCommandGroup(0.95, 1.75, intake, leftShooter, rightShooter).withTimeout(5)
+        new DriveDistanceCommand(-86, driveTrain),
+        new TestHighShootCommandGroup(0.6, 0.1, intake, leftShooter, rightShooter).withTimeout(5)
     );
   }
 }

@@ -26,7 +26,7 @@ public class VisionCommandGroup extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new InstantCommand(() -> driveTrain.turnOnLight(false), driveTrain),
+        new InstantCommand(() -> driveTrain.turnOnLight(true), driveTrain),
         //new WaitUntilCommand(driveTrain::findTarget),
         new BasicVisionCommand(driveTrain)
     //new DriveDistanceCommand(driveTrain.getVisionDistance() - 200, driveTrain)
@@ -43,7 +43,7 @@ public class VisionCommandGroup extends SequentialCommandGroup {
 
   @Override
   public void end(boolean interrupted) {
-    driveTrain.turnOnLight(true);
+    driveTrain.turnOnLight(false);
     driveTrain.toggleDriverMode(true);
     driveTrain.setShootPipeline(Pipelines.DRIVER);
     super.end(interrupted);
