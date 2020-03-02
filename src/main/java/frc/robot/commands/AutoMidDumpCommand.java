@@ -26,11 +26,11 @@ public class AutoMidDumpCommand extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super(
           new DriveTurnCommand(-40.26042879358, driveTrain),
-          new DriveDistanceCommand(104.8334989399857816, driveTrain),
+          new DriveDistanceCommand(-104.8334989399857816, driveTrain),
           new DriveTurnCommand(40.260428793580, driveTrain),
-          new DriveDistanceCommand(42, driveTrain),
+          new DriveDistanceCommand(-42, driveTrain),
           //new PidShootCommandGroup(1000, intake, leftShooter)
-          new TestHighShootCommandGroup(0.4, 0.5, intake, leftShooter, rightShooter)
+          new TestHighShootCommandGroup(0.4, 0.1, intake, leftShooter, rightShooter).withTimeout(3)
           );
   }
 }

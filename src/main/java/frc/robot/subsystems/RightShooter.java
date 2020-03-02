@@ -68,12 +68,6 @@ public class RightShooter extends PIDSubsystem {
   }
 
   @Override
-public void enable() {
-    super.enable();
-    System.out.println("enabeling the right thing");
-  }
-
-  @Override
   protected void useOutput(double output, double setpoint) {
     shooterRight.setVoltage(output + ((12.0 / 5000.0) * setpoint));
   }

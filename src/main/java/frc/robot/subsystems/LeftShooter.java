@@ -65,12 +65,6 @@ public class LeftShooter extends PIDSubsystem {
   }
 
   @Override
-public void enable() {
-    super.enable();
-    System.out.println("enabeling the left thing: " + super.isEnabled());
-  }
-
-  @Override
   protected void useOutput(double output, double setpoint) {
     shooterLeft.setVoltage((output + ((12.0 / 5000.0) * setpoint)));
   }

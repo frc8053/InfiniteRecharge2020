@@ -46,15 +46,15 @@ public class DefaultIntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.intakeBar(speed.getAsDouble() * 0.8);
+    intake.intakeBar(speed.getAsDouble() * 0.65);
     //if (intake.haveBall()) {
     //intake.conveyorControl(IntakeConstant.CONVEYOR_SPEED);
     //} else {
     //intake.conveyorControl(0);
     //}
-    intake.conveyorControl(speed.getAsDouble() * 0.55);
-    leftShooter.shoot(Math.abs(speed.getAsDouble()) * -0.15);
-    rightShooter.shoot(Math.abs(speed.getAsDouble()) * -0.15);
+    intake.conveyorControl(speed.getAsDouble() * 0.3);
+    leftShooter.shoot(Math.abs(speed.getAsDouble()) * 0);
+    rightShooter.shoot(Math.abs(speed.getAsDouble()) * 0);
   }
 
   // Called once the command ends or is interrupted.

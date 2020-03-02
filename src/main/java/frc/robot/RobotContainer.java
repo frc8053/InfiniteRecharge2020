@@ -7,12 +7,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -25,10 +27,11 @@ import frc.robot.commands.AutoLeftShootCommandGroup;
 import frc.robot.commands.AutoMidDumpCommand;
 import frc.robot.commands.AutoMidShootCommand;
 import frc.robot.commands.AutoRightShootCommandGroup;
+import frc.robot.commands.AutoStraightCommandGroup;
+import frc.robot.commands.AutoStraightDumpCommandGroup;
+import frc.robot.commands.AutoStraightShootCommandGroup;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultIntakeCommand;
-import frc.robot.commands.DriveDistanceCommand;
-import frc.robot.commands.DriveTurnCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.PidShootCommandGroup;
 import frc.robot.commands.ReverseCommand;
@@ -65,7 +68,10 @@ public class RobotContainer {
   private Elevator elevator;
   private Winch winch;
 
+  private AutoStraightCommandGroup autoStraightCommandGroup;
   private AutoRightShootCommandGroup autoRightShootCommandGroup;
+  private AutoStraightShootCommandGroup autoStraightShootCommandGroup;
+  private AutoStraightDumpCommandGroup autoStraightDumpCommandGroup;
   private AutoMidShootCommand autoMidShootCommand;
   private AutoMidDumpCommand autoMidDumpCommand;
   private AutoLeftShootCommandGroup autoLeftShootCommandGroup;
@@ -73,12 +79,11 @@ public class RobotContainer {
   private VisionCommandGroup visionCommandGroup;
   private TestHighShootCommandGroup testHighShootCommand;
   private TestHighShootCommandGroup testMidShootCommand;
+  private TestHighShootCommandGroup lowerMidShootCommand;
   private TestHighShootCommandGroup testLowShootCommand;
   private PidShootCommandGroup lowShootCommand;
   private PidShootCommandGroup highShootCommand;
   private WinchCommand winchCommand;
-  private DriveDistanceCommand testDriveDistanceCommand;
-  private DriveTurnCommand testDriveTurnCommand;
 
   XboxController driverController;
   JoystickButton driverButtonA;
@@ -102,6 +107,11 @@ public class RobotContainer {
   Trigger maniRightTrigger;
   AnalogTrigger analogTrigger;
 
+  ShuffleboardTab parameterTab;
+  NetworkTableEntry highSpeed;
+  NetworkTableEntry midSpeed;
+  NetworkTableEntry lowerMidSpeed;
+  NetworkTableEntry lowSpeed;
   SendableChooser<Command> autoChooser;
 
   /**
@@ -114,11 +124,27 @@ public class RobotContainer {
     leftShooter = new LeftShooter();
     rightShooter = new RightShooter();
     elevator = new Elevator(); 
-    winch = new Winch();  
+    winch = new Winch();
+    
+    /*parameterTab = Shuffleboard.getTab("Parameter Tab");
+    highSpeed = parameterTab.add("High Speed", 0.9)
+      .getEntry();
+    midSpeed = parameterTab.add("Mid Speed", 0.825)
+      .getEntry();
+    lowerMidSpeed = parameterTab.add("Lower Mid Speed", 0.75)
+      .getEntry();
+    lowSpeed = parameterTab.add("Low Speed", 0.4)
+      .getEntry();
+    */
 
     // Initalize commands
+    autoStraightCommandGroup = new AutoStraightCommandGroup(driveTrain);
     autoRightShootCommandGroup = new AutoRightShootCommandGroup(driveTrain, intake, 
                                                                 leftShooter, rightShooter);
+    autoStraightShootCommandGroup = new AutoStraightShootCommandGroup(driveTrain, intake, 
+                                                                      leftShooter, rightShooter);
+    autoStraightDumpCommandGroup =  new AutoStraightDumpCommandGroup(driveTrain, intake,
+                                                                     leftShooter, rightShooter);
     autoMidShootCommand = new AutoMidShootCommand(driveTrain, intake, leftShooter, rightShooter);
     autoMidDumpCommand = new AutoMidDumpCommand(driveTrain, intake, leftShooter, rightShooter);
     autoLeftShootCommandGroup = new AutoLeftShootCommandGroup(driveTrain, intake, 
@@ -128,13 +154,16 @@ public class RobotContainer {
     visionCommandGroup = new VisionCommandGroup(driveTrain);
     lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, leftShooter, rightShooter);
     highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, leftShooter, rightShooter);
-    testHighShootCommand = new TestHighShootCommandGroup(1, 2, intake, leftShooter, rightShooter);
-    testMidShootCommand = new TestHighShootCommandGroup(.9, 1.5, intake, leftShooter, rightShooter);
-    testLowShootCommand = new TestHighShootCommandGroup(0.3, 0.3, intake, 
+    testHighShootCommand = new TestHighShootCommandGroup(0.9, 1.5, intake, 
+      leftShooter, rightShooter);
+    testMidShootCommand = new TestHighShootCommandGroup(0.825, 1.5, intake, 
                                                         leftShooter, rightShooter);
+    lowerMidShootCommand = new TestHighShootCommandGroup(.75, 1.5, intake, 
+                                                         leftShooter, rightShooter);
+    testLowShootCommand = new TestHighShootCommandGroup(0.6, 0.3, intake, 
+                                                        leftShooter, rightShooter);
+    highShootCommand = new PidShootCommandGroup(3000, intake, leftShooter, rightShooter);
     winchCommand = new WinchCommand(winch);
-    testDriveDistanceCommand = new DriveDistanceCommand(50, driveTrain);
-    testDriveTurnCommand = new DriveTurnCommand(90, driveTrain);
     
     // Initialize Driver Controller and Buttons
     driverController = new XboxController(0);
@@ -145,8 +174,8 @@ public class RobotContainer {
     driverPovUp = new POVButton(driverController, 0);
     driverRightBumper = new JoystickButton(driverController, Button.kBumperRight.value);
     driverLeftBumper = new JoystickButton(driverController, Button.kBumperLeft.value);
-    driverLeftTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kLeft));
-    driverRightTrigger = new TriggerButton(driverController.getTriggerAxis(Hand.kRight));
+    driverLeftTrigger = new TriggerButton(driverController, Hand.kLeft);
+    driverRightTrigger = new TriggerButton(driverController, Hand.kRight);
     
     
 
@@ -198,6 +227,7 @@ public class RobotContainer {
     driverRightBumper.whenHeld(visionCommandGroup);
     driverButtonX.whenReleased(new InstantCommand(() -> driveTrain.toggleOnLight(), driveTrain));
     maniButtonA.whenHeld(testLowShootCommand);
+    maniButtonX.whenHeld(lowerMidShootCommand);
     maniButtonB.whenHeld(testMidShootCommand);
     maniButtonY.whenHeld(testHighShootCommand)  
         .whenReleased(new InstantCommand(
@@ -209,13 +239,13 @@ public class RobotContainer {
         ));
     maniLeftBumper.whenHeld(visionCommandGroup);
     maniRightBumper.whenHeld(winchCommand);
-    maniButtonX.whenHeld(testDriveDistanceCommand);
-    maniButtonB.whenHeld(testDriveTurnCommand);
-
     //maniButtonX.whenHeld(highShootCommand);                   
     
     autoChooser = new SendableChooser<Command>();
     autoChooser.setDefaultOption("Auto Right Shoot", autoRightShootCommandGroup);
+    autoChooser.addOption("Auto Straight", autoStraightCommandGroup);
+    autoChooser.addOption("Auto Straight Shoot", autoStraightShootCommandGroup);
+    autoChooser.addOption("Auto Straight Dump", autoStraightDumpCommandGroup);
     autoChooser.addOption("Auto Middle Shoot", autoMidShootCommand);
     autoChooser.addOption("Auto Middle Dump", autoMidDumpCommand);
     autoChooser.addOption("Auto Left Shoot", autoLeftShootCommandGroup);
