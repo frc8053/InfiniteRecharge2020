@@ -114,8 +114,8 @@ public class DefaultDriveCommand extends CommandBase {
       speed = Constants.LOW_SPEED;
     }
 
-    if (!driveTrain.getDriverMode()) {
-      driveTrain.toggleDriverMode(true);
+    if (!driveTrain.getShootDriverMode()) {
+      driveTrain.setShootDriverMode(true);
       //driveTrain.setShootPipeline(Pipelines.DRIVER);
     }
     

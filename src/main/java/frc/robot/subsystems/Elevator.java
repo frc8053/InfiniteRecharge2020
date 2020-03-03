@@ -52,7 +52,7 @@ public class Elevator extends SubsystemBase {
    * @param speed sets the speed of the motor [-1, 1]
     */
   public void motorControl(double speed) {
-    elevatorMotor.set(ControlMode.PercentOutput, speed * weight);
+    elevatorMotor.set(ControlMode.PercentOutput, speed);
     
   }
 
