@@ -48,7 +48,7 @@ public class VisionTurnCommand extends PIDCommand {
   public void initialize() {
     driveTrain.resetGyro();
     super.initialize();
-    m_setpoint = () -> driveTrain.getVisionYaw();
+    m_setpoint = () -> driveTrain.getShootVisionYaw();
   }
   
   @Override

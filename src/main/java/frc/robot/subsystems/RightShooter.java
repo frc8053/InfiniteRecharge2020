@@ -45,7 +45,8 @@ public class RightShooter extends PIDSubsystem {
     shooterRight = new WPI_VictorSPX(8);
     shooterRight.setNeutralMode(NeutralMode.Coast);
 
-    shootRightEncoder = new Encoder(2, 3, false, CounterBase.EncodingType.k4X);    
+    shootRightEncoder = new Encoder(2, 3, false, CounterBase.EncodingType.k1X);  
+    shootRightEncoder.setSamplesToAverage(7);  
 
     //shootRightEncoder = new DutyCycleEncoder(3);
     

@@ -37,7 +37,7 @@ public class BasicVisionCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (driveTrain.getVisionYaw() > 0.5) {
+    if (driveTrain.getShootVisionYaw() > 0.5) {
       if (isTurning && isTurnNegative) {
         driveTrain.arcadeDrive(0, 0);
         isTurning = false;
@@ -48,7 +48,7 @@ public class BasicVisionCommand extends CommandBase {
       driveTrain.arcadeDrive(0, -0.52);
     }
     
-    if (driveTrain.getVisionYaw() < -0.5) {
+    if (driveTrain.getShootVisionYaw() < -0.5) {
       if (isTurning && !isTurnNegative) {
         driveTrain.arcadeDrive(0, 0);
         isTurning = false;
@@ -59,7 +59,7 @@ public class BasicVisionCommand extends CommandBase {
       isTurning = true;
       driveTrain.arcadeDrive(0, 0.52);
     } 
-    if (Math.abs(driveTrain.getVisionYaw()) < 0.5) {
+    if (Math.abs(driveTrain.getShootVisionYaw()) < 0.5) {
       driveTrain.arcadeDrive(0, 0);
       isTurning = false;
       finished = true;

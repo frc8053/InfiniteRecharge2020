@@ -36,7 +36,7 @@ public class VisionCommandGroup extends SequentialCommandGroup {
 
   @Override
   public void initialize() {
-    driveTrain.toggleDriverMode(false);
+    driveTrain.setShootDriverMode(false);
     driveTrain.setShootPipeline(Pipelines.DEFAULT);
     super.initialize();
   }
@@ -44,7 +44,7 @@ public class VisionCommandGroup extends SequentialCommandGroup {
   @Override
   public void end(boolean interrupted) {
     driveTrain.turnOnLight(false);
-    driveTrain.toggleDriverMode(true);
+    driveTrain.setShootDriverMode(true);
     driveTrain.setShootPipeline(Pipelines.DRIVER);
     super.end(interrupted);
   }

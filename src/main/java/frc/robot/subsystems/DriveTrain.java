@@ -62,7 +62,7 @@ public class DriveTrain extends SubsystemBase {
   private String shootDistance;
 
   /**
-   * Initalizes drive motors and helper classes.
+   * Initalizes drive motors and helper classes. Also contains vision values from the Pi.
    * </p>
    */
 
@@ -117,13 +117,13 @@ public class DriveTrain extends SubsystemBase {
     } else {
       driver = "Trey";
     }
-    if (getVisionPitch() > 2) {
+    if (getShootVisionPitch() > 2) {
       shootDistance = "Too Close";
     }
-    if (getVisionPitch() < -2) {
+    if (getShootVisionPitch() < -2) {
       shootDistance = "Too Far";
     }
-    if (Math.abs(getVisionPitch()) < 2) {
+    if (Math.abs(getShootVisionPitch()) < 2) {
       shootDistance = "Good";
     }
   
@@ -135,76 +135,163 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Left Voltage", frontLeft.getMotorOutputVoltage());
     SmartDashboard.putNumber("Right Voltage", frontRight.getMotorOutputVoltage());
     SmartDashboard.putNumber("Distance to Goal", getVisionDistance());
-    SmartDashboard.putNumber("Vision Yaw", getVisionYaw());
+    SmartDashboard.putNumber("Vision Yaw", getShootVisionYaw());
   }
 
+  /**
+   * Powers the drive motors in arcade drive format.
+   * @param left speed given to the motors along the x-axis. Between -1 and 1.
+   * @param right turning power to the motors. Between -1 and 1.
+   */
   public void arcadeDrive(final double left, final double right) {
     myRobot.arcadeDrive(left, right);
   }
 
+  /**
+   * Powers the drive motors in tank drive format.
+   * @param left the power given to the left side of the robot
+   * @param right the power given to the right side of the robot
+   */
   public void tankDrive(final double left, final double right) {
     myRobot.tankDrive(left, right);
   }
 
+  /**
+   * Returns the max drive speed given by Shuffleboard.
+   * @return max drive speed
+   */
   public double getDriveSpeed() {
     return maxSpeed.getDouble(1);
   }
 
+  /**
+   * Returns the brake reduction given by the Shuffleboard.
+   * @return brake reduction
+   */
   public double getBrakeReduction() {
     return brakeReduction.getDouble(0.33);
   }
 
+  /**
+   * Resets the left drive Encoder.
+   */
   public void leftEncoderReset() {
     leftEncoder.reset();
   }
 
+  /**
+   * Returns the distance recieved from the left drive encoder.
+   * @return the distance determined from the left drive encoder
+   */
   public double leftEncoderValue() {
     return leftEncoder.getDistance();
   }
   
+  /**
+   * Switches the drive style boolean.
+   */
   public void switchDrive() {
     switchDrive = !switchDrive;
   }
 
+  /**
+   * Returns the drive style boolean.
+   * @return
+   */
   public Boolean getDriver() {
     return switchDrive;
   }
   
+  /**
+   * Inverts the value of the reverse double.
+   */
   public void switchReverse() {
     reverse = -reverse;
   }
 
+  /**
+   * Returns the value of the reverse double. 
+   * Used to reverse direction of the drive train.
+   * @return
+   */
   public double getReverse() {
     return reverse;
   }
 
+  /**
+   * Used to toggle the vision light.
+   * It inverts the current value.
+   */
   public void toggleOnLight() {
     visionLight.set(!visionLight.get());
   }
 
+  /**
+   * Sets the vision light to on or off.
+   * @param lightOn Set true for on, false for off.
+   */
   public void turnOnLight(boolean lightOn) {
     visionLight.set(lightOn);
   }
 
-  public double getVisionYaw() {
+  /**
+   * Returns the yaw value of the shoot vision camera.
+   * @return
+   */
+  public double getShootVisionYaw() {
     return shootVision.getRotation().yaw;
   }
-
-  public void toggleDriverMode(boolean isDriverMode) {
-    shootVision.setDriverMode(isDriverMode);
+  
+  /**
+   * Returns the pitch of the shooter camera.
+   * @return
+   */
+  public double getShootVisionPitch() {
+    //return 75.25 / Math.tan(shootVision.getRotation().pitch + 30); 
+    return shootVision.getRotation().pitch;
   }
 
-  public boolean findTarget() {
-    return shootVision.isValidFrame();
+  /**
+   * returns the distance to the goal as calculated by the shoot camera.
+   * @return
+   */
+  public double getVisionDistance() {
+    return 75.25 * Math.tan((shootVision.getRotation().pitch + 20.618809296) * Math.PI / 180);
   }
-
-  public boolean getDriverMode() {
+  
+  /**
+  * Returns if the shooter vision camera is in driver mode.
+  * @return
+  */
+  public boolean getShootDriverMode() {
     return shootVision.isDriverMode();
   }
 
+  /**
+   * sets the driveMode settings of the shoot camera. 
+   * @param isDriverMode whether camera should be in drive mode.
+   */
+  public void setShootDriverMode(boolean isDriverMode) {
+    shootVision.setDriverMode(isDriverMode);
+  }
+
+  /**
+   * Returns if the shoot camera identifies the vision target.
+   * @return
+   */
+  public boolean findShootTarget() {
+    return shootVision.isValidFrame();
+  }
+
+  /**
+   * Sets the pipeline of the vision camera.
+   * @param pipeline the pipeline of the vision camera desired
+   */
   public void setShootPipeline(double pipeline) {
     shootVision.setVisionPipeline(Pipelines.DEFAULT);
   }
+
+  
 
   /**
    * Sets the intake cam driverMode settings.
@@ -219,14 +306,7 @@ public class DriveTrain extends SubsystemBase {
     }
   }
 
-  public double getVisionPitch() {
-    //return 75.25 / Math.tan(shootVision.getRotation().pitch + 30); 
-    return shootVision.getRotation().pitch;
-  }
-
-  public double getVisionDistance() {
-    return 75.25 * Math.tan(shootVision.getRotation().pitch + 20.618809296);
-  }
+  
   /**
    * returns gyro value.
    * @return the rotational value of the gyroscope
@@ -244,6 +324,9 @@ public class DriveTrain extends SubsystemBase {
     }
   }
   
+  /**
+   * resets the Gyro back to 0 degrees.
+   */
   public void resetGyro() {
     gyro.reset();
   }
