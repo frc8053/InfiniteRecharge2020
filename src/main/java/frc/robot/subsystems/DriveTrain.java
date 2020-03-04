@@ -98,7 +98,6 @@ public class DriveTrain extends SubsystemBase {
 
     gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
     gyro.calibrate();
-
     parameterTab = Shuffleboard.getTab("Parameter Tab");
     maxSpeed = parameterTab.add("Max Drive Speed", 1)
       .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1))
@@ -258,7 +257,7 @@ public class DriveTrain extends SubsystemBase {
   public double getVisionDistance() {
     return 75.25 * Math.tan((shootVision.getRotation().pitch + 20.618809296) * Math.PI / 180);
   }
-  
+
   /**
   * Returns if the shooter vision camera is in driver mode.
   * @return

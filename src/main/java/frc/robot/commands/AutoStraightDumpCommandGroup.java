@@ -25,7 +25,7 @@ public class AutoStraightDumpCommandGroup extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveDistanceCommand(-86, driveTrain),
+        new DriveDistanceCommand(-86, false, driveTrain),
         new TestHighShootCommandGroup(0.6, 0.1, intake, leftShooter, rightShooter).withTimeout(5)
     );
   }

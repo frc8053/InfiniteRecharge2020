@@ -32,7 +32,10 @@ import frc.robot.commands.AutoStraightDumpCommandGroup;
 import frc.robot.commands.AutoStraightShootCommandGroup;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultIntakeCommand;
+import frc.robot.commands.DriveDistanceCommand;
+import frc.robot.commands.DriveTurnCommand;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.PidShootCommandGroup;
 import frc.robot.commands.ReverseCommand;
 import frc.robot.commands.SwitchDrive;
@@ -84,6 +87,8 @@ public class RobotContainer {
   private PidShootCommandGroup lowShootCommand;
   private PidShootCommandGroup highShootCommand;
   private WinchCommand winchCommand;
+  private DriveDistanceCommand tDriveDistanceCommand;
+  private DriveTurnCommand tDriveTurnCommand;
 
   XboxController driverController;
   JoystickButton driverButtonA;
@@ -164,6 +169,8 @@ public class RobotContainer {
                                                         leftShooter, rightShooter);
     highShootCommand = new PidShootCommandGroup(3000, intake, leftShooter, rightShooter);
     winchCommand = new WinchCommand(winch);
+    tDriveDistanceCommand = new DriveDistanceCommand(50, true, driveTrain);
+    tDriveTurnCommand = new DriveTurnCommand(-90, driveTrain);
     
     // Initialize Driver Controller and Buttons
     driverController = new XboxController(0);
@@ -222,8 +229,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driverPovUp.whenHeld(new SwitchDrive(driveTrain));
-    driverPovDown.whenHeld(new ReverseCommand(driveTrain));
+    driverPovUp.whenHeld(tDriveDistanceCommand.raceWith(new IntakeCommand(0.8, 0.5, intake)));
+    driverPovDown.whenHeld(tDriveTurnCommand);
     driverRightBumper.whenHeld(visionCommandGroup);
     driverButtonX.whenReleased(new InstantCommand(() -> driveTrain.toggleOnLight(), driveTrain));
     maniButtonA.whenHeld(testLowShootCommand);

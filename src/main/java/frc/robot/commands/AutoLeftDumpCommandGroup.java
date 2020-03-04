@@ -30,9 +30,9 @@ public class AutoLeftDumpCommandGroup extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super(
         new DriveTurnCommand(23.4946, driveTrain),
-        new DriveDistanceCommand(-228.26352227, driveTrain),
+        new DriveDistanceCommand(-228.26352227, false, driveTrain),
         new DriveTurnCommand(90 - 23.4946, driveTrain),
-        new DriveDistanceCommand(-12, driveTrain),
+        new DriveDistanceCommand(-12, false, driveTrain),
         //new PidShootCommandGroup(1000, intake, leftShooter, rightShooter)
         new TestHighShootCommandGroup(0.5, 0.1, intake, leftShooter, rightShooter).withTimeout(3)
     );
