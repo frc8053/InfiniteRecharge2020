@@ -28,7 +28,7 @@ public class VisionCommandGroup extends SequentialCommandGroup {
     super(
         new InstantCommand(() -> driveTrain.turnOnLight(true), driveTrain),
         //new WaitUntilCommand(driveTrain::findTarget),
-        new BasicVisionCommand(driveTrain)
+        new VisionAlignCommand(driveTrain)
     //new DriveDistanceCommand(driveTrain.getVisionDistance() - 200, driveTrain)
     );
     this.driveTrain = driveTrain;
