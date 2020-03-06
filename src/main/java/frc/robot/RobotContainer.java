@@ -39,7 +39,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.PidShootCommandGroup;
 import frc.robot.commands.ReverseCommand;
 import frc.robot.commands.SwitchDrive;
-import frc.robot.commands.TestHighShootCommandGroup;
+import frc.robot.commands.SetRpmShootCommandGroup;
 import frc.robot.commands.VisionCommandGroup;
 import frc.robot.commands.WinchCommand;
 import frc.robot.subsystems.DriveTrain;
@@ -78,10 +78,10 @@ public class RobotContainer {
   private AutoLeftShootCommandGroup autoLeftShootCommandGroup;
   private AutoLeftDumpCommandGroup autoLeftDumpCommandGroup;
   private VisionCommandGroup visionCommandGroup;
-  private TestHighShootCommandGroup testHighShootCommand;
-  private TestHighShootCommandGroup testMidShootCommand;
-  private TestHighShootCommandGroup lowerMidShootCommand;
-  private TestHighShootCommandGroup testLowShootCommand;
+  private SetRpmShootCommandGroup testHighShootCommand;
+  private SetRpmShootCommandGroup testMidShootCommand;
+  private SetRpmShootCommandGroup lowerMidShootCommand;
+  private SetRpmShootCommandGroup testLowShootCommand;
   private PidShootCommandGroup lowShootCommand;
   private PidShootCommandGroup highShootCommand;
   private WinchCommand winchCommand;
@@ -154,15 +154,14 @@ public class RobotContainer {
     autoLeftDumpCommandGroup = new AutoLeftDumpCommandGroup(driveTrain, intake, 
                                                             pidShooter);
     visionCommandGroup = new VisionCommandGroup(driveTrain);
-    lowShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
     highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
-    testHighShootCommand = new TestHighShootCommandGroup(0.9, 1.5, intake, 
+    testHighShootCommand = new SetRpmShootCommandGroup(4500, intake, 
       pidShooter);
-    testMidShootCommand = new TestHighShootCommandGroup(0.825, 1.5, intake, 
+    testMidShootCommand = new SetRpmShootCommandGroup(4000, intake, 
                                                         pidShooter);
-    lowerMidShootCommand = new TestHighShootCommandGroup(.75, 1.5, intake, 
+    lowerMidShootCommand = new SetRpmShootCommandGroup(3500, intake, 
                                                          pidShooter);
-    testLowShootCommand = new TestHighShootCommandGroup(0.6, 0.3, intake, 
+    testLowShootCommand = new SetRpmShootCommandGroup(1000, intake, 
                                                         pidShooter);
     highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
     winchCommand = new WinchCommand(winch);

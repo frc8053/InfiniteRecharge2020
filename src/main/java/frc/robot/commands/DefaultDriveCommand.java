@@ -82,6 +82,7 @@ public class DefaultDriveCommand extends CommandBase {
   @Override
   public void initialize() {
     reverse = 1;
+    driveTrain.setShootDriverMode(true);
     driveTrain.setIntakeDriverMode(true);
     driveTrain.setShootPipeline(Pipelines.DEFAULT);
     driveTrain.turnOnLight(true);

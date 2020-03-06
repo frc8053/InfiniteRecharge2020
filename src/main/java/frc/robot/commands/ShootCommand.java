@@ -38,7 +38,8 @@ public class ShootCommand extends CommandBase {
   @Override
   public void initialize() {
     //shooter.setSetpoint(5000);
-    shooter.setSetpoint(TrajectoryMath.getVelocityFromDistance(TrajectoryMath.getDistanceFromPitch(drive.getShootVisionPitch())));
+    shooter.setSetpoint(TrajectoryMath.getVelocityFromDistance(
+        TrajectoryMath.getDistanceFromPitch(drive.getShootVisionPitch())));
   }
 
   // Called every time the scheduler runs while the command is scheduled.

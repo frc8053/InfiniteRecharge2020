@@ -116,24 +116,13 @@ public class DriveTrain extends SubsystemBase {
     } else {
       driver = "Trey";
     }
-    if (getShootVisionPitch() > 2) {
-      shootDistance = "Too Close";
-    }
-    if (getShootVisionPitch() < -2) {
-      shootDistance = "Too Far";
-    }
-    if (Math.abs(getShootVisionPitch()) < 2) {
-      shootDistance = "Good";
-    }
   
-    SmartDashboard.putString("Good to Shoot", shootDistance);
     SmartDashboard.putString("Driver", driver);
     SmartDashboard.putNumber("Drive Encoder", leftEncoder.getDistance());
     SmartDashboard.putNumber("Yaw", gyro.getAngle());
     SmartDashboard.putNumber("Modified Yaw", getGyro());
     SmartDashboard.putNumber("Left Voltage", frontLeft.getMotorOutputVoltage());
     SmartDashboard.putNumber("Right Voltage", frontRight.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Distance to Goal", getVisionDistance());
     SmartDashboard.putNumber("Vision Yaw", getShootVisionYaw());
   }
 

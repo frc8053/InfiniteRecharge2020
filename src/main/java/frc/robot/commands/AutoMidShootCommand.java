@@ -25,9 +25,7 @@ public class AutoMidShootCommand extends SequentialCommandGroup {
           new DriveTurnCommand(48.471614533921, driveTrain),
           new DriveDistanceCommand(90.498964082468922, false, driveTrain),
           new DriveTurnCommand(-48.471614533921, driveTrain),
-          new PidShootCommandGroup(3000, intake, pidShooter)
-          //new VisionCommandGroup(driveTrain),
-          //new TestHighShootCommandGroup(0.95, 2, intake, pidShooter).withTimeout(5)
-          );
+          new SetRpmShootCommandGroup(2500, intake, pidShooter)
+    );
   }
 }

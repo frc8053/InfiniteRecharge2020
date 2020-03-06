@@ -101,6 +101,7 @@ public class PidShooter extends SubsystemBase {
 
   public void shootRpm(double setpoint) {
     setSetpoint(setpoint);
+    runRpm();
   }
 
   public void shootRpm() {

@@ -23,11 +23,11 @@ public class VisionAlignCommand extends CommandBase {
   */
   double rotationError;
   double distanceError;
-  double KpRot=-0.1;
-  double KpDist=-0.1;
-  double angleTolerance=5;//Deadzone for the angle control loop
-  double distanceTolerance=5;//Deadzone for the distance control loop
-  double constantForce=0.35;
+  double KpRot = -0.1;
+  double KpDist = -0.1;
+  double angleTolerance = 5; //Deadzone for the angle control loop
+  double distanceTolerance = 5; //Deadzone for the distance control loop
+  double constantForce = 0.35;
   double rotationAjust;
   double distanceAjust;
 
@@ -47,10 +47,11 @@ public class VisionAlignCommand extends CommandBase {
     rotationError = driveTrain.getShootVisionYaw();
     distanceError = driveTrain.getShootVisionPitch();
 
-    if (rotationError > angleTolerance)
+    if (rotationError > angleTolerance) {
       rotationAjust = constantForce;
-    else
+    } else {
       rotationAjust =  - constantForce;
+    }
     driveTrain.arcadeDrive(0, rotationAjust);
     SmartDashboard.putNumber("Distance Adjuist", distanceAjust);
     SmartDashboard.putNumber("Rotation Adjust", rotationAjust);

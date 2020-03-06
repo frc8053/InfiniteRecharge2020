@@ -32,8 +32,7 @@ public class AutoLeftDumpCommandGroup extends SequentialCommandGroup {
         new DriveDistanceCommand(-228.26352227, false, driveTrain),
         new DriveTurnCommand(90 - 23.4946, driveTrain),
         new DriveDistanceCommand(-12, false, driveTrain),
-        new PidShootCommandGroup(1000, intake, pidShooter).withTimeout(5)
-        //new TestHighShootCommandGroup(0.5, 0.1, intake, pidShooter).withTimeout(3)
+        new SetRpmShootCommandGroup(1000, intake, pidShooter).withTimeout(3)
     );
   }
 }

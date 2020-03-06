@@ -27,8 +27,7 @@ public class AutoMidDumpCommand extends SequentialCommandGroup {
           new DriveDistanceCommand(-104.8334989399857816, false, driveTrain),
           new DriveTurnCommand(40.260428793580, driveTrain),
           new DriveDistanceCommand(-42, false, driveTrain),
-          //new PidShootCommandGroup(1000, intake, leftShooter)
-          new TestHighShootCommandGroup(0.4, 0.1, intake, pidShooter).withTimeout(3)
-          );
+          new SetRpmShootCommandGroup(1000, intake, pidShooter)
+    );
   }
 }

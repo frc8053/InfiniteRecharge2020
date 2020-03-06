@@ -32,30 +32,14 @@ public class AutoRightShootCommandGroup extends SequentialCommandGroup {
     super(
         new DriveDistanceCommand(86.63, false, driveTrain),
         new DriveTurnCommand(22.48, driveTrain),
-        //new VisionCommandGroup(driveTrain),
-        new PidShootCommandGroup(2500, intake, pidShooter).withTimeout(4),
-        //new TestHighShootCommandGroup(0.95, 2, intake, pidShooter).withTimeout(5),
+        new SetRpmShootCommandGroup(2500, intake, pidShooter).withTimeout(3),
         new DriveTurnCommand(-22.48, driveTrain),
         new DriveDistanceCommand(114, true, driveTrain)
           .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED, 
           IntakeConstant.CONVEYOR_SPEED, intake)),
         new DriveDistanceCommand(-114, true, driveTrain),
         new DriveTurnCommand(22.48, driveTrain),
-        //new TestHighShootCommandGroup(0.5, 1.5, intake, pidShooter).withTimeout(3)
-        new PidShootCommandGroup(2500, intake, pidShooter)
-        
-    /*new DriveDistanceCommand(160, true, driveTrain)
-    .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED, 
-    IntakeConstant.CONVEYOR_SPEED, intake)),
-    new DriveDistanceCommand(-73.37, false, driveTrain),
-    new DriveTurnCommand(22.48, driveTrain),
-    //new VisionCommandGroup(driveTrain),
-    //new PidShootCommandGroup(3000, intake, leftShooter, rightShooter).withTimeout(6),
-    new TestHighShootCommandGroup(0.95, 2, intake, leftShooter, rightShooter).withTimeout(5),
-    new DriveTurnCommand(-22.48, driveTrain),
-    new DriveDistanceCommand(114, true, driveTrain)
-    .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED,
-    IntakeConstant.CONVEYOR_SPEED, intake))*/
+        new SetRpmShootCommandGroup(2500, intake, pidShooter)
     );
   }
 }
