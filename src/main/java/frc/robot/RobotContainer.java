@@ -42,8 +42,7 @@ import frc.robot.commands.WinchCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LeftShooter;
-import frc.robot.subsystems.RightShooter;
+import frc.robot.subsystems.PidShooter;
 import frc.robot.subsystems.Winch;
 import frc.robot.triggers.AnalogTrigger;
 import frc.robot.triggers.TriggerButton;
@@ -63,8 +62,7 @@ public class RobotContainer {
 
   private DriveTrain driveTrain;
   private Intake intake;
-  private LeftShooter leftShooter;
-  private RightShooter rightShooter;
+  private PidShooter pidShooter;
   private Elevator elevator;
   private Winch winch;
 
@@ -121,8 +119,7 @@ public class RobotContainer {
     // Initalize subsystems
     driveTrain = new DriveTrain();
     intake = new Intake();
-    leftShooter = new LeftShooter();
-    rightShooter = new RightShooter();
+    pidShooter = new PidShooter();
     elevator = new Elevator(); 
     winch = new Winch();
     
@@ -140,29 +137,29 @@ public class RobotContainer {
     // Initalize commands
     autoStraightCommandGroup = new AutoStraightCommandGroup(driveTrain);
     autoRightShootCommandGroup = new AutoRightShootCommandGroup(driveTrain, intake, 
-                                                                leftShooter, rightShooter);
+                                                                pidShooter);
     autoStraightShootCommandGroup = new AutoStraightShootCommandGroup(driveTrain, intake, 
-                                                                      leftShooter, rightShooter);
+                                                                      pidShooter);
     autoStraightDumpCommandGroup =  new AutoStraightDumpCommandGroup(driveTrain, intake,
-                                                                     leftShooter, rightShooter);
-    autoMidShootCommand = new AutoMidShootCommand(driveTrain, intake, leftShooter, rightShooter);
-    autoMidDumpCommand = new AutoMidDumpCommand(driveTrain, intake, leftShooter, rightShooter);
+                                                                     pidShooter);
+    autoMidShootCommand = new AutoMidShootCommand(driveTrain, intake, pidShooter);
+    autoMidDumpCommand = new AutoMidDumpCommand(driveTrain, intake, pidShooter);
     autoLeftShootCommandGroup = new AutoLeftShootCommandGroup(driveTrain, intake, 
-                                                              leftShooter, rightShooter);
+                                                              pidShooter);
     autoLeftDumpCommandGroup = new AutoLeftDumpCommandGroup(driveTrain, intake, 
-                                                            leftShooter, rightShooter);
+                                                            pidShooter);
     visionCommandGroup = new VisionCommandGroup(driveTrain);
-    lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, leftShooter, rightShooter);
-    highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, leftShooter, rightShooter);
+    lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, pidShooter);
+    highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, pidShooter);
     testHighShootCommand = new TestHighShootCommandGroup(0.9, 1.5, intake, 
-      leftShooter, rightShooter);
+      pidShooter);
     testMidShootCommand = new TestHighShootCommandGroup(0.825, 1.5, intake, 
-                                                        leftShooter, rightShooter);
+                                                        pidShooter);
     lowerMidShootCommand = new TestHighShootCommandGroup(.75, 1.5, intake, 
-                                                         leftShooter, rightShooter);
+                                                         pidShooter);
     testLowShootCommand = new TestHighShootCommandGroup(0.6, 0.3, intake, 
-                                                        leftShooter, rightShooter);
-    highShootCommand = new PidShootCommandGroup(3000, intake, leftShooter, rightShooter);
+                                                        pidShooter);
+    highShootCommand = new PidShootCommandGroup(3000, intake, pidShooter);
     winchCommand = new WinchCommand(winch);
     
     // Initialize Driver Controller and Buttons
@@ -205,9 +202,7 @@ public class RobotContainer {
 
     intake.setDefaultCommand(new DefaultIntakeCommand(
         () -> manipulatorController.getY(Hand.kLeft),
-        intake,
-        leftShooter,
-        rightShooter));
+        intake));
     elevator.setDefaultCommand(new ElevatorCommand(
         () -> manipulatorController.getY(Hand.kRight),
         elevator));
@@ -229,9 +224,9 @@ public class RobotContainer {
     maniButtonA.whenHeld(testLowShootCommand);
     maniButtonX.whenHeld(lowerMidShootCommand);
     maniButtonB.whenHeld(testMidShootCommand);
-    maniButtonY.whenHeld(testHighShootCommand)  
+    maniButtonY.whenHeld(highShootCommand)  
         .whenReleased(new InstantCommand(
-            () -> leftShooter.shoot(0), leftShooter));
+            () -> pidShooter.stopShooting(), pidShooter));
     maniPovUp.whenHeld(new InstantCommand(
         () -> winch.winchControl(-1), winch))
         .whenReleased(new InstantCommand(

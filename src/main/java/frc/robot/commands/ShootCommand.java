@@ -8,13 +8,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LeftShooter;
+import frc.robot.subsystems.PidShooter;
 
 public class ShootCommand extends CommandBase {
   
 
   private double speed;
-  private LeftShooter shooter;
+  private PidShooter shooter;
   /**
    * Spins the shoot motors.
    * 
@@ -22,29 +22,33 @@ public class ShootCommand extends CommandBase {
    * @param shooter the shooter subsystem used
    */
   
-  public ShootCommand(double speed, LeftShooter shooter) {
+  public ShootCommand(double speed, PidShooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.speed = speed;
     this.shooter = shooter;
+
+    this.addRequirements(shooter);
 
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    shooter.setSetpoint(speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    shooter.shoot(speed);
+    shooter.shootRpm();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    shooter.stopShooting();
   }
 
   // Returns true when the command should end.

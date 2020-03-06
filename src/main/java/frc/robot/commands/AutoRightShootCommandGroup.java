@@ -11,8 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.IntakeConstant;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LeftShooter;
-import frc.robot.subsystems.RightShooter;
+import frc.robot.subsystems.PidShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -28,7 +27,7 @@ public class AutoRightShootCommandGroup extends SequentialCommandGroup {
    * @param rightShooter the right Shooter subsystem used
    */
   public AutoRightShootCommandGroup(DriveTrain driveTrain, Intake intake, 
-                                    LeftShooter leftShooter, RightShooter rightShooter) {
+                                    PidShooter pidShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
@@ -39,7 +38,7 @@ public class AutoRightShootCommandGroup extends SequentialCommandGroup {
         new DriveTurnCommand(22.48, driveTrain),
         //new VisionCommandGroup(driveTrain),
         //new PidShootCommandGroup(3000, intake, leftShooter, rightShooter).withTimeout(6),
-        new TestHighShootCommandGroup(0.95, 2, intake, leftShooter, rightShooter).withTimeout(5),
+        new TestHighShootCommandGroup(0.95, 2, intake, pidShooter).withTimeout(5),
         new DriveTurnCommand(-22.48, driveTrain),
         new DriveDistanceCommand(114, driveTrain)
         .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED,
