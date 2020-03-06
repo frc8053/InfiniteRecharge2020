@@ -11,8 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.IntakeConstant;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LeftShooter;
-import frc.robot.subsystems.RightShooter;
+import frc.robot.subsystems.PidShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -24,25 +23,26 @@ public class AutoRightShootCommandGroup extends SequentialCommandGroup {
    * 
    * @param driveTrain the driveTrain subsystem used
    * @param intake the intake subsytem used
-   * @param leftShooter the ;eft shooter subsystem used
-   * @param rightShooter the right Shooter subsystem used
+   * @param pidShooter the pidShooter used
    */
   public AutoRightShootCommandGroup(DriveTrain driveTrain, Intake intake, 
-                                    LeftShooter leftShooter, RightShooter rightShooter) {
+                                    PidShooter pidShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
         new DriveDistanceCommand(86.63, false, driveTrain),
         new DriveTurnCommand(22.48, driveTrain),
-        new TestHighShootCommandGroup(0.5, 1.5, intake, leftShooter, rightShooter)
-          .withTimeout(3), //rpm is 2440.8
+        //new VisionCommandGroup(driveTrain),
+        new PidShootCommandGroup(2500, intake, pidShooter).withTimeout(4),
+        //new TestHighShootCommandGroup(0.95, 2, intake, pidShooter).withTimeout(5),
         new DriveTurnCommand(-22.48, driveTrain),
         new DriveDistanceCommand(114, true, driveTrain)
           .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED, 
           IntakeConstant.CONVEYOR_SPEED, intake)),
         new DriveDistanceCommand(-114, true, driveTrain),
         new DriveTurnCommand(22.48, driveTrain),
-        new TestHighShootCommandGroup(0.5, 1.5, intake, leftShooter, rightShooter).withTimeout(3)
+        //new TestHighShootCommandGroup(0.5, 1.5, intake, pidShooter).withTimeout(3)
+        new PidShootCommandGroup(2500, intake, pidShooter)
         
     /*new DriveDistanceCommand(160, true, driveTrain)
     .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED, 

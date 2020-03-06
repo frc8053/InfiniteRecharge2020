@@ -10,8 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LeftShooter;
-import frc.robot.subsystems.RightShooter;
+import frc.robot.subsystems.PidShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -20,8 +19,7 @@ public class AutoMidShootCommand extends SequentialCommandGroup {
   /**
    * Creates a new AutoMidShootCommand.
    */
-  public AutoMidShootCommand(DriveTrain driveTrain, Intake intake, LeftShooter leftShooter, 
-                            RightShooter rightShooter) {
+  public AutoMidShootCommand(DriveTrain driveTrain, Intake intake, PidShooter pidShooter) {
 
     super(
           new DriveTurnCommand(48.471614533921, driveTrain),
@@ -29,7 +27,7 @@ public class AutoMidShootCommand extends SequentialCommandGroup {
           new DriveTurnCommand(-48.471614533921, driveTrain),
           //new PidShootCommandGroup(/*help*/0, intake, shooter)
           //new VisionCommandGroup(driveTrain),
-          new TestHighShootCommandGroup(0.95, 2, intake, leftShooter, rightShooter).withTimeout(5)
+          new TestHighShootCommandGroup(0.95, 2, intake, pidShooter).withTimeout(5)
           );
   }
 }

@@ -10,8 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LeftShooter;
-import frc.robot.subsystems.RightShooter;
+import frc.robot.subsystems.PidShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -20,8 +19,7 @@ public class AutoMidDumpCommand extends SequentialCommandGroup {
   /**
    * Creates a new AutoMidDump.
    */
-  public AutoMidDumpCommand(DriveTrain driveTrain, Intake intake, LeftShooter leftShooter, 
-                            RightShooter rightShooter) {
+  public AutoMidDumpCommand(DriveTrain driveTrain, Intake intake, PidShooter pidShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
@@ -30,7 +28,7 @@ public class AutoMidDumpCommand extends SequentialCommandGroup {
           new DriveTurnCommand(40.260428793580, driveTrain),
           new DriveDistanceCommand(-42, false, driveTrain),
           //new PidShootCommandGroup(1000, intake, leftShooter)
-          new TestHighShootCommandGroup(0.4, 0.1, intake, leftShooter, rightShooter).withTimeout(3)
+          new TestHighShootCommandGroup(0.4, 0.1, intake, pidShooter).withTimeout(3)
           );
   }
 }

@@ -10,8 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LeftShooter;
-import frc.robot.subsystems.RightShooter;
+import frc.robot.subsystems.PidShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,12 +20,13 @@ public class AutoStraightShootCommandGroup extends SequentialCommandGroup {
    * Creates a new AutoStraightShootCommandGroup.
    */
   public AutoStraightShootCommandGroup(DriveTrain driveTrain, Intake intake, 
-                                      LeftShooter leftShooter, RightShooter rightShooter) {
+                                      PidShooter pidShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
         new DriveDistanceCommand(82, false, driveTrain),
-        new TestHighShootCommandGroup(0.89, 2, intake, leftShooter, rightShooter).withTimeout(5)
+        new PidShootCommandGroup(2500, intake, pidShooter)
+        //new TestHighShootCommandGroup(0.89, 2, intake, pidShooter).withTimeout(5)
     );
   }
 }
