@@ -21,7 +21,7 @@ public class AutoLeftDumpCommandGroup extends SequentialCommandGroup {
    * 
    * @param driveTrain the driveTrain subsystem used
    * @param intake the intake subsystem used
-   * @param leftShooter the shooter subsystem used
+   * @param pidShooter the shooter subsystem used
    */
   public AutoLeftDumpCommandGroup(DriveTrain driveTrain, Intake intake, 
                                   PidShooter pidShooter) {
@@ -32,8 +32,8 @@ public class AutoLeftDumpCommandGroup extends SequentialCommandGroup {
         new DriveDistanceCommand(-228.26352227, false, driveTrain),
         new DriveTurnCommand(90 - 23.4946, driveTrain),
         new DriveDistanceCommand(-12, false, driveTrain),
-        //new PidShootCommandGroup(1000, intake, leftShooter, rightShooter)
-        new TestHighShootCommandGroup(0.5, 0.1, intake, pidShooter).withTimeout(3)
+        new PidShootCommandGroup(1000, intake, pidShooter).withTimeout(5)
+        //new TestHighShootCommandGroup(0.5, 0.1, intake, pidShooter).withTimeout(3)
     );
   }
 }
