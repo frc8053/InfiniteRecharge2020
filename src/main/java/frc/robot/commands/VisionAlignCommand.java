@@ -7,51 +7,59 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.modules.TrajectoryMath;
+import frc.robot.modules.*;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.PidShooter;
 
-public class ShootCommand extends CommandBase {
-  
-
-  private double speed;
-  private DriveTrain drive;
-  private PidShooter shooter;
+public class VisionAlignCommand extends CommandBase {
   /**
-   * Spins the shoot motors.
-   * 
-   * @param shooter the shooter subsystem used
-   * @param drive the drivetrain
+   * Creates a new VisionAlignCommand.
    */
-  
-  public ShootCommand(PidShooter shooter, DriveTrain drive) {
+  private DriveTrain driveTrain;
+
+  /*
+  PID Variables
+  */
+  double rotationError;
+  double distanceError;
+  double KpRot=-0.1;
+  double KpDist=-0.1;
+  double angleTolerance=5;//Deadzone for the angle control loop
+  double distanceTolerance=5;//Deadzone for the distance control loop
+  double constantForce=0.35;
+  double rotationAjust;
+  double distanceAjust;
+
+  public VisionAlignCommand(DriveTrain drive) {
+    driveTrain = drive;
     // Use addRequirements() here to declare subsystem dependencies.
-
-    this.shooter = shooter;
-    this.drive = drive;
-    this.addRequirements(shooter);
-
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //shooter.setSetpoint(5000);
-    shooter.setSetpoint(TrajectoryMath.getVelocityFromDistance(TrajectoryMath.getDistanceFromPitch(drive.getShootVisionPitch())));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    rotationError = driveTrain.getShootVisionYaw();
+    distanceError = driveTrain.getShootVisionPitch();
 
-    shooter.shootRpm();
+    if (rotationError > angleTolerance)
+      rotationAjust = constantForce;
+    else
+      rotationAjust =  - constantForce;
+    driveTrain.arcadeDrive(0, rotationAjust);
+    SmartDashboard.putNumber("Distance Adjuist", distanceAjust);
+    SmartDashboard.putNumber("Rotation Adjust", rotationAjust);
+    SmartDashboard.putNumber("Distance From", TrajectoryMath.getDistanceFromPitch(distanceError));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stopShooting();
   }
 
   // Returns true when the command should end.

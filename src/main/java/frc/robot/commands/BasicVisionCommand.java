@@ -7,7 +7,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.modules.TrajectoryMath;
 import frc.robot.subsystems.DriveTrain;
 
 public class BasicVisionCommand extends CommandBase {
@@ -38,32 +40,36 @@ public class BasicVisionCommand extends CommandBase {
   @Override
   public void execute() {
     if (driveTrain.getShootVisionYaw() > 0.5) {
-      if (isTurning && isTurnNegative) {
-        driveTrain.arcadeDrive(0, 0);
-        isTurning = false;
-        finished = true;
-        return;
-      }
-      isTurning = true;
+      // if (isTurning && isTurnNegative) {
+      //   driveTrain.arcadeDrive(0, 0);
+      //   isTurning = false;
+      //   finished = true;
+      //   return;
+      // }
+      // isTurning = true;
       driveTrain.arcadeDrive(0, -0.52);
     }
     
     if (driveTrain.getShootVisionYaw() < -0.5) {
-      if (isTurning && !isTurnNegative) {
-        driveTrain.arcadeDrive(0, 0);
-        isTurning = false;
-        finished = true;
-        return;
-      }
-      isTurnNegative = true;
-      isTurning = true;
+      // if (isTurning && !isTurnNegative) {
+      //   driveTrain.arcadeDrive(0, 0);
+      //   isTurning = false;
+      //   finished = true;
+      //   return;
+      // }
+      // isTurnNegative = true;
+      // isTurning = true;
       driveTrain.arcadeDrive(0, 0.52);
     } 
     if (Math.abs(driveTrain.getShootVisionYaw()) < 0.5) {
-      driveTrain.arcadeDrive(0, 0);
-      isTurning = false;
-      finished = true;
+      // driveTrain.arcadeDrive(0, 0);
+      // isTurning = false;
+      // finished = true;
     }
+    SmartDashboard.putNumber("RPM Requested", TrajectoryMath.getVelocityFromDistance(TrajectoryMath.getDistanceFromPitch(driveTrain.getShootVisionPitch())));
+    SmartDashboard.putNumber("Rotation Adjust", driveTrain.getShootVisionYaw());
+    SmartDashboard.putNumber("Distance From", TrajectoryMath.getDistanceFromPitch(driveTrain.getShootVisionPitch()));
+    //SmartDashboard.putNumber("Velocity",TrajectoryMath.getVelocityFromDistance(25));
   }
 
   // Called once the command ends or is interrupted.
