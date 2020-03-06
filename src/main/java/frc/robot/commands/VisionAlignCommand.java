@@ -23,8 +23,8 @@ public class VisionAlignCommand extends CommandBase {
   */
   double rotationError;
   double distanceError;
-  double KpRot=-0.1;
-  double KpDist=-0.1;
+  double KpRot=-0.01;
+  double KpDist=-0.01;
   double angleTolerance=5;//Deadzone for the angle control loop
   double distanceTolerance=5;//Deadzone for the distance control loop
   double constantForce=0.35;
