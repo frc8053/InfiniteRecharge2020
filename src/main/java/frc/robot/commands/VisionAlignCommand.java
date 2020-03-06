@@ -51,16 +51,10 @@ public class VisionAlignCommand extends CommandBase {
       rotationAjust = KpRot * rotationError + constantForce;
     else
       rotationAjust = KpRot * rotationError - constantForce;
-    
-    if (distanceError > distanceTolerance)
-      distanceAjust = KpDist*distanceError+constantForce;
-    else
-      distanceAjust = KpDist * distanceError - constantForce;
-
-
-    driveTrain.arcadeDrive(distanceAjust, rotationAjust);
+    driveTrain.arcadeDrive(0, rotationAjust);
     SmartDashboard.putNumber("Distance Adjuist", distanceAjust);
-    SmartDashboard.putNumber("Rotation Ajust", rotationAjust);
+    SmartDashboard.putNumber("Rotation Adjust", rotationAjust);
+    SmartDashboard.putNumber("Distance From", TrajectoryMath.getDistanceFromPitch(distanceError));
   }
 
   // Called once the command ends or is interrupted.
