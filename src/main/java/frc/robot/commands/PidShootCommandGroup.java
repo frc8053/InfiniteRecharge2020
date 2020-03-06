@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PidShooter;
 
@@ -24,12 +25,12 @@ public class PidShootCommandGroup extends SequentialCommandGroup {
   /**
    * Shoots balls at the specified rpm using a PID control system.
    * 
-   * @param rpm the target speed of the wheels
+   * @param drive drive train
    * @param intake the intake subsystem used
    * @param pidShooter the right shooter subsystem used
    */
   
-  public PidShootCommandGroup(double rpm, Intake intake, PidShooter pidShooter) {
+  public PidShootCommandGroup(DriveTrain drive, Intake intake, PidShooter pidShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
@@ -39,7 +40,7 @@ public class PidShootCommandGroup extends SequentialCommandGroup {
         new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.3), 
         new InstantCommand(() -> intake.conveyorControl(0), intake),
         new ParallelCommandGroup(
-          new ShootCommand(rpm, pidShooter),
+          new ShootCommand(pidShooter,drive),
           new SequentialCommandGroup(
             new WaitUntilCommand(() -> (pidShooter.reachedSetpoint())),
             new RunCommand(() -> intake.conveyorControl(0.9), intake),

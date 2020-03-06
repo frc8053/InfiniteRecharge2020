@@ -8,26 +8,28 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.modules.TrajectoryMath;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.PidShooter;
 
 public class ShootCommand extends CommandBase {
   
 
   private double speed;
+  private DriveTrain drive;
   private PidShooter shooter;
   /**
    * Spins the shoot motors.
    * 
-   * @param speed the speed of the shooter wheels
    * @param shooter the shooter subsystem used
+   * @param drive the drivetrain
    */
   
-  public ShootCommand(double speed, PidShooter shooter) {
+  public ShootCommand(PidShooter shooter, DriveTrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
 
-    this.speed = speed;
     this.shooter = shooter;
-
+    this.drive = drive;
     this.addRequirements(shooter);
 
   }
@@ -35,7 +37,7 @@ public class ShootCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setSetpoint(speed);
+    shooter.setSetpoint(TrajectoryMath.getVelocityFromDistance(TrajectoryMath.getDistanceFromPitch(drive.getShootVisionPitch())));
   }
 
   // Called every time the scheduler runs while the command is scheduled.

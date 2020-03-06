@@ -149,8 +149,8 @@ public class RobotContainer {
     autoLeftDumpCommandGroup = new AutoLeftDumpCommandGroup(driveTrain, intake, 
                                                             pidShooter);
     visionCommandGroup = new VisionCommandGroup(driveTrain);
-    lowShootCommand = new PidShootCommandGroup(Shoot.SLOW_RPM, intake, pidShooter);
-    highShootCommand = new PidShootCommandGroup(Shoot.FAST_RPM, intake, pidShooter);
+    lowShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
+    highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
     testHighShootCommand = new TestHighShootCommandGroup(0.9, 1.5, intake, 
       pidShooter);
     testMidShootCommand = new TestHighShootCommandGroup(0.825, 1.5, intake, 
@@ -159,7 +159,7 @@ public class RobotContainer {
                                                          pidShooter);
     testLowShootCommand = new TestHighShootCommandGroup(0.6, 0.3, intake, 
                                                         pidShooter);
-    highShootCommand = new PidShootCommandGroup(3000, intake, pidShooter);
+    highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
     winchCommand = new WinchCommand(winch);
     
     // Initialize Driver Controller and Buttons
