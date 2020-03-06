@@ -4,10 +4,13 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
+
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.modules.Pipelines;
 import frc.robot.subsystems.DriveTrain; 
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -20,33 +23,41 @@ public class DefaultDriveCommand extends CommandBase {
   private DoubleSupplier leftY;
   private DoubleSupplier rightY;
   private DoubleSupplier rightX;
-  private Supplier<Boolean> isHighSpeed;
-  private Supplier<Boolean> isMidSpeed;
-  private Supplier<Boolean> isLowSpeed;
+  private Supplier<Boolean> isAReleased;
+  private Supplier<Boolean> isBReleased;
+  private Supplier<Boolean> isYReleased;
+  private Supplier<Boolean> isLeftBrake;
+  private Supplier<Boolean> isRightBrake;
 
   private Supplier<Boolean> isDriveToggled;
-  double speed;
-  double reverse;
-  boolean driveState;
+  private double speed;
+  private double reverse;
+  private boolean driveState;
+  private String driveMode;
+  private String reversed;
+  private String shootDistance;
 
   /**
-   * Creates a new default drive command.
+   * Drives the robot using the joysticks on the gamepad. Can
+   * be tank or arcade drive.
    *
    * @param leftY The leftY joystick of driver gamepad
    * @param rightY The RightY joystick of driver gamepad
    * @param rightX rightX joystick of driver gamepad
    * 
-   * 
    * @param isDriveToggled Whether the toggle button has been released (basically pressed)
-   * @param isHighSpeed Whether Y has been released
-   * @param isMidSpeed Whether B has been released
-   * @param isLowSpeed Whether A has been released
+   * @param isAReleased Whether A has been released
+   * @param isBReleased Whether B has been released
+   * @param isYReleased Whether Y has been released
+   * @param isLeftBrake Whether left trigger is held
+   * @param isRightBrake Whether right trigger is held
    * 
    * @param driveTrain The driveTrain subsystem.
    */
   public DefaultDriveCommand(DoubleSupplier leftY, DoubleSupplier rightY, DoubleSupplier rightX, 
-                            Supplier<Boolean> isDriveToggled, Supplier<Boolean> isHighSpeed, 
-                            Supplier<Boolean> isMidSpeed,  Supplier<Boolean> isLowSpeed,
+                            Supplier<Boolean> isDriveToggled, Supplier<Boolean> isAReleased, 
+                            Supplier<Boolean> isBReleased, Supplier<Boolean> isYReleased,
+                            Supplier<Boolean> isLeftBrake,  Supplier<Boolean> isRightBrake,
                             DriveTrain driveTrain) {
 
     this.driveTrain = driveTrain;
@@ -56,9 +67,11 @@ public class DefaultDriveCommand extends CommandBase {
     this.rightX = rightX;
 
     this.isDriveToggled = isDriveToggled;
-    this.isHighSpeed = isHighSpeed;
-    this.isMidSpeed = isMidSpeed;
-    this.isLowSpeed = isLowSpeed;
+    this.isAReleased = isAReleased;
+    this.isBReleased = isBReleased;
+    this.isYReleased = isYReleased;
+    this.isLeftBrake = isLeftBrake;
+    this.isRightBrake = isRightBrake;
     this.driveState = false;
     this.speed = 1;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -69,30 +82,68 @@ public class DefaultDriveCommand extends CommandBase {
   @Override
   public void initialize() {
     reverse = 1;
+    driveTrain.setShootDriverMode(true);
+    driveTrain.setIntakeDriverMode(true);
+    driveTrain.setShootPipeline(Pipelines.DEFAULT);
+    driveTrain.turnOnLight(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (isHighSpeed.get()) {
+    /*if (driveTrain.getDriver()) {
+      if (isAReleased.get()) {
+        speed = Constants.LOW_SPEED;
+      }
+      if (isBReleased.get()) {
+        speed = Constants.MID_SPEED;
+      }
+      if (isYReleased.get()) {
+        speed = Constants.HIGH_SPEED;
+      }
+      reverse = driveTrain.getReverse();
+    } else { */
+
+    if (!isLeftBrake.get() && !isRightBrake.get()) {
       speed = Constants.HIGH_SPEED;
     }
-    if (isMidSpeed.get()) {
+    if (isLeftBrake.get() || isRightBrake.get()) {
       speed = Constants.MID_SPEED;
     }
-    if (isLowSpeed.get()) {
+
+    if (isLeftBrake.get() && isRightBrake.get()) {
       speed = Constants.LOW_SPEED;
     }
-    if (isDriveToggled.get()) {
-      driveState = !driveState;
+
+    if (!driveTrain.getShootDriverMode()) {
+      driveTrain.setShootDriverMode(true);
+      //driveTrain.setShootPipeline(Pipelines.DRIVER);
     }
-    reverse = driveTrain.getReverse();
+    
+    reverse = 1;
+    driveState = false;
+    //if (isDriveToggled.get()) {
+    //driveState = !driveState;
+    //}
+    if (driveState) {
+      driveMode = "Tank Drive";
+    } else {
+      driveMode = "Arcade Drive";
+    }
+    if (reverse == 1) {
+      reversed = "forward";
+    } else {
+      reversed = "reversed";
+    }
+    SmartDashboard.putString("Drive Mode", driveMode);
+    SmartDashboard.putString("Direction", reversed);
+ 
     if (driveState) {
       driveTrain.tankDrive(leftY.getAsDouble() * speed * reverse, 
                           rightY.getAsDouble() * speed * reverse);
     } else {
       driveTrain.arcadeDrive(leftY.getAsDouble() * speed * reverse, 
-                            rightX.getAsDouble() * speed * reverse);
+                            -rightX.getAsDouble() * speed * reverse);
     }
   }
 
@@ -101,6 +152,4 @@ public class DefaultDriveCommand extends CommandBase {
   public void end(boolean interrupted) {
     driveTrain.tankDrive(0, 0);
   }
-
-  
 }

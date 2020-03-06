@@ -157,9 +157,13 @@ gradle-app.setting
 bin/
 imgui.ini
 
-
-<<<<<<< HEAD
 # End of https://www.gitignore.io/api/c++,java,linux,macos,gradle,windows,visualstudiocode
-=======
-# End of https://www.gitignore.io/api/c++,java,linux,macos,gradle,windows,visualstudiocode
->>>>>>> master
+.gradle/6.0.1/executionHistory/executionHistory.bin
+.gradle/6.0.1/executionHistory/executionHistory.lock
+.gradle/6.0.1/fileHashes/fileHashes.bin
+.gradle/6.0.1/fileHashes/fileHashes.lock
+.gradle/6.0.1/fileHashes/resourceHashesCache.bin
+.gradle/6.0.1/javaCompile/javaCompile.lock
+.gradle/6.0.1/javaCompile/taskHistory.bin
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+.gradle/buildOutputCleanup/outputFiles.bin

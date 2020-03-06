@@ -7,21 +7,34 @@
 
 package frc.robot.triggers;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * Add your docs here.
  */
-public class LeftTriggerButton extends Trigger {
-  private double triggerLeftValue;
+public class TriggerButton extends Trigger {
+  private XboxController joystick;
+  private Hand hand;
 
-  public LeftTriggerButton(double triggerLeftValue) {
-    this.triggerLeftValue = triggerLeftValue;
+  /**
+   * Turns the trigger on the controller into a button.
+   * 
+   * @param joystick value of the trigger
+   */
+  public TriggerButton(XboxController joystick, Hand hand) {
+    this.joystick = joystick;
+    this.hand = hand;
   }
 
+  /*
+  *sets whether trigger is activated
+  */
   @Override
   public boolean get() {
-    if (triggerLeftValue > 50) {
+    if (Math.abs(joystick.getTriggerAxis(hand)) > 0.8) {
       return true;
     } else {
       return false;
