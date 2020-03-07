@@ -157,9 +157,9 @@ public class RobotContainer {
     highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
     testHighShootCommand = new SetRpmShootCommandGroup(4500, intake, 
       pidShooter);
-    testMidShootCommand = new SetRpmShootCommandGroup(4000, intake, 
+    testMidShootCommand = new SetRpmShootCommandGroup(3500, intake, 
                                                         pidShooter);
-    lowerMidShootCommand = new SetRpmShootCommandGroup(3500, intake, 
+    lowerMidShootCommand = new SetRpmShootCommandGroup(3000, intake, 
                                                          pidShooter);
     testLowShootCommand = new SetRpmShootCommandGroup(1000, intake, 
                                                         pidShooter);
@@ -228,7 +228,8 @@ public class RobotContainer {
     driverRightBumper.whenHeld(visionCommandGroup);
     driverButtonX.whenReleased(new InstantCommand(() -> driveTrain.toggleOnLight(), driveTrain));
     maniButtonA.whenHeld(testLowShootCommand);
-    maniButtonX.whenHeld(lowerMidShootCommand);
+    maniButtonX.whenHeld(new InstantCommand(() -> pidShooter.shootPower(1), pidShooter))
+      .whenReleased(new InstantCommand(() -> pidShooter.stopShooting()));
     maniButtonB.whenHeld(testMidShootCommand);
     maniButtonY.whenHeld(highShootCommand)  
         .whenReleased(new InstantCommand(

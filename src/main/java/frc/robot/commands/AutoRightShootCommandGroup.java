@@ -32,14 +32,13 @@ public class AutoRightShootCommandGroup extends SequentialCommandGroup {
     super(
         new DriveDistanceCommand(86.63, false, driveTrain),
         new DriveTurnCommand(22.48, driveTrain),
-        new SetRpmShootCommandGroup(2500, intake, pidShooter).withTimeout(3),
+        new SetRpmShootCommandGroup(2471.19, intake, pidShooter).withTimeout(4.5),
         new DriveTurnCommand(-22.48, driveTrain),
         new DriveDistanceCommand(114, true, driveTrain)
           .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED, 
           IntakeConstant.CONVEYOR_SPEED, intake)),
-        new DriveDistanceCommand(-114, true, driveTrain),
-        new DriveTurnCommand(22.48, driveTrain),
-        new SetRpmShootCommandGroup(2500, intake, pidShooter)
+        new DriveTurnCommand(14.43823268, driveTrain),
+        new SetRpmShootCommandGroup(2463.44201, intake, pidShooter)
     );
   }
 }
