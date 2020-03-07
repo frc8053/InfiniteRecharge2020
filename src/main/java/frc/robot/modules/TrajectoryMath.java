@@ -11,7 +11,7 @@ public class TrajectoryMath {
         double a = GRAVITY/2*Math.pow(distance,2);
         double b = (Math.sin(ANGLE_RADS) * Math.cos(ANGLE_RADS) * distance) - (Math.pow(Math.cos(ANGLE_RADS), 2) * (GOAL_HEIGHT-SHOOTER_HEIGHT));
         double c = Math.sqrt(a/b);
-        return c*60/(.7*(2.0/12.0)*2*Math.PI);
+        return c*60/(.67    *(2.0/12.0)*2*Math.PI);
     }
     public static double getDistanceFromPitch(double pitch)
     {

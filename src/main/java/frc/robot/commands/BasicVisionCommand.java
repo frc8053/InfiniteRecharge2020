@@ -40,31 +40,31 @@ public class BasicVisionCommand extends CommandBase {
   @Override
   public void execute() {
     if (driveTrain.getShootVisionYaw() > 0.5) {
-      // if (isTurning && isTurnNegative) {
-      //   driveTrain.arcadeDrive(0, 0);
-      //   isTurning = false;
-      //   finished = true;
-      //   return;
-      // }
-      // isTurning = true;
-      driveTrain.arcadeDrive(0, -0.52);
+      if (isTurning && isTurnNegative) {
+        driveTrain.arcadeDrive(0, 0);
+        isTurning = false;
+        finished = true;
+        return;
+      }
+      isTurning = true;
+      driveTrain.arcadeDrive(0, -0.45);
     }
     
     if (driveTrain.getShootVisionYaw() < -0.5) {
-      // if (isTurning && !isTurnNegative) {
-      //   driveTrain.arcadeDrive(0, 0);
-      //   isTurning = false;
-      //   finished = true;
-      //   return;
-      // }
-      // isTurnNegative = true;
-      // isTurning = true;
-      driveTrain.arcadeDrive(0, 0.52);
+      if (isTurning && !isTurnNegative) {
+        driveTrain.arcadeDrive(0, 0);
+        isTurning = false;
+        finished = true;
+        return;
+      }
+      isTurnNegative = true;
+      isTurning = true;
+      driveTrain.arcadeDrive(0, 0.45);
     } 
     if (Math.abs(driveTrain.getShootVisionYaw()) < 0.5) {
-      // driveTrain.arcadeDrive(0, 0);
-      // isTurning = false;
-      // finished = true;
+      driveTrain.arcadeDrive(0, 0);
+      isTurning = false;
+      finished = true;
     }
     SmartDashboard.putNumber("RPM Requested", TrajectoryMath.getVelocityFromDistance(TrajectoryMath.getDistanceFromPitch(driveTrain.getShootVisionPitch())));
     SmartDashboard.putNumber("Rotation Adjust", driveTrain.getShootVisionYaw());
