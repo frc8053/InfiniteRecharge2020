@@ -58,7 +58,7 @@ public class PidShooter extends SubsystemBase {
 
     setpoint = 3000;
 
-    leftPidController = new PIDController(0.0015, 0.00005, 0);
+    leftPidController = new PIDController(0.005, 0.00007, 0);
     rightPidController = new PIDController(0.005, 0.00007, 0);
     leftPidController.setTolerance(tolerance);
     rightPidController.setTolerance(tolerance);
