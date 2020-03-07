@@ -5,12 +5,5 @@
     "debugfile": "frcJava_roborio.debugconfig",
     "project": "RAM2020code",
     "language": "java"
-  },
-  {
-    "artifact": "frcJava (in project RATM2020_MASTER)",
-    "target": "roborio",
-    "debugfile": "frcJava_roborio.debugconfig",
-    "project": "RATM2020_MASTER",
-    "language": "java"
   }
 ]

@@ -21,7 +21,7 @@ public class AutoStraightCommandGroup extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveDistanceCommand(-50, driveTrain)
+        new DriveDistanceCommand(-50, false, driveTrain)
     );
   }
 }

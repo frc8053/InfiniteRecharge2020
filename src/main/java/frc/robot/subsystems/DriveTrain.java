@@ -98,7 +98,6 @@ public class DriveTrain extends SubsystemBase {
 
     gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
     gyro.calibrate();
-
     parameterTab = Shuffleboard.getTab("Parameter Tab");
     maxSpeed = parameterTab.add("Max Drive Speed", 1)
       .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1))
@@ -117,24 +116,13 @@ public class DriveTrain extends SubsystemBase {
     } else {
       driver = "Trey";
     }
-    if (getShootVisionPitch() > 2) {
-      shootDistance = "Too Close";
-    }
-    if (getShootVisionPitch() < -2) {
-      shootDistance = "Too Far";
-    }
-    if (Math.abs(getShootVisionPitch()) < 2) {
-      shootDistance = "Good";
-    }
   
-    SmartDashboard.putString("Good to Shoot", shootDistance);
     SmartDashboard.putString("Driver", driver);
     SmartDashboard.putNumber("Drive Encoder", leftEncoder.getDistance());
     SmartDashboard.putNumber("Yaw", gyro.getAngle());
     SmartDashboard.putNumber("Modified Yaw", getGyro());
     SmartDashboard.putNumber("Left Voltage", frontLeft.getMotorOutputVoltage());
     SmartDashboard.putNumber("Right Voltage", frontRight.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Distance to Goal", getVisionDistance());
     SmartDashboard.putNumber("Vision Yaw", getShootVisionYaw());
   }
 
@@ -258,7 +246,7 @@ public class DriveTrain extends SubsystemBase {
   public double getVisionDistance() {
     return 75.25 * Math.tan((shootVision.getRotation().pitch + 20.618809296) * Math.PI / 180);
   }
-  
+
   /**
   * Returns if the shooter vision camera is in driver mode.
   * @return

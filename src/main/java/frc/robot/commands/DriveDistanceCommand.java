@@ -22,7 +22,7 @@ public class DriveDistanceCommand extends PIDCommand {
    * @param driveTrain The DriveTrain subsystem used by this command
    */
 
-  public DriveDistanceCommand(double distance, DriveTrain driveTrain) {
+  public DriveDistanceCommand(double distance, boolean ballIntake, DriveTrain driveTrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     super(
         new PIDController(0.3, 0.014, 0.06),
@@ -32,7 +32,15 @@ public class DriveDistanceCommand extends PIDCommand {
         distance,
         //output
         output -> {
-          driveTrain.tankDrive(-output, -output);
+          if (ballIntake) {
+            if (output > 0.5) {
+              driveTrain.tankDrive(-0.5, -0.5);
+            } else {
+              driveTrain.tankDrive(-output, -output);
+            }
+          } else {
+            driveTrain.tankDrive(-output, -output);
+          }
         },
         driveTrain
     );

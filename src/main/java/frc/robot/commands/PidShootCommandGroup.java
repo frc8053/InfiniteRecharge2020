@@ -40,7 +40,7 @@ public class PidShootCommandGroup extends SequentialCommandGroup {
         new RunCommand(() -> intake.conveyorControl(-0.1), intake).withTimeout(0.3), 
         new InstantCommand(() -> intake.conveyorControl(0), intake),
         new ParallelCommandGroup(
-          new ShootCommand(pidShooter,drive),
+          new ShootCommand(pidShooter, drive),
           new SequentialCommandGroup(
             new WaitUntilCommand(() -> (pidShooter.reachedSetpoint())),
             new RunCommand(() -> intake.conveyorControl(0.9), intake),

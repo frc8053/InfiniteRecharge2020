@@ -29,7 +29,7 @@ public class PidShooter extends SubsystemBase {
   private PIDController rightPidController;
 
   private double setpoint;
-  private double tolerance = 100;
+  private double tolerance = 50;
 
 
   /**
@@ -37,12 +37,12 @@ public class PidShooter extends SubsystemBase {
    * to accurately fire balls.
    */
   public PidShooter() {
-    shooterLeft = new WPI_VictorSPX(7);
-    shooterRight = new WPI_VictorSPX(8);
+    shooterLeft = new WPI_VictorSPX(8);
+    shooterRight = new WPI_VictorSPX(7);
 
-    shooterLeft.setInverted(true);
+    shooterLeft.setInverted(false);
     shooterLeft.setNeutralMode(NeutralMode.Coast);
-    shooterRight.setInverted(false);
+    shooterRight.setInverted(true);
     shooterRight.setNeutralMode(NeutralMode.Coast);
 
     shootLeftEncoder = new Encoder(0, 1, true, EncodingType.k1X);   
@@ -58,8 +58,8 @@ public class PidShooter extends SubsystemBase {
 
     setpoint = 3000;
 
-    leftPidController = new PIDController(0.001, 0, 0);
-    rightPidController = new PIDController(0.001, 0, 0);
+    leftPidController = new PIDController(0.005, 0.00007, 0);
+    rightPidController = new PIDController(0.005, 0.00007, 0);
     leftPidController.setTolerance(tolerance);
     rightPidController.setTolerance(tolerance);
     leftPidController.setSetpoint(setpoint);
@@ -86,7 +86,7 @@ public class PidShooter extends SubsystemBase {
   }
 
   private void runRpm() {
-    double ff = (12. / 5000);
+    double ff = (12.0 / 5000);
     shooterLeft.setVoltage(ff * leftPidController.getSetpoint() 
           + leftPidController.calculate(getLeftRpm()));
     shooterRight.setVoltage(ff * rightPidController.getSetpoint() 
@@ -101,6 +101,7 @@ public class PidShooter extends SubsystemBase {
 
   public void shootRpm(double setpoint) {
     setSetpoint(setpoint);
+    runRpm();
   }
 
   public void shootRpm() {

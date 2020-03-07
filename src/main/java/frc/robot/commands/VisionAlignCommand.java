@@ -47,10 +47,11 @@ public class VisionAlignCommand extends CommandBase {
     rotationError = driveTrain.getShootVisionYaw();
     distanceError = driveTrain.getShootVisionPitch();
 
-    if (rotationError > angleTolerance)
+    if (rotationError > angleTolerance) {
       rotationAjust = constantForce;
-    else
+    } else {
       rotationAjust =  - constantForce;
+    }
     driveTrain.arcadeDrive(0, rotationAjust);
     SmartDashboard.putNumber("Distance Adjuist", distanceAjust);
     SmartDashboard.putNumber("Rotation Adjust", rotationAjust);

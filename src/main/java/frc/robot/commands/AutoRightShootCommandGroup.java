@@ -23,26 +23,22 @@ public class AutoRightShootCommandGroup extends SequentialCommandGroup {
    * 
    * @param driveTrain the driveTrain subsystem used
    * @param intake the intake subsytem used
-   * @param leftShooter the ;eft shooter subsystem used
-   * @param rightShooter the right Shooter subsystem used
+   * @param pidShooter the pidShooter used
    */
   public AutoRightShootCommandGroup(DriveTrain driveTrain, Intake intake, 
                                     PidShooter pidShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-        new DriveDistanceCommand(160, driveTrain)
-        .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED, 
-        IntakeConstant.CONVEYOR_SPEED, intake)),
-        new DriveDistanceCommand(-73.37, driveTrain),
+        new DriveDistanceCommand(86.63, false, driveTrain),
         new DriveTurnCommand(22.48, driveTrain),
-        //new VisionCommandGroup(driveTrain),
-        //new PidShootCommandGroup(3000, intake, leftShooter, rightShooter).withTimeout(6),
-        new TestHighShootCommandGroup(0.95, 2, intake, pidShooter).withTimeout(5),
+        new SetRpmShootCommandGroup(2471.19, intake, pidShooter).withTimeout(4.5),
         new DriveTurnCommand(-22.48, driveTrain),
-        new DriveDistanceCommand(114, driveTrain)
-        .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED,
-        IntakeConstant.CONVEYOR_SPEED, intake))
+        new DriveDistanceCommand(114, true, driveTrain)
+          .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED, 
+          IntakeConstant.CONVEYOR_SPEED, intake)),
+        new DriveTurnCommand(14.43823268, driveTrain),
+        new SetRpmShootCommandGroup(2463.44201, intake, pidShooter)
     );
   }
 }
