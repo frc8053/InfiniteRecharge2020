@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.modules.Pipelines;
 import frc.robot.subsystems.DriveTrain;
 
@@ -27,9 +26,7 @@ public class VisionCommandGroup extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super(
         new InstantCommand(() -> driveTrain.turnOnLight(true), driveTrain),
-        //new WaitUntilCommand(driveTrain::findTarget),
-        new BasicVisionCommand(driveTrain)
-    //new DriveDistanceCommand(driveTrain.getVisionDistance() - 200, driveTrain)
+        new VisionTurnCommand(driveTrain)
     );
     this.driveTrain = driveTrain;
   }
@@ -44,8 +41,8 @@ public class VisionCommandGroup extends SequentialCommandGroup {
   @Override
   public void end(boolean interrupted) {
     driveTrain.turnOnLight(false);
-    driveTrain.setShootDriverMode(true);
-    driveTrain.setShootPipeline(Pipelines.DRIVER);
+    driveTrain.setShootDriverMode(false);
+    //driveTrain.setShootPipeline(Pipelines.DRIVER);
     super.end(interrupted);
   }
 }

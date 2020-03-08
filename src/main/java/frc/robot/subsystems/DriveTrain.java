@@ -55,11 +55,11 @@ public class DriveTrain extends SubsystemBase {
 
   private final Gyro gyro;
 
+  private double turnAngle;
+
   private ShuffleboardTab parameterTab;
   private NetworkTableEntry maxSpeed;
   private NetworkTableEntry brakeReduction;
-
-  private String shootDistance;
 
   /**
    * Initalizes drive motors and helper classes. Also contains vision values from the Pi.
@@ -142,6 +142,14 @@ public class DriveTrain extends SubsystemBase {
    */
   public void tankDrive(final double left, final double right) {
     myRobot.tankDrive(left, right);
+  }
+
+  public void saveTurnAngle() {
+    turnAngle = gyro.getAngle();
+  }
+
+  public double getSavedTurnAngle() {
+    return -turnAngle;
   }
 
   /**

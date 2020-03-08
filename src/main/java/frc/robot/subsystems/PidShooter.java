@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Shoot;
 
 public class PidShooter extends SubsystemBase {
   
@@ -50,16 +51,14 @@ public class PidShooter extends SubsystemBase {
 
     shootLeftEncoder.setSamplesToAverage(5);
     shootRightEncoder.setSamplesToAverage(5);
-    // 1 / EPR = rotations
-    //PUT THIS IN CONSTANTS FILE!!!!!
-    double dpr = (1.0 / (2048.0));
+    double dpr = (Shoot.SHOOTRATE);
     shootLeftEncoder.setDistancePerPulse(dpr);
     shootRightEncoder.setDistancePerPulse(dpr);
 
     setpoint = 3000;
 
-    leftPidController = new PIDController(0.005, 0.00007, 0);
-    rightPidController = new PIDController(0.005, 0.00007, 0);
+    leftPidController = new PIDController(0.008, 0.00007, 0);
+    rightPidController = new PIDController(0.007, 0.00007, 0);
     leftPidController.setTolerance(tolerance);
     rightPidController.setTolerance(tolerance);
     leftPidController.setSetpoint(setpoint);
@@ -91,10 +90,11 @@ public class PidShooter extends SubsystemBase {
           + leftPidController.calculate(getLeftRpm()));
     shooterRight.setVoltage(ff * rightPidController.getSetpoint() 
           + rightPidController.calculate(getRightRpm()));
+    System.out.println("Trying to shoot!!");
     
   }
 
-  public void shootPower(double power){
+  public void shootPower(double power) {
     shooterLeft.set(ControlMode.PercentOutput, power);
     shooterRight.set(ControlMode.PercentOutput, power);
   }
@@ -108,9 +108,14 @@ public class PidShooter extends SubsystemBase {
     runRpm();
   }
 
+  /**
+   * Stops the PIDShooter.
+   */
   public void stopShooting() {
     shooterLeft.setVoltage(0);
     shooterRight.setVoltage(0);
+    leftPidController.reset();
+    rightPidController.reset();
   }
 
   public boolean reachedSetpoint() {

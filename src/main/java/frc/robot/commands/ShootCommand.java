@@ -13,18 +13,15 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.PidShooter;
 
 public class ShootCommand extends CommandBase {
-  
-
-  private double speed;
   private DriveTrain drive;
   private PidShooter shooter;
+  
   /**
-   * Spins the shoot motors.
+   * Spins the shoot motors to the speed needed by the vision target.
    * 
    * @param shooter the shooter subsystem used
    * @param drive the drivetrain
    */
-  
   public ShootCommand(PidShooter shooter, DriveTrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
 

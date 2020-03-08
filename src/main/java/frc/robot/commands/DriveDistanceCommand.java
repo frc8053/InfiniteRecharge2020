@@ -35,7 +35,11 @@ public class DriveDistanceCommand extends PIDCommand {
           if (ballIntake) {
             if (output > 0.5) {
               driveTrain.tankDrive(-0.5, -0.5);
-            } else {
+            } 
+            if (output < -0.5) {
+              driveTrain.tankDrive(0.5, 0.5);
+            }
+            if (Math.abs(output) < 0.5) {
               driveTrain.tankDrive(-output, -output);
             }
           } else {

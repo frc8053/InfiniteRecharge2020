@@ -7,27 +7,23 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.PidShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoMidShootCommand extends SequentialCommandGroup {
+public class AutoTurnCommandGroup extends SequentialCommandGroup {
   /**
-   * Creates a new AutoMidShootCommand.
+   * Creates a new AutoTurnCommandGroup.
    */
-  public AutoMidShootCommand(DriveTrain driveTrain, Intake intake, PidShooter pidShooter) {
-
+  public AutoTurnCommandGroup(DriveTrain driveTrain) {
+    // Add your commands in the super() call, e.g.
+    // super(new FooCommand(), new BarCommand());
     super(
-          new DriveTurnCommand(48.471614533921, driveTrain),
-          new DriveDistanceCommand(90.498964082468922, false, driveTrain),
-          //new DriveTurnCommand(-48.471614533921, driveTrain),
-          //new SetRpmShootCommandGroup(2500, intake, pidShooter)
-          new AutoTurnCommandGroup(driveTrain),
-          new PidShootCommandGroup(driveTrain, intake, pidShooter).withTimeout(4.5)
+        new VisionCommandGroup(driveTrain),
+        new InstantCommand(() -> driveTrain.saveTurnAngle(), driveTrain)
     );
   }
 }

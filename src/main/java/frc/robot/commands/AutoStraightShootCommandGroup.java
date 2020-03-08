@@ -25,7 +25,9 @@ public class AutoStraightShootCommandGroup extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super(
         new DriveDistanceCommand(82, false, driveTrain),
-        new SetRpmShootCommandGroup(2500, intake, pidShooter).withTimeout(3)
+        new AutoTurnCommandGroup(driveTrain),
+        new PidShootCommandGroup(driveTrain, intake, pidShooter)
+    //new SetRpmShootCommandGroup(2500, intake, pidShooter).withTimeout(3)
     );
   }
 }

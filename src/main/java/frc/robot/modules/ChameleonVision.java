@@ -24,8 +24,8 @@ public class ChameleonVision {
     yaw = ctable.getEntry("yaw");
     pipeline = ctable.getEntry("pipeline");
     timestamp = ctable.getEntry("timestamp");
-    driverMode = ctable.getEntry("driver_mode");
-    isValid = ctable.getEntry("is_valid");
+    driverMode = ctable.getEntry("driverMode");
+    isValid = ctable.getEntry("isValid");
   }
 
   /**
@@ -40,8 +40,8 @@ public class ChameleonVision {
     yaw = ctable.getEntry("targetYaw");
     pipeline = ctable.getEntry("pipeline");
     timestamp = ctable.getEntry("timestamp");
-    driverMode = ctable.getEntry("driver_mode");
-    isValid = ctable.getEntry("is_valid");
+    driverMode = ctable.getEntry("driverMode");
+    isValid = ctable.getEntry("isValid");
     pipeline.setValue(pipelinex);
   }
 

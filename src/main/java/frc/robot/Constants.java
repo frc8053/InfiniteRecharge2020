@@ -49,7 +49,7 @@ public final class Constants {
   public static final class DrivePid {
     public static double PTURN = 0.15;
     public static double ITURN = 0.014;
-    public static double DTURN = 0.0242;
+    public static double DTURN = 0.0238;
     public static double TURN_TOLERANCE = 0.5;
     public static double SPEED_TOLERANCE = 3;
   }
