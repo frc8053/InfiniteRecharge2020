@@ -47,43 +47,39 @@ public final class Constants {
   }
 
   public static final class DrivePid {
-    public static double PTURN = 0.15;
-    public static double ITURN = 0.014;
-    public static double DTURN = 0.0238;
+    public static double P_TURN = 0.15;
+    public static double I_TURN = 0.014;
+    public static double D_TURN = 0.0242;
+    public static double P_BALL = 0.05;
+    public static double I_BALL = 0.007;
+    public static double D_BALL = 0.035;
+    public static double P_DISTANCE = 0.3;
+    public static double I_DISTANCE = 0.014;
+    public static double D_DISTANCE = 0.06;
     public static double TURN_TOLERANCE = 0.5;
     public static double SPEED_TOLERANCE = 3;
   }
 
   public static final class IntakeConstant {
     public static double INTAKE_SPEED = 0.7;
-    public static double CONVEYOR_SPEED = 0.7;
+    public static double CONVEYOR_SPEED = 0.5;
   }
 
   public static final class Shoot {
-    public static double SHOOT_LOW = 0.2;
-    public static double SHOOT_HIGH = 0.8;
     public static double SHOOTRATE = 1.0 / 2048.0;
     public static double SLOW_RPM = 1000;
     public static double FAST_RPM = 3000;
-    public static double KS = 1;
-    public static double KV = 1;
-    public static double PSHOOT = 1;
-    public static double ISHOOT = 0;
-    public static double DSHOOT = 0;
-    public static double SHOOT_TOLERANCE = 10;
+    public static double P_LEFT_SHOOTER = 0.007;
+    public static double I_LEFT_SHOOTER = 0.0005;
+    public static double D_LEFT_SHOOTER = 0;
+    public static double P_RIGHT_SHOOTER = 0.007;
+    public static double I_RIGHT_SHOOTER = 0.00007;
+    public static double D_RIGHT_SHOOTER = 0;
+    public static double SHOOT_TOLERANCE = 50;
   }
 
   public static final class Climb {
     public static double CLIMB_SPEED = 0.8;
-  }
-
-  public static final class DioPorts {
-    public static int[] DRIVE_RIGHT_ENCODER = {4, 5};
-    public static int[] DRIVE_LEFT_ENCODER = {6, 7};
-    public static int[] SHOOT_LEFT_ENCODER = {0, 1};
-    public static int[] SHOOT_RIGHT_ENCODER = {2, 3};
-    public static int[] ELEVATOR_ENCODER = {8, 9};
-    public static int INTAKE_IR_SWITCH = 10;
   }
 }
 

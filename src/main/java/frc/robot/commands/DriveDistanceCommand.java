@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import frc.robot.Constants.DrivePid;
 import frc.robot.subsystems.DriveTrain;
 
 public class DriveDistanceCommand extends PIDCommand {
@@ -25,7 +26,7 @@ public class DriveDistanceCommand extends PIDCommand {
   public DriveDistanceCommand(double distance, boolean ballIntake, DriveTrain driveTrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     super(
-        new PIDController(0.3, 0.014, 0.06),
+        new PIDController(DrivePid.P_DISTANCE, DrivePid.I_DISTANCE, DrivePid.D_DISTANCE),
         //input
         driveTrain::leftEncoderValue,
         //setpoint

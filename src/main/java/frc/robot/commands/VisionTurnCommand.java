@@ -12,15 +12,13 @@ public class VisionTurnCommand extends PIDCommand {
   DriveTrain driveTrain;
   /**
    * Turns the robot to the vision target.
-   * 
-   * 
    * @param driveTrain the driveTrain subsystem used
    */
 
   public VisionTurnCommand(DriveTrain driveTrain) {
     super(
         // The controller that the command will use
-        new PIDController(DrivePid.PTURN, DrivePid.ITURN, DrivePid.DTURN),
+        new PIDController(DrivePid.P_TURN, DrivePid.I_TURN, DrivePid.D_TURN),
         // This should return the measurement
         driveTrain::getShootVisionYaw,
         // This should return the setpoint (can also be a constant)
@@ -28,10 +26,10 @@ public class VisionTurnCommand extends PIDCommand {
         // This uses the output
         output -> {
           // Use the output here
-          if (output > 0.6) {
+          if (output > 0.55) {
             driveTrain.arcadeDrive(0, 0.55);
           } 
-          if (output < -0.6) {
+          if (output < -0.55) {
             driveTrain.arcadeDrive(0, -0.55);
           } 
           if (Math.abs(output) < 0.55) {

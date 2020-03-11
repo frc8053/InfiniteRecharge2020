@@ -44,14 +44,12 @@ public class DriveTrain extends SubsystemBase {
   private final ChameleonVision shootVision;
   private final ChameleonVision intakeVision;
 
-  private final Solenoid visionLight;
+  private Solenoid visionLight;
   private final Encoder leftEncoder;
   private final Encoder rightEncoder;
 
   private Boolean switchDrive;
   private double reverse;
-
-  private String driver;
 
   private final Gyro gyro;
 
@@ -63,9 +61,8 @@ public class DriveTrain extends SubsystemBase {
 
   /**
    * Initalizes drive motors and helper classes. Also contains vision values from the Pi.
-   * </p>
+   * 
    */
-
   public DriveTrain() {
     frontLeft = new WPI_VictorSPX(0);
     frontRight = new WPI_VictorSPX(1);
@@ -80,8 +77,8 @@ public class DriveTrain extends SubsystemBase {
     backRight.setInverted(true);
     backRight.setNeutralMode(NeutralMode.Brake);
 
-    shootVision = new ChameleonVision("Shooter Cam", Pipelines.DRIVER);
-    intakeVision = new ChameleonVision("Intake Cam", Pipelines.DRIVER);
+    shootVision = new ChameleonVision("Shooter Cam", Pipelines.DEFAULT);
+    intakeVision = new ChameleonVision("Intake Cam", Pipelines.DEFAULT);
 
     visionLight = new Solenoid(0);
 
@@ -111,13 +108,6 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (switchDrive) {
-      driver = "Chris";
-    } else {
-      driver = "Trey";
-    }
-  
-    SmartDashboard.putString("Driver", driver);
     SmartDashboard.putNumber("Drive Encoder", leftEncoder.getDistance());
     SmartDashboard.putNumber("Yaw", gyro.getAngle());
     SmartDashboard.putNumber("Modified Yaw", getGyro());
@@ -248,14 +238,6 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
-   * returns the distance to the goal as calculated by the shoot camera.
-   * @return
-   */
-  public double getVisionDistance() {
-    return 75.25 * Math.tan((shootVision.getRotation().pitch + 20.618809296) * Math.PI / 180);
-  }
-
-  /**
   * Returns if the shooter vision camera is in driver mode.
   * @return
   */
@@ -264,7 +246,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
-   * sets the driveMode settings of the shoot camera. 
+   * sets the driveMode settings of the shoot camera.
    * @param isDriverMode whether camera should be in drive mode.
    */
   public void setShootDriverMode(boolean isDriverMode) {
@@ -287,7 +269,17 @@ public class DriveTrain extends SubsystemBase {
     shootVision.setVisionPipeline(Pipelines.DEFAULT);
   }
 
-  
+  public double getIntakeVisionYaw() {
+    return intakeVision.getRotation().yaw;
+  }  
+
+  public double getIntakeVisionPitch() {
+    return intakeVision.getRotation().pitch;
+  }
+
+  public boolean findIntakeTarget() {
+    return intakeVision.isValidFrame();
+  }
 
   /**
    * Sets the intake cam driverMode settings.

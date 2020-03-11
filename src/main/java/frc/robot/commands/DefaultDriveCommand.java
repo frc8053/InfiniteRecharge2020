@@ -24,12 +24,9 @@ public class DefaultDriveCommand extends CommandBase {
   private DoubleSupplier rightY;
   private DoubleSupplier rightX;
   private Supplier<Boolean> isAReleased;
-  private Supplier<Boolean> isBReleased;
-  private Supplier<Boolean> isYReleased;
   private Supplier<Boolean> isLeftBrake;
   private Supplier<Boolean> isRightBrake;
 
-  private Supplier<Boolean> isDriveToggled;
   private double speed;
   private double reverse;
   private boolean driveState;
@@ -44,18 +41,14 @@ public class DefaultDriveCommand extends CommandBase {
    * @param rightY The RightY joystick of driver gamepad
    * @param rightX rightX joystick of driver gamepad
    * 
-   * @param isDriveToggled Whether the toggle button has been released (basically pressed)
-   * @param isAReleased Whether A has been released
-   * @param isBReleased Whether B has been released
-   * @param isYReleased Whether Y has been released
+   * @param isAReleased Whether A has been releaseed
    * @param isLeftBrake Whether left trigger is held
    * @param isRightBrake Whether right trigger is held
    * 
    * @param driveTrain The driveTrain subsystem.
    */
   public DefaultDriveCommand(DoubleSupplier leftY, DoubleSupplier rightY, DoubleSupplier rightX, 
-                            Supplier<Boolean> isDriveToggled, Supplier<Boolean> isAReleased, 
-                            Supplier<Boolean> isBReleased, Supplier<Boolean> isYReleased,
+                            Supplier<Boolean> isAReleased, 
                             Supplier<Boolean> isLeftBrake,  Supplier<Boolean> isRightBrake,
                             DriveTrain driveTrain) {
 
@@ -65,10 +58,7 @@ public class DefaultDriveCommand extends CommandBase {
     this.rightY = rightY;
     this.rightX = rightX;
 
-    this.isDriveToggled = isDriveToggled;
     this.isAReleased = isAReleased;
-    this.isBReleased = isBReleased;
-    this.isYReleased = isYReleased;
     this.isLeftBrake = isLeftBrake;
     this.isRightBrake = isRightBrake;
     this.driveState = false;
@@ -83,10 +73,9 @@ public class DefaultDriveCommand extends CommandBase {
     reverse = 1;  
     driveState = false;
     driveTrain.setShootDriverMode(false);
-    driveTrain.setIntakeDriverMode(true);
+    driveTrain.setIntakeDriverMode(false);
     driveTrain.setShootPipeline(Pipelines.DEFAULT);
     driveTrain.turnOnLight(true);
- 
   }
 
   // Called every time the scheduler runs while the command is scheduled.

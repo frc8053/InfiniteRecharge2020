@@ -17,7 +17,10 @@ import frc.robot.subsystems.PidShooter;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class AutoStraightDumpCommandGroup extends SequentialCommandGroup {
   /**
-   * Creates a new AutoStraightDumpCommandGroup.
+   * Auto command that drives forward and shoots into the low goal.
+   * @param driveTrain the driveTrain subsystem used
+   * @param intake the intake subsystem used
+   * @param pidShooter the pidShooter subsystem used
    */
   public AutoStraightDumpCommandGroup(DriveTrain driveTrain, Intake intake, 
                                       PidShooter pidShooter) {

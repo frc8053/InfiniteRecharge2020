@@ -7,14 +7,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -29,6 +27,7 @@ import frc.robot.commands.AutoRightShootCommandGroup;
 import frc.robot.commands.AutoStraightCommandGroup;
 import frc.robot.commands.AutoStraightDumpCommandGroup;
 import frc.robot.commands.AutoStraightShootCommandGroup;
+import frc.robot.commands.BallAlignmentCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultIntakeCommand;
 import frc.robot.commands.ElevatorCommand;
@@ -72,6 +71,7 @@ public class RobotContainer {
   private AutoLeftShootCommandGroup autoLeftShootCommandGroup;
   private AutoLeftDumpCommandGroup autoLeftDumpCommandGroup;
   private VisionCommandGroup visionCommandGroup;
+  private BallAlignmentCommand ballAlignmentCommand;
   private SetRpmShootCommandGroup midShootCommand;
   private SetRpmShootCommandGroup lowShootCommand;
   private PidShootCommandGroup highShootCommand;
@@ -101,11 +101,6 @@ public class RobotContainer {
   Trigger maniRightTrigger;
   AnalogTrigger analogTrigger;
 
-  ShuffleboardTab parameterTab;
-  NetworkTableEntry highSpeed;
-  NetworkTableEntry midSpeed;
-  NetworkTableEntry lowerMidSpeed;
-  NetworkTableEntry lowSpeed;
   SendableChooser<Command> autoChooser;
 
   /**
@@ -119,17 +114,29 @@ public class RobotContainer {
     elevator = new Elevator(); 
     winch = new Winch();
     
-    /*parameterTab = Shuffleboard.getTab("Parameter Tab");
-    highSpeed = parameterTab.add("High Speed", 0.9)
-      .getEntry();
-    midSpeed = parameterTab.add("Mid Speed", 0.825)
-      .getEntry();
-    lowerMidSpeed = parameterTab.add("Lower Mid Speed", 0.75)
-      .getEntry();
-    lowSpeed = parameterTab.add("Low Speed", 0.4)
-      .getEntry();
-    */
+    // Initialize Driver Controller and Buttons
+    driverController = new XboxController(0);
 
+    driverButtonA = new JoystickButton(driverController, Button.kA.value);
+    driverButtonX = new JoystickButton(driverController, Button.kX.value);
+    driverPovDown = new POVButton(driverController, 180);
+    driverPovUp = new POVButton(driverController, 0);
+    driverRightBumper = new JoystickButton(driverController, Button.kBumperRight.value);
+    driverLeftBumper = new JoystickButton(driverController, Button.kBumperLeft.value);
+    driverLeftTrigger = new TriggerButton(driverController, Hand.kLeft);
+    driverRightTrigger = new TriggerButton(driverController, Hand.kRight);
+
+    // Initialize Manipulator Controller and Buttons
+    manipulatorController = new XboxController(1);
+
+    maniButtonA = new JoystickButton(manipulatorController, Button.kA.value);
+    maniButtonX = new JoystickButton(manipulatorController, Button.kX.value);
+    maniButtonY = new JoystickButton(manipulatorController, Button.kY.value);
+    maniButtonB = new JoystickButton(manipulatorController, Button.kB.value);
+    maniLeftBumper = new JoystickButton(manipulatorController, Button.kBumperLeft.value);
+    maniRightBumper = new JoystickButton(manipulatorController, Button.kBumperRight.value);
+    maniPovUp = new POVButton(manipulatorController, 0);
+    
     // Initalize commands
     autoStraightCommandGroup = new AutoStraightCommandGroup(driveTrain);
     autoRightShootCommandGroup = new AutoRightShootCommandGroup(driveTrain, intake, 
@@ -144,7 +151,8 @@ public class RobotContainer {
                                                               pidShooter);
     autoLeftDumpCommandGroup = new AutoLeftDumpCommandGroup(driveTrain, intake, 
                                                             pidShooter);
-    visionCommandGroup = new VisionCommandGroup(driveTrain);
+    visionCommandGroup = new VisionCommandGroup(driveTrain, intake, pidShooter);
+    ballAlignmentCommand = new BallAlignmentCommand(driverController, driveTrain, intake);
     highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
     midShootCommand = new SetRpmShootCommandGroup(3500, intake, 
                                                         pidShooter);
@@ -155,40 +163,12 @@ public class RobotContainer {
     //tDriveDistanceCommand = new DriveDistanceCommand(50, true, driveTrain);
     //tDriveTurnCommand = new DriveTurnCommand(-90, driveTrain);
     
-    // Initialize Driver Controller and Buttons
-    driverController = new XboxController(0);
-
-    driverButtonA = new JoystickButton(driverController, Button.kA.value);
-    driverButtonX = new JoystickButton(driverController, Button.kX.value);
-    driverPovDown = new POVButton(driverController, 180);
-    driverPovUp = new POVButton(driverController, 0);
-    driverRightBumper = new JoystickButton(driverController, Button.kBumperRight.value);
-    driverLeftBumper = new JoystickButton(driverController, Button.kBumperLeft.value);
-    driverLeftTrigger = new TriggerButton(driverController, Hand.kLeft);
-    driverRightTrigger = new TriggerButton(driverController, Hand.kRight);
-    
-    
-
-    // Initialize Manipulator Controller and Buttons
-    manipulatorController = new XboxController(1);
-
-    maniButtonA = new JoystickButton(manipulatorController, Button.kA.value);
-    maniButtonX = new JoystickButton(manipulatorController, Button.kX.value);
-    maniButtonY = new JoystickButton(manipulatorController, Button.kY.value);
-    maniButtonB = new JoystickButton(manipulatorController, Button.kB.value);
-    maniLeftBumper = new JoystickButton(manipulatorController, Button.kBumperLeft.value);
-    maniRightBumper = new JoystickButton(manipulatorController, Button.kBumperRight.value);
-    maniPovUp = new POVButton(manipulatorController, 0);
-    
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
         () -> driverController.getY(Hand.kLeft),
-        () -> driverController.getY(Hand.kRight), 
-        () -> driverController.getX(Hand.kRight), 
-        () -> driverController.getXButtonReleased(), 
+        () -> driverController.getY(Hand.kRight),
+        () -> driverController.getX(Hand.kRight),
         () -> driverController.getAButtonReleased(),
-        () -> driverController.getBButtonReleased(),
-        () -> driverController.getYButtonReleased(),
         () -> Math.abs(driverController.getTriggerAxis(Hand.kLeft)) > 0.2,
         () -> Math.abs(driverController.getTriggerAxis(Hand.kRight)) > 0.2,
         driveTrain));
@@ -212,13 +192,14 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //driverPovUp.whenHeld(tDriveDistanceCommand.raceWith(new IntakeCommand(0.8, 0.5, intake)));
     //driverPovDown.whenHeld(tDriveTurnCommand);
+    driverLeftBumper.whenHeld(ballAlignmentCommand);
     driverRightBumper.whenHeld(visionCommandGroup);
     driverButtonX.whenReleased(new InstantCommand(() -> driveTrain.toggleOnLight(), driveTrain));
     maniButtonA.whenHeld(lowShootCommand);
     maniButtonX.whenHeld(new InstantCommand(() -> pidShooter.shootPower(1), pidShooter))
       .whenReleased(new InstantCommand(() -> pidShooter.stopShooting()));
     maniButtonB.whenHeld(midShootCommand);
-    maniButtonY.whenHeld(highShootCommand)  
+    maniButtonY.whenHeld(highShootCommand)
         .whenReleased(new InstantCommand(
             () -> pidShooter.stopShooting(), pidShooter));
     maniPovUp.whenHeld(new InstantCommand(
@@ -227,7 +208,7 @@ public class RobotContainer {
             () -> winch.winchControl(0)
         ));
     maniLeftBumper.whenHeld(visionCommandGroup);
-    maniRightBumper.whenHeld(winchCommand);                  
+    maniRightBumper.whenHeld(winchCommand);
     
     autoChooser = new SendableChooser<Command>();
     autoChooser.setDefaultOption("Auto Right Shoot", autoRightShootCommandGroup);
@@ -242,7 +223,6 @@ public class RobotContainer {
       .add("Auto Chooser", autoChooser)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
   }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

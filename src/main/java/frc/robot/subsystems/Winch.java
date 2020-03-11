@@ -10,6 +10,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,6 +22,8 @@ public class Winch extends SubsystemBase {
 
   //Instance Variables
   private WPI_VictorSPX winch;
+  private Solenoid backLeftLight;
+  private Solenoid backRightLight;
 
   /**
    * Instantiate Elevator Subsystem.
@@ -27,13 +31,19 @@ public class Winch extends SubsystemBase {
   public Winch() {
     winch = new WPI_VictorSPX(10);
     winch.setNeutralMode(NeutralMode.Brake);
+    backLeftLight = new Solenoid(1);
+    backRightLight = new Solenoid(2);
+    backLeftLight.set(true);
+    backRightLight.set(true);
   }
   
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Winch Voltage", winch.getMotorOutputVoltage());    
+    SmartDashboard.putNumber("Winch Voltage", winch.getMotorOutputVoltage());   
+    backLeftLight.set(true); 
+    backRightLight.set(true);
   }
 
   /**

@@ -44,10 +44,13 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("Elevator Voltage", elevatorMotor.getMotorOutputVoltage());
   }
 
+  /**
+  * Returns the height of the elevator. 
+  * @return
+  */
   public double getDistance() {
     return encoder.getDistance() + Constants.Elevator.HEIGHT;
   }
-
 
   /**
    * Controls the small winch for the climber setup.

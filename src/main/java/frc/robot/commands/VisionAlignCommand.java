@@ -14,7 +14,7 @@ import frc.robot.subsystems.DriveTrain;
 
 public class VisionAlignCommand extends CommandBase {
   /**
-   * Creates a new VisionAlignCommand.
+   * Aligns to vision target using a P controller.
    */
   private DriveTrain driveTrain;
 
@@ -50,7 +50,7 @@ public class VisionAlignCommand extends CommandBase {
     if (rotationError > angleTolerance) {
       rotationAjust = constantForce;
     } else {
-      rotationAjust =  - constantForce;
+      rotationAjust =  -constantForce;
     }
     driveTrain.arcadeDrive(0, rotationAjust);
     SmartDashboard.putNumber("Distance Adjuist", distanceAjust);

@@ -21,10 +21,10 @@ import frc.robot.subsystems.PidShooter;
 public class SetRpmShootCommandGroup extends SequentialCommandGroup {
   Intake intake;
   PidShooter pidShooter;
-  /**
-   * A temporary test command to shoot for the high goal.
-   */
   
+  /**
+   * A command that sets the shooter PID to the desired rpm.
+   */
   public SetRpmShootCommandGroup(double rpm, Intake intake, 
                                   PidShooter pidShooter) {
     // Add your commands in the super() call, e.g.

@@ -17,7 +17,10 @@ import frc.robot.subsystems.PidShooter;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class AutoMidShootCommand extends SequentialCommandGroup {
   /**
-   * Creates a new AutoMidShootCommand.
+   * Auto command that turns, drives forward 48.5 inches, turns toward the vision target and shoots.
+   * @param driveTrain the driveTrain subsystem used
+   * @param intake the intake subsystem used
+   * @param pidShooter the pidShooter subsystem used
    */
   public AutoMidShootCommand(DriveTrain driveTrain, Intake intake, PidShooter pidShooter) {
 
@@ -26,7 +29,7 @@ public class AutoMidShootCommand extends SequentialCommandGroup {
           new DriveDistanceCommand(90.498964082468922, false, driveTrain),
           //new DriveTurnCommand(-48.471614533921, driveTrain),
           //new SetRpmShootCommandGroup(2500, intake, pidShooter)
-          new AutoTurnCommandGroup(driveTrain),
+          new AutoTurnCommandGroup(driveTrain, intake, pidShooter),
           new PidShootCommandGroup(driveTrain, intake, pidShooter).withTimeout(4.5)
     );
   }

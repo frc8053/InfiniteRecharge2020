@@ -15,7 +15,8 @@ public class WinchCommand extends CommandBase {
   private final Winch subsystem;
   
   /**
-   * Creates a new Elevatorommand.
+   * Runs the winch at 100% speed to climb.
+   * @param subsystem the winch subsystem used
    */
   public WinchCommand(Winch subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.

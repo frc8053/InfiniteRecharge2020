@@ -33,7 +33,7 @@ public class AutoRightShootCommandGroup extends SequentialCommandGroup {
         new DriveDistanceCommand(86.63, false, driveTrain),
         //new DriveTurnCommand(22.48, driveTrain),
         //new SetRpmShootCommandGroup(2471.19, intake, pidShooter).withTimeout(4.5),
-        new AutoTurnCommandGroup(driveTrain),
+        new AutoTurnCommandGroup(driveTrain, intake, pidShooter),
         new PidShootCommandGroup(driveTrain, intake, pidShooter).withTimeout(4.5),
         new DriveTurnCommand(driveTrain.getSavedTurnAngle(), driveTrain),
         new DriveDistanceCommand(114, true, driveTrain)
@@ -41,7 +41,7 @@ public class AutoRightShootCommandGroup extends SequentialCommandGroup {
           IntakeConstant.CONVEYOR_SPEED, intake)),
         //new DriveTurnCommand(14.43823268, driveTrain),
         //new SetRpmShootCommandGroup(2463.44201, intake, pidShooter)
-        new AutoTurnCommandGroup(driveTrain),
+        new AutoTurnCommandGroup(driveTrain, intake, pidShooter),
         new PidShootCommandGroup(driveTrain, intake, pidShooter).withTimeout(4.5)
     );
   }

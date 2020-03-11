@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.modules.Pipelines;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.PidShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,14 +21,16 @@ public class VisionCommandGroup extends SequentialCommandGroup {
   private DriveTrain driveTrain;
 
   /**
-   * Creates a new VisionCommandGroup.
+   * The vision command group turns on the vision light and turns to the target.
+   * @param driveTrain the driveTrain subsystem used
    */
-  public VisionCommandGroup(DriveTrain driveTrain) {
+  public VisionCommandGroup(DriveTrain driveTrain, Intake intake, PidShooter pidShooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
         new InstantCommand(() -> driveTrain.turnOnLight(true), driveTrain),
-        new VisionTurnCommand(driveTrain)
+        new VisionTurnCommand(driveTrain),
+        new PidShootCommandGroup(driveTrain, intake, pidShooter)
     );
     this.driveTrain = driveTrain;
   }
@@ -40,7 +44,7 @@ public class VisionCommandGroup extends SequentialCommandGroup {
 
   @Override
   public void end(boolean interrupted) {
-    driveTrain.turnOnLight(false);
+    //driveTrain.turnOnLight(false);
     driveTrain.setShootDriverMode(false);
     //driveTrain.setShootPipeline(Pipelines.DRIVER);
     super.end(interrupted);

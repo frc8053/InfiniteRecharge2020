@@ -17,7 +17,11 @@ import frc.robot.subsystems.PidShooter;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class AutoMidDumpCommand extends SequentialCommandGroup {
   /**
-   * Creates a new AutoMidDump.
+   * Auto command that turns, drives backwards, turns toward goal, drives backward 
+   * and fires into the low goal.
+   * @param driveTrain the driveTrain subsystem used
+   * @param intake the intake subsystem used
+   * @param pidShooter the pidShooter subsystem used
    */
   public AutoMidDumpCommand(DriveTrain driveTrain, Intake intake, PidShooter pidShooter) {
     // Add your commands in the super() call, e.g.
