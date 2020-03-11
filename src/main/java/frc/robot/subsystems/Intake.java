@@ -55,6 +55,14 @@ public class Intake extends SubsystemBase {
     intakeBar.set(ControlMode.PercentOutput, speed);
   }
 
+  public void leftConveyor(double speed) {
+    leftConveyor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void rightConveyor(double speed) {
+    rightConveyor.set(ControlMode.PercentOutput, speed);
+  }
+
   /**
    * Controls the speed of the conveyor that moves the balls
    * to the shooter.

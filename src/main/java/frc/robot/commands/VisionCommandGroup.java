@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.modules.Pipelines;
 import frc.robot.subsystems.DriveTrain;
@@ -29,7 +30,9 @@ public class VisionCommandGroup extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super(
         new InstantCommand(() -> driveTrain.turnOnLight(true), driveTrain),
-        new VisionTurnCommand(driveTrain),
+        new VisionTurnCommand(driveTrain).raceWith(
+          new ShootCommand(pidShooter, driveTrain)
+        ),
         new PidShootCommandGroup(driveTrain, intake, pidShooter)
     );
     this.driveTrain = driveTrain;

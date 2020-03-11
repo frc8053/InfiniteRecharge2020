@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Auto11BallCommandGroup;
 import frc.robot.commands.AutoLeftDumpCommandGroup;
 import frc.robot.commands.AutoLeftShootCommandGroup;
 import frc.robot.commands.AutoMidDumpCommand;
@@ -33,6 +34,7 @@ import frc.robot.commands.DefaultIntakeCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.PidShootCommandGroup;
 import frc.robot.commands.SetRpmShootCommandGroup;
+import frc.robot.commands.UnclogCommand;
 import frc.robot.commands.VisionCommandGroup;
 import frc.robot.commands.WinchCommand;
 import frc.robot.subsystems.DriveTrain;
@@ -64,6 +66,7 @@ public class RobotContainer {
 
   private AutoStraightCommandGroup autoStraightCommandGroup;
   private AutoRightShootCommandGroup autoRightShootCommandGroup;
+  private Auto11BallCommandGroup auto11BallCommandGroup;
   private AutoStraightShootCommandGroup autoStraightShootCommandGroup;
   private AutoStraightDumpCommandGroup autoStraightDumpCommandGroup;
   private AutoMidShootCommand autoMidShootCommand;
@@ -75,6 +78,7 @@ public class RobotContainer {
   private SetRpmShootCommandGroup midShootCommand;
   private SetRpmShootCommandGroup lowShootCommand;
   private PidShootCommandGroup highShootCommand;
+  private UnclogCommand unclogCommand;
   private WinchCommand winchCommand;
   //private DriveDistanceCommand tDriveDistanceCommand;
   //private DriveTurnCommand tDriveTurnCommand;
@@ -135,12 +139,15 @@ public class RobotContainer {
     maniButtonB = new JoystickButton(manipulatorController, Button.kB.value);
     maniLeftBumper = new JoystickButton(manipulatorController, Button.kBumperLeft.value);
     maniRightBumper = new JoystickButton(manipulatorController, Button.kBumperRight.value);
+    maniLeftTrigger = new TriggerButton(manipulatorController, Hand.kLeft);
+    maniRightTrigger = new TriggerButton(manipulatorController, Hand.kRight);
     maniPovUp = new POVButton(manipulatorController, 0);
     
     // Initalize commands
     autoStraightCommandGroup = new AutoStraightCommandGroup(driveTrain);
     autoRightShootCommandGroup = new AutoRightShootCommandGroup(driveTrain, intake, 
                                                                 pidShooter);
+    auto11BallCommandGroup = new Auto11BallCommandGroup(driveTrain, intake, pidShooter);
     autoStraightShootCommandGroup = new AutoStraightShootCommandGroup(driveTrain, intake, 
                                                                       pidShooter);
     autoStraightDumpCommandGroup =  new AutoStraightDumpCommandGroup(driveTrain, intake,
@@ -159,6 +166,7 @@ public class RobotContainer {
     lowShootCommand = new SetRpmShootCommandGroup(1000, intake, 
                                                         pidShooter);
     highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
+    unclogCommand = new UnclogCommand(intake);
     winchCommand = new WinchCommand(winch);
     //tDriveDistanceCommand = new DriveDistanceCommand(50, true, driveTrain);
     //tDriveTurnCommand = new DriveTurnCommand(-90, driveTrain);
@@ -209,9 +217,11 @@ public class RobotContainer {
         ));
     maniLeftBumper.whenHeld(visionCommandGroup);
     maniRightBumper.whenHeld(winchCommand);
+    maniLeftTrigger.whileActiveOnce(unclogCommand);
     
     autoChooser = new SendableChooser<Command>();
     autoChooser.setDefaultOption("Auto Right Shoot", autoRightShootCommandGroup);
+    autoChooser.addOption("11 Ball Auto", auto11BallCommandGroup);
     autoChooser.addOption("Auto Straight", autoStraightCommandGroup);
     autoChooser.addOption("Auto Straight Shoot", autoStraightShootCommandGroup);
     autoChooser.addOption("Auto Straight Dump", autoStraightDumpCommandGroup);
