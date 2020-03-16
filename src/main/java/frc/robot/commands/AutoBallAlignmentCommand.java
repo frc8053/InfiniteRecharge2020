@@ -19,9 +19,12 @@ import frc.robot.subsystems.Intake;
 public class AutoBallAlignmentCommand extends PIDCommand {
   DriveTrain driveTrain;
   Intake intake;
-  
+
   /**
-   * Creates a new AutoBallAlignmentCommand.
+   * Ball Alignment Command used in autonomous.
+   * @param speed the speed subsystem used
+   * @param driveTrain the driveTrain subsystem used
+   * @param intake the intake subsystem used
    */
   public AutoBallAlignmentCommand(double speed, DriveTrain driveTrain, Intake intake) {
     super(

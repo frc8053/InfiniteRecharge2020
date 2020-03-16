@@ -80,8 +80,6 @@ public class RobotContainer {
   private PidShootCommandGroup highShootCommand;
   private UnclogCommand unclogCommand;
   private WinchCommand winchCommand;
-  //private DriveDistanceCommand tDriveDistanceCommand;
-  //private DriveTurnCommand tDriveTurnCommand;
 
   XboxController driverController;
   JoystickButton driverButtonA;
@@ -130,7 +128,7 @@ public class RobotContainer {
     driverLeftTrigger = new TriggerButton(driverController, Hand.kLeft);
     driverRightTrigger = new TriggerButton(driverController, Hand.kRight);
 
-    // Initialize Manipulator Controller and Buttons
+    // Initialize Manipulator/Operator Controller and Buttons
     manipulatorController = new XboxController(1);
 
     maniButtonA = new JoystickButton(manipulatorController, Button.kA.value);
@@ -167,9 +165,7 @@ public class RobotContainer {
                                                         pidShooter);
     highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
     unclogCommand = new UnclogCommand(intake);
-    winchCommand = new WinchCommand(winch);
-    //tDriveDistanceCommand = new DriveDistanceCommand(50, true, driveTrain);
-    //tDriveTurnCommand = new DriveTurnCommand(-90, driveTrain);
+    winchCommand = new WinchCommand(winch, driveTrain);
     
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
@@ -181,6 +177,7 @@ public class RobotContainer {
         () -> Math.abs(driverController.getTriggerAxis(Hand.kRight)) > 0.2,
         driveTrain));
 
+    //Sets the default intake command to run the intake bar and conveyor on operator input
     intake.setDefaultCommand(new DefaultIntakeCommand(
         () -> manipulatorController.getY(Hand.kLeft),
         intake));
@@ -198,8 +195,6 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //driverPovUp.whenHeld(tDriveDistanceCommand.raceWith(new IntakeCommand(0.8, 0.5, intake)));
-    //driverPovDown.whenHeld(tDriveTurnCommand);
     driverLeftBumper.whenHeld(ballAlignmentCommand);
     driverRightBumper.whenHeld(visionCommandGroup);
     driverButtonX.whenReleased(new InstantCommand(() -> driveTrain.toggleOnLight(), driveTrain));
@@ -219,6 +214,7 @@ public class RobotContainer {
     maniRightBumper.whenHeld(winchCommand);
     maniLeftTrigger.whileActiveOnce(unclogCommand);
     
+    //The Auto chooser to select autonomous in SmartDashboard
     autoChooser = new SendableChooser<Command>();
     autoChooser.setDefaultOption("Auto Right Shoot", autoRightShootCommandGroup);
     autoChooser.addOption("11 Ball Auto", auto11BallCommandGroup);

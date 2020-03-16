@@ -76,6 +76,7 @@ public class DefaultDriveCommand extends CommandBase {
     driveTrain.setIntakeDriverMode(false);
     driveTrain.setShootPipeline(Pipelines.DEFAULT);
     driveTrain.turnOnLight(true);
+    driveTrain.useDriveBlinkers(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -111,7 +112,7 @@ public class DefaultDriveCommand extends CommandBase {
     }
     SmartDashboard.putString("Drive Mode", driveMode);
     SmartDashboard.putString("Direction", reversed);
- 
+
     if (driveState) {
       driveTrain.tankDrive(leftY.getAsDouble() * speed * reverse, 
                           rightY.getAsDouble() * speed * reverse);

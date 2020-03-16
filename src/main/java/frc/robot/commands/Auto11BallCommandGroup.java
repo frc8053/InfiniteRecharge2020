@@ -20,7 +20,10 @@ import frc.robot.subsystems.PidShooter;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class Auto11BallCommandGroup extends SequentialCommandGroup {
   /**
-   * Creates a new Auto11BallCommandGroup.
+   * Auto that uses vision processing to collect and fire up to 11 power cells.
+   * @param driveTrain the driveTrain subsystem used
+   * @param intake the intake subsystem used
+   * @param pidShooter the pidShooter subsystem used
    */
   public Auto11BallCommandGroup(DriveTrain driveTrain, Intake intake, PidShooter pidShooter) {
     // Add your commands in the super() call, e.g.
@@ -34,7 +37,7 @@ public class Auto11BallCommandGroup extends SequentialCommandGroup {
             .raceWith(new IntakeCommand(IntakeConstant.INTAKE_SPEED, 
             IntakeConstant.CONVEYOR_SPEED, intake)),
           new AutoTurnCommandGroup(driveTrain, intake, pidShooter).withTimeout(2.5),
-          new DriveTurnCommand(45, driveTrain),
+          new DriveTurnCommand(170, driveTrain),
           new AutoBallAlignmentCommand(0.55, driveTrain, intake)
         ).withTimeout(12.5),
         new InstantCommand(() -> driveTrain.arcadeDrive(0, 0.5), driveTrain),

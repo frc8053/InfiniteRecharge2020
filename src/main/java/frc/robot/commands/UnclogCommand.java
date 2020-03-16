@@ -14,7 +14,8 @@ public class UnclogCommand extends CommandBase {
   Intake intake;
 
   /**
-   * Creates a new UnclogCommand.
+   * Command Ran to unclog the shooter if two balls get stuck next to each other.
+   * @param intake the intake subsystem used
    */
   public UnclogCommand(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.

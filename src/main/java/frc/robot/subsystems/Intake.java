@@ -69,8 +69,7 @@ public class Intake extends SubsystemBase {
    * @param speed the speed of the conveyor [-1, 1]
    */
   public void conveyorControl(double speed) {
-    leftConveyor.set(ControlMode.PercentOutput, speed);
-    rightConveyor.set(ControlMode.PercentOutput, speed);
+    conveyor.set(speed);
   }
 
   /**

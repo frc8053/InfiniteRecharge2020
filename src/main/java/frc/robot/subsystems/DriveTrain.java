@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Drive;
 import frc.robot.modules.ChameleonVision;
 import frc.robot.modules.Pipelines;
-
 import java.util.Map;
 
 public class DriveTrain extends SubsystemBase {
@@ -40,20 +39,25 @@ public class DriveTrain extends SubsystemBase {
   private final SpeedControllerGroup leftDrive;
   private final SpeedControllerGroup rightDrive;
   private final DifferentialDrive myRobot;
+  
+  private Solenoid visionLight;
+  private Solenoid backLeftLight;
+  private Solenoid backRightLight;
 
   private final ChameleonVision shootVision;
   private final ChameleonVision intakeVision;
 
-  private Solenoid visionLight;
   private final Encoder leftEncoder;
   private final Encoder rightEncoder;
-
-  private Boolean switchDrive;
-  private double reverse;
-
   private final Gyro gyro;
 
+  private Boolean switchDrive;
+  private boolean useBlinkers;
+  private boolean leftBlinker;
+  private boolean rightBlinker;
+  private double reverse;
   private double turnAngle;
+  private double counter;
 
   private ShuffleboardTab parameterTab;
   private NetworkTableEntry maxSpeed;
@@ -90,6 +94,9 @@ public class DriveTrain extends SubsystemBase {
     rightEncoder = new Encoder(6, 7);
     rightEncoder.setDistancePerPulse(Drive.DISTANCE_PER_PULSE);
 
+    backLeftLight = new Solenoid(1);
+    backRightLight = new Solenoid(2);
+
     switchDrive = false;
     reverse = 1;
 
@@ -108,6 +115,42 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (useBlinkers) {
+      if (gyro.getRate() > 0.5) {
+        if (counter < 500) {
+          counter++;
+        }
+        if (counter >= 500) {
+          rightBlinker = !rightBlinker;
+          counter = 0;
+        }
+        leftBlinker = true;
+      }
+      if (gyro.getRate() < -0.5) {
+        if (counter < 500) {
+          counter++;
+        }
+        if (counter >= 500) {
+          leftBlinker = !leftBlinker;
+          counter = 0;
+        }
+        rightBlinker = true;
+      }
+      if (frontLeft.getMotorOutputVoltage() + frontRight.getMotorOutputVoltage() < 0) {
+        backLeftLight.set(rightBlinker);
+        backRightLight.set(leftBlinker);
+      } else {
+        backLeftLight.set(leftBlinker);
+        backRightLight.set(rightBlinker);
+      }
+      if (Math.abs(gyro.getRate()) < 0.5) {
+        counter = 0;
+        leftBlinker = false;
+        rightBlinker = false;
+        backLeftLight.set(true);
+        backRightLight.set(true);
+      }
+    }
     SmartDashboard.putNumber("Drive Encoder", leftEncoder.getDistance());
     SmartDashboard.putNumber("Yaw", gyro.getAngle());
     SmartDashboard.putNumber("Modified Yaw", getGyro());
@@ -132,6 +175,18 @@ public class DriveTrain extends SubsystemBase {
    */
   public void tankDrive(final double left, final double right) {
     myRobot.tankDrive(left, right);
+  }
+
+  public void useDriveBlinkers(boolean useBlinkers) {
+    this.useBlinkers = useBlinkers;
+  }
+
+  public void turnOnLeftBlinker(boolean on) {
+    backLeftLight.set(on);
+  }
+
+  public void turnOnRightBlinker(boolean on) {
+    backRightLight.set(on);
   }
 
   public void saveTurnAngle() {
@@ -269,14 +324,26 @@ public class DriveTrain extends SubsystemBase {
     shootVision.setVisionPipeline(Pipelines.DEFAULT);
   }
 
+  /**
+   * returns the yaw in degrees to the power cell.
+   * @return
+   */
   public double getIntakeVisionYaw() {
     return intakeVision.getRotation().yaw;
   }  
 
+  /**
+   * Returns the Pitch in degrees to the power cell.
+   * @return
+   */
   public double getIntakeVisionPitch() {
     return intakeVision.getRotation().pitch;
   }
 
+  /**
+   * Returns if a power cell is identified by vision processing.
+   * @return
+   */
   public boolean findIntakeTarget() {
     return intakeVision.isValidFrame();
   }
@@ -294,12 +361,10 @@ public class DriveTrain extends SubsystemBase {
     }
   }
 
-  
   /**
    * returns gyro value.
    * @return the rotational value of the gyroscope
    */
-
   public double getGyro() {
     if (gyro.getAngle() > 180) {
       return -(gyro.getAngle() - 360);
@@ -318,6 +383,4 @@ public class DriveTrain extends SubsystemBase {
   public void resetGyro() {
     gyro.reset();
   }
-
-  
 }

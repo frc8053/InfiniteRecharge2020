@@ -30,10 +30,7 @@ public class AutoLeftShootCommandGroup extends SequentialCommandGroup {
     super(
         new DriveTurnCommand(-19.335, driveTrain),
         new DriveDistanceCommand(-151.017, false, driveTrain),
-        //new DriveTurnCommand(84.285, driveTrain),
-        new AutoTurnCommandGroup(driveTrain, intake, pidShooter),
-        //new SetRpmShootCommandGroup(2500, intake, pidShooter).withTimeout(3)
-        new PidShootCommandGroup(driveTrain, intake, pidShooter)
+        new AutoTurnCommandGroup(driveTrain, intake, pidShooter)
     );
   }
 }

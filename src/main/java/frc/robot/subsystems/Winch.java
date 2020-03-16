@@ -11,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -19,11 +18,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 * Add your docs here.
 */
 public class Winch extends SubsystemBase {
-
   //Instance Variables
   private WPI_VictorSPX winch;
-  private Solenoid backLeftLight;
-  private Solenoid backRightLight;
 
   /**
    * Instantiate Elevator Subsystem.
@@ -31,10 +27,6 @@ public class Winch extends SubsystemBase {
   public Winch() {
     winch = new WPI_VictorSPX(10);
     winch.setNeutralMode(NeutralMode.Brake);
-    backLeftLight = new Solenoid(1);
-    backRightLight = new Solenoid(2);
-    backLeftLight.set(true);
-    backRightLight.set(true);
   }
   
 
@@ -42,8 +34,6 @@ public class Winch extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Winch Voltage", winch.getMotorOutputVoltage());   
-    backLeftLight.set(true); 
-    backRightLight.set(true);
   }
 
   /**
@@ -52,7 +42,6 @@ public class Winch extends SubsystemBase {
     */
   public void winchControl(double speed) {
     winch.set(ControlMode.PercentOutput, speed);
-    
   }
   
 
