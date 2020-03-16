@@ -14,7 +14,6 @@ public class SwitchDrive extends CommandBase {
   private DriveTrain driveTrain;
   /**
    * Switches the drive controls.
-   * 
    * @param driveTrain the driveTrain subsystem used
    */
   

@@ -17,7 +17,10 @@ import frc.robot.subsystems.PidShooter;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class AutoStraightShootCommandGroup extends SequentialCommandGroup {
   /**
-   * Creates a new AutoStraightShootCommandGroup.
+   * Auto commands that moves straight, turns to vision target and shoots.
+   * @param driveTrain the driveTrain subsystem used
+   * @param intake the intake subsystem used
+   * @param pidShooter the pidShooter used
    */
   public AutoStraightShootCommandGroup(DriveTrain driveTrain, Intake intake, 
                                       PidShooter pidShooter) {
@@ -25,7 +28,8 @@ public class AutoStraightShootCommandGroup extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super(
         new DriveDistanceCommand(82, false, driveTrain),
-        new SetRpmShootCommandGroup(2500, intake, pidShooter).withTimeout(3)
+        new AutoTurnCommandGroup(driveTrain, intake, pidShooter),
+        new PidShootCommandGroup(driveTrain, intake, pidShooter)
     );
   }
 }

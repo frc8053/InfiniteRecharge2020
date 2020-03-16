@@ -24,18 +24,14 @@ public class DefaultDriveCommand extends CommandBase {
   private DoubleSupplier rightY;
   private DoubleSupplier rightX;
   private Supplier<Boolean> isAReleased;
-  private Supplier<Boolean> isBReleased;
-  private Supplier<Boolean> isYReleased;
   private Supplier<Boolean> isLeftBrake;
   private Supplier<Boolean> isRightBrake;
 
-  private Supplier<Boolean> isDriveToggled;
   private double speed;
   private double reverse;
   private boolean driveState;
   private String driveMode;
   private String reversed;
-  private String shootDistance;
 
   /**
    * Drives the robot using the joysticks on the gamepad. Can
@@ -45,18 +41,14 @@ public class DefaultDriveCommand extends CommandBase {
    * @param rightY The RightY joystick of driver gamepad
    * @param rightX rightX joystick of driver gamepad
    * 
-   * @param isDriveToggled Whether the toggle button has been released (basically pressed)
-   * @param isAReleased Whether A has been released
-   * @param isBReleased Whether B has been released
-   * @param isYReleased Whether Y has been released
+   * @param isAReleased Whether A has been releaseed
    * @param isLeftBrake Whether left trigger is held
    * @param isRightBrake Whether right trigger is held
    * 
    * @param driveTrain The driveTrain subsystem.
    */
   public DefaultDriveCommand(DoubleSupplier leftY, DoubleSupplier rightY, DoubleSupplier rightX, 
-                            Supplier<Boolean> isDriveToggled, Supplier<Boolean> isAReleased, 
-                            Supplier<Boolean> isBReleased, Supplier<Boolean> isYReleased,
+                            Supplier<Boolean> isAReleased, 
                             Supplier<Boolean> isLeftBrake,  Supplier<Boolean> isRightBrake,
                             DriveTrain driveTrain) {
 
@@ -66,10 +58,7 @@ public class DefaultDriveCommand extends CommandBase {
     this.rightY = rightY;
     this.rightX = rightX;
 
-    this.isDriveToggled = isDriveToggled;
     this.isAReleased = isAReleased;
-    this.isBReleased = isBReleased;
-    this.isYReleased = isYReleased;
     this.isLeftBrake = isLeftBrake;
     this.isRightBrake = isRightBrake;
     this.driveState = false;
@@ -81,29 +70,18 @@ public class DefaultDriveCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    reverse = 1;
-    driveTrain.setShootDriverMode(true);
-    driveTrain.setIntakeDriverMode(true);
+    reverse = 1;  
+    driveState = false;
+    driveTrain.setShootDriverMode(false);
+    driveTrain.setIntakeDriverMode(false);
     driveTrain.setShootPipeline(Pipelines.DEFAULT);
     driveTrain.turnOnLight(true);
+    driveTrain.useDriveBlinkers(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    /*if (driveTrain.getDriver()) {
-      if (isAReleased.get()) {
-        speed = Constants.LOW_SPEED;
-      }
-      if (isBReleased.get()) {
-        speed = Constants.MID_SPEED;
-      }
-      if (isYReleased.get()) {
-        speed = Constants.HIGH_SPEED;
-      }
-      reverse = driveTrain.getReverse();
-    } else { */
-
     if (!isLeftBrake.get() && !isRightBrake.get()) {
       speed = Constants.HIGH_SPEED;
     }
@@ -116,15 +94,12 @@ public class DefaultDriveCommand extends CommandBase {
     }
 
     if (!driveTrain.getShootDriverMode()) {
-      driveTrain.setShootDriverMode(true);
-      //driveTrain.setShootPipeline(Pipelines.DRIVER);
+      driveTrain.setShootDriverMode(false);
+      driveTrain.setShootPipeline(Pipelines.DEFAULT);
     }
-    
-    reverse = 1;
-    driveState = false;
-    //if (isDriveToggled.get()) {
-    //driveState = !driveState;
-    //}
+    if (isAReleased.get()) {
+      driveState = !driveState;
+    }
     if (driveState) {
       driveMode = "Tank Drive";
     } else {
@@ -137,7 +112,7 @@ public class DefaultDriveCommand extends CommandBase {
     }
     SmartDashboard.putString("Drive Mode", driveMode);
     SmartDashboard.putString("Direction", reversed);
- 
+
     if (driveState) {
       driveTrain.tankDrive(leftY.getAsDouble() * speed * reverse, 
                           rightY.getAsDouble() * speed * reverse);

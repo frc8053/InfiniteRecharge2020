@@ -8,9 +8,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 * Add your docs here.
 */
 public class Winch extends SubsystemBase {
-
   //Instance Variables
   private WPI_VictorSPX winch;
 
@@ -27,13 +26,14 @@ public class Winch extends SubsystemBase {
    */
   public Winch() {
     winch = new WPI_VictorSPX(10);
+    winch.setNeutralMode(NeutralMode.Brake);
   }
   
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Winch Voltage", winch.getMotorOutputVoltage());    
+    SmartDashboard.putNumber("Winch Voltage", winch.getMotorOutputVoltage());   
   }
 
   /**
@@ -42,7 +42,6 @@ public class Winch extends SubsystemBase {
     */
   public void winchControl(double speed) {
     winch.set(ControlMode.PercentOutput, speed);
-    
   }
   
 

@@ -7,21 +7,19 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.Shoot;
+import frc.robot.commands.Auto11BallCommandGroup;
 import frc.robot.commands.AutoLeftDumpCommandGroup;
 import frc.robot.commands.AutoLeftShootCommandGroup;
 import frc.robot.commands.AutoMidDumpCommand;
@@ -30,16 +28,13 @@ import frc.robot.commands.AutoRightShootCommandGroup;
 import frc.robot.commands.AutoStraightCommandGroup;
 import frc.robot.commands.AutoStraightDumpCommandGroup;
 import frc.robot.commands.AutoStraightShootCommandGroup;
+import frc.robot.commands.BallAlignmentCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultIntakeCommand;
-import frc.robot.commands.DriveDistanceCommand;
-import frc.robot.commands.DriveTurnCommand;
 import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.PidShootCommandGroup;
-import frc.robot.commands.ReverseCommand;
-import frc.robot.commands.SwitchDrive;
 import frc.robot.commands.SetRpmShootCommandGroup;
+import frc.robot.commands.UnclogCommand;
 import frc.robot.commands.VisionCommandGroup;
 import frc.robot.commands.WinchCommand;
 import frc.robot.subsystems.DriveTrain;
@@ -71,6 +66,7 @@ public class RobotContainer {
 
   private AutoStraightCommandGroup autoStraightCommandGroup;
   private AutoRightShootCommandGroup autoRightShootCommandGroup;
+  private Auto11BallCommandGroup auto11BallCommandGroup;
   private AutoStraightShootCommandGroup autoStraightShootCommandGroup;
   private AutoStraightDumpCommandGroup autoStraightDumpCommandGroup;
   private AutoMidShootCommand autoMidShootCommand;
@@ -78,15 +74,12 @@ public class RobotContainer {
   private AutoLeftShootCommandGroup autoLeftShootCommandGroup;
   private AutoLeftDumpCommandGroup autoLeftDumpCommandGroup;
   private VisionCommandGroup visionCommandGroup;
-  private SetRpmShootCommandGroup testHighShootCommand;
-  private SetRpmShootCommandGroup testMidShootCommand;
-  private SetRpmShootCommandGroup lowerMidShootCommand;
-  private SetRpmShootCommandGroup testLowShootCommand;
-  private PidShootCommandGroup lowShootCommand;
+  private BallAlignmentCommand ballAlignmentCommand;
+  private SetRpmShootCommandGroup midShootCommand;
+  private SetRpmShootCommandGroup lowShootCommand;
   private PidShootCommandGroup highShootCommand;
+  private UnclogCommand unclogCommand;
   private WinchCommand winchCommand;
-  private DriveDistanceCommand tDriveDistanceCommand;
-  private DriveTurnCommand tDriveTurnCommand;
 
   XboxController driverController;
   JoystickButton driverButtonA;
@@ -110,11 +103,6 @@ public class RobotContainer {
   Trigger maniRightTrigger;
   AnalogTrigger analogTrigger;
 
-  ShuffleboardTab parameterTab;
-  NetworkTableEntry highSpeed;
-  NetworkTableEntry midSpeed;
-  NetworkTableEntry lowerMidSpeed;
-  NetworkTableEntry lowSpeed;
   SendableChooser<Command> autoChooser;
 
   /**
@@ -128,46 +116,6 @@ public class RobotContainer {
     elevator = new Elevator(); 
     winch = new Winch();
     
-    /*parameterTab = Shuffleboard.getTab("Parameter Tab");
-    highSpeed = parameterTab.add("High Speed", 0.9)
-      .getEntry();
-    midSpeed = parameterTab.add("Mid Speed", 0.825)
-      .getEntry();
-    lowerMidSpeed = parameterTab.add("Lower Mid Speed", 0.75)
-      .getEntry();
-    lowSpeed = parameterTab.add("Low Speed", 0.4)
-      .getEntry();
-    */
-
-    // Initalize commands
-    autoStraightCommandGroup = new AutoStraightCommandGroup(driveTrain);
-    autoRightShootCommandGroup = new AutoRightShootCommandGroup(driveTrain, intake, 
-                                                                pidShooter);
-    autoStraightShootCommandGroup = new AutoStraightShootCommandGroup(driveTrain, intake, 
-                                                                      pidShooter);
-    autoStraightDumpCommandGroup =  new AutoStraightDumpCommandGroup(driveTrain, intake,
-                                                                     pidShooter);
-    autoMidShootCommand = new AutoMidShootCommand(driveTrain, intake, pidShooter);
-    autoMidDumpCommand = new AutoMidDumpCommand(driveTrain, intake, pidShooter);
-    autoLeftShootCommandGroup = new AutoLeftShootCommandGroup(driveTrain, intake, 
-                                                              pidShooter);
-    autoLeftDumpCommandGroup = new AutoLeftDumpCommandGroup(driveTrain, intake, 
-                                                            pidShooter);
-    visionCommandGroup = new VisionCommandGroup(driveTrain);
-    highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
-    testHighShootCommand = new SetRpmShootCommandGroup(4500, intake, 
-      pidShooter);
-    testMidShootCommand = new SetRpmShootCommandGroup(3500, intake, 
-                                                        pidShooter);
-    lowerMidShootCommand = new SetRpmShootCommandGroup(3000, intake, 
-                                                         pidShooter);
-    testLowShootCommand = new SetRpmShootCommandGroup(1000, intake, 
-                                                        pidShooter);
-    highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
-    winchCommand = new WinchCommand(winch);
-    tDriveDistanceCommand = new DriveDistanceCommand(50, true, driveTrain);
-    tDriveTurnCommand = new DriveTurnCommand(-90, driveTrain);
-    
     // Initialize Driver Controller and Buttons
     driverController = new XboxController(0);
 
@@ -179,10 +127,8 @@ public class RobotContainer {
     driverLeftBumper = new JoystickButton(driverController, Button.kBumperLeft.value);
     driverLeftTrigger = new TriggerButton(driverController, Hand.kLeft);
     driverRightTrigger = new TriggerButton(driverController, Hand.kRight);
-    
-    
 
-    // Initialize Manipulator Controller and Buttons
+    // Initialize Manipulator/Operator Controller and Buttons
     manipulatorController = new XboxController(1);
 
     maniButtonA = new JoystickButton(manipulatorController, Button.kA.value);
@@ -191,21 +137,47 @@ public class RobotContainer {
     maniButtonB = new JoystickButton(manipulatorController, Button.kB.value);
     maniLeftBumper = new JoystickButton(manipulatorController, Button.kBumperLeft.value);
     maniRightBumper = new JoystickButton(manipulatorController, Button.kBumperRight.value);
+    maniLeftTrigger = new TriggerButton(manipulatorController, Hand.kLeft);
+    maniRightTrigger = new TriggerButton(manipulatorController, Hand.kRight);
     maniPovUp = new POVButton(manipulatorController, 0);
+    
+    // Initalize commands
+    autoStraightCommandGroup = new AutoStraightCommandGroup(driveTrain);
+    autoRightShootCommandGroup = new AutoRightShootCommandGroup(driveTrain, intake, 
+                                                                pidShooter);
+    auto11BallCommandGroup = new Auto11BallCommandGroup(driveTrain, intake, pidShooter);
+    autoStraightShootCommandGroup = new AutoStraightShootCommandGroup(driveTrain, intake, 
+                                                                      pidShooter);
+    autoStraightDumpCommandGroup =  new AutoStraightDumpCommandGroup(driveTrain, intake,
+                                                                     pidShooter);
+    autoMidShootCommand = new AutoMidShootCommand(driveTrain, intake, pidShooter);
+    autoMidDumpCommand = new AutoMidDumpCommand(driveTrain, intake, pidShooter);
+    autoLeftShootCommandGroup = new AutoLeftShootCommandGroup(driveTrain, intake, 
+                                                              pidShooter);
+    autoLeftDumpCommandGroup = new AutoLeftDumpCommandGroup(driveTrain, intake, 
+                                                            pidShooter);
+    visionCommandGroup = new VisionCommandGroup(driveTrain, intake, pidShooter);
+    ballAlignmentCommand = new BallAlignmentCommand(driverController, driveTrain, intake);
+    highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
+    midShootCommand = new SetRpmShootCommandGroup(3500, intake, 
+                                                        pidShooter);
+    lowShootCommand = new SetRpmShootCommandGroup(1000, intake, 
+                                                        pidShooter);
+    highShootCommand = new PidShootCommandGroup(driveTrain, intake, pidShooter);
+    unclogCommand = new UnclogCommand(intake);
+    winchCommand = new WinchCommand(winch, driveTrain);
     
     // Set the default drive command to split-stick arcade drive
     driveTrain.setDefaultCommand(new DefaultDriveCommand(
         () -> driverController.getY(Hand.kLeft),
-        () -> driverController.getY(Hand.kRight), 
-        () -> driverController.getX(Hand.kRight), 
-        () -> driverController.getXButtonReleased(), 
+        () -> driverController.getY(Hand.kRight),
+        () -> driverController.getX(Hand.kRight),
         () -> driverController.getAButtonReleased(),
-        () -> driverController.getBButtonReleased(),
-        () -> driverController.getYButtonReleased(),
         () -> Math.abs(driverController.getTriggerAxis(Hand.kLeft)) > 0.2,
         () -> Math.abs(driverController.getTriggerAxis(Hand.kRight)) > 0.2,
         driveTrain));
 
+    //Sets the default intake command to run the intake bar and conveyor on operator input
     intake.setDefaultCommand(new DefaultIntakeCommand(
         () -> manipulatorController.getY(Hand.kLeft),
         intake));
@@ -223,15 +195,14 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driverPovUp.whenHeld(tDriveDistanceCommand.raceWith(new IntakeCommand(0.8, 0.5, intake)));
-    driverPovDown.whenHeld(tDriveTurnCommand);
+    driverLeftBumper.whenHeld(ballAlignmentCommand);
     driverRightBumper.whenHeld(visionCommandGroup);
     driverButtonX.whenReleased(new InstantCommand(() -> driveTrain.toggleOnLight(), driveTrain));
-    maniButtonA.whenHeld(testLowShootCommand);
+    maniButtonA.whenHeld(lowShootCommand);
     maniButtonX.whenHeld(new InstantCommand(() -> pidShooter.shootPower(1), pidShooter))
       .whenReleased(new InstantCommand(() -> pidShooter.stopShooting()));
-    maniButtonB.whenHeld(testMidShootCommand);
-    maniButtonY.whenHeld(highShootCommand)  
+    maniButtonB.whenHeld(midShootCommand);
+    maniButtonY.whenHeld(highShootCommand)
         .whenReleased(new InstantCommand(
             () -> pidShooter.stopShooting(), pidShooter));
     maniPovUp.whenHeld(new InstantCommand(
@@ -241,10 +212,12 @@ public class RobotContainer {
         ));
     maniLeftBumper.whenHeld(visionCommandGroup);
     maniRightBumper.whenHeld(winchCommand);
-    //maniButtonX.whenHeld(highShootCommand);                   
+    maniLeftTrigger.whileActiveOnce(unclogCommand);
     
+    //The Auto chooser to select autonomous in SmartDashboard
     autoChooser = new SendableChooser<Command>();
     autoChooser.setDefaultOption("Auto Right Shoot", autoRightShootCommandGroup);
+    autoChooser.addOption("11 Ball Auto", auto11BallCommandGroup);
     autoChooser.addOption("Auto Straight", autoStraightCommandGroup);
     autoChooser.addOption("Auto Straight Shoot", autoStraightShootCommandGroup);
     autoChooser.addOption("Auto Straight Dump", autoStraightDumpCommandGroup);
@@ -256,7 +229,6 @@ public class RobotContainer {
       .add("Auto Chooser", autoChooser)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
   }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -66,9 +66,11 @@ public class BasicVisionCommand extends CommandBase {
       isTurning = false;
       finished = true;
     }
-    SmartDashboard.putNumber("RPM Requested", TrajectoryMath.getVelocityFromDistance(TrajectoryMath.getDistanceFromPitch(driveTrain.getShootVisionPitch())));
+    SmartDashboard.putNumber("RPM Requested", TrajectoryMath.getVelocityFromDistance(
+        TrajectoryMath.getDistanceFromPitch(driveTrain.getShootVisionPitch())));
     SmartDashboard.putNumber("Rotation Adjust", driveTrain.getShootVisionYaw());
-    SmartDashboard.putNumber("Distance From", TrajectoryMath.getDistanceFromPitch(driveTrain.getShootVisionPitch()));
+    SmartDashboard.putNumber("Distance From", TrajectoryMath.getDistanceFromPitch(
+        driveTrain.getShootVisionPitch()));
     //SmartDashboard.putNumber("Velocity",TrajectoryMath.getVelocityFromDistance(25));
   }
 

@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Shoot;
 
 public class PidShooter extends SubsystemBase {
   
@@ -50,16 +51,16 @@ public class PidShooter extends SubsystemBase {
 
     shootLeftEncoder.setSamplesToAverage(5);
     shootRightEncoder.setSamplesToAverage(5);
-    // 1 / EPR = rotations
-    //PUT THIS IN CONSTANTS FILE!!!!!
-    double dpr = (1.0 / (2048.0));
+    double dpr = (Shoot.SHOOTRATE);
     shootLeftEncoder.setDistancePerPulse(dpr);
     shootRightEncoder.setDistancePerPulse(dpr);
 
     setpoint = 3000;
 
-    leftPidController = new PIDController(0.005, 0.00007, 0);
-    rightPidController = new PIDController(0.005, 0.00007, 0);
+    leftPidController = new PIDController(Shoot.P_LEFT_SHOOTER, Shoot.I_LEFT_SHOOTER, 
+      Shoot.D_LEFT_SHOOTER);
+    rightPidController = new PIDController(Shoot.P_RIGHT_SHOOTER, Shoot.I_RIGHT_SHOOTER, 
+      Shoot.D_RIGHT_SHOOTER);
     leftPidController.setTolerance(tolerance);
     rightPidController.setTolerance(tolerance);
     leftPidController.setSetpoint(setpoint);
@@ -79,56 +80,98 @@ public class PidShooter extends SubsystemBase {
     SmartDashboard.putNumber("Right Shooter Voltage", shooterRight.getMotorOutputVoltage());
   }
 
-
+  /**
+   * Sets the desired rpm of the shooter PID controllers.
+   * @param setpointRpm the setpoint of the PID controllers in rpm [-5000, 5000]
+   */
   public void setSetpoint(double setpointRpm) {
     leftPidController.setSetpoint(setpointRpm);
     rightPidController.setSetpoint(setpointRpm);
   }
 
+  /**
+   * Runs the PID shooter.
+   */
   private void runRpm() {
     double ff = (12.0 / 5000);
     shooterLeft.setVoltage(ff * leftPidController.getSetpoint() 
           + leftPidController.calculate(getLeftRpm()));
-    shooterRight.setVoltage(ff * rightPidController.getSetpoint() 
+    shooterRight.setVoltage(ff * rightPidController.getSetpoint()
           + rightPidController.calculate(getRightRpm()));
-    
+    //System.out.println("Trying to shoot!!");
   }
 
-  public void shootPower(double power){
+  /**
+   * Sets the power to the shooter wheels.
+   * @param power The power of the motors [-1. 1]
+   */
+  public void shootPower(double power) {
     shooterLeft.set(ControlMode.PercentOutput, power);
     shooterRight.set(ControlMode.PercentOutput, power);
   }
 
+  /**
+   * Sets the desired rpm and runs the shooter PID.
+   * @param setpoint the desired rpm of the PID shooter [-5000, 5000]
+   */
   public void shootRpm(double setpoint) {
     setSetpoint(setpoint);
     runRpm();
   }
 
+  /**
+   * Runs the shooter PID.
+   */
   public void shootRpm() {
     runRpm();
   }
 
+  /**
+   * Stops the PIDShooter.
+   */
   public void stopShooting() {
     shooterLeft.setVoltage(0);
     shooterRight.setVoltage(0);
+    leftPidController.reset();
+    rightPidController.reset();
   }
-
+  
+  /**
+   * Returns whether both shooter wheels have reached their setpoint.
+   * @return
+   */
   public boolean reachedSetpoint() {
     return leftPidController.atSetpoint() && rightPidController.atSetpoint();
   }
 
+  /**
+   * Returns the rpm of the left shooter wheel.
+   * @return
+   */
   public double getLeftRpm() {
     return shootLeftEncoder.getRate() * 60;
   }
 
+  /**
+   * returns the linear velocity of the left shooter wheel.
+   * @return
+   */
   public double getLeftSpeed() {
     return shootLeftEncoder.getRate() * Math.PI * 1.33333333333333333333333333333333333333333333333;
   }
 
+  /**
+   * Returns the rpm of the right shooter wheel.
+   * @return
+   */
   public double getRightRpm() {
     return shootRightEncoder.getRate() * 60;
   }
 
+  /**
+   * Returns the linear velocity of the right shooter wheel.
+   * @return
+   */
   public double getRightSpeed() {
     return shootRightEncoder.getRate() * Math.PI * 1.3333333333333333333333333333333333333333333333;
   }

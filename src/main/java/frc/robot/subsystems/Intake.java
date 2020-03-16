@@ -47,17 +47,37 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Intake Bar Voltage", intakeBar.getMotorOutputVoltage());
   }
 
+  /**
+   * Controls the speed of the intake bar.
+   * @param speed the speed of the intake bar [-1, 1]
+   */
   public void intakeBar(double speed) {
     intakeBar.set(ControlMode.PercentOutput, speed);
   }
 
+  public void leftConveyor(double speed) {
+    leftConveyor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void rightConveyor(double speed) {
+    rightConveyor.set(ControlMode.PercentOutput, speed);
+  }
+
+  /**
+   * Controls the speed of the conveyor that moves the balls
+   * to the shooter.
+   * @param speed the speed of the conveyor [-1, 1]
+   */
   public void conveyorControl(double speed) {
     conveyor.set(speed);
   }
 
+  /**
+   * Returns whether we have a ball.
+   * This sensor is currently not in the robot.
+   * @return
+   */
   public boolean haveBall() {
     return laserSwitch.get();
   }
-
-  
 }

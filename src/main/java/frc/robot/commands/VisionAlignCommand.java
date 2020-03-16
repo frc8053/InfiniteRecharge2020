@@ -9,12 +9,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.modules.*;
+import frc.robot.modules.TrajectoryMath;
 import frc.robot.subsystems.DriveTrain;
 
 public class VisionAlignCommand extends CommandBase {
   /**
-   * Creates a new VisionAlignCommand.
+   * Aligns to vision target using a P controller.
    */
   private DriveTrain driveTrain;
 
@@ -23,11 +23,11 @@ public class VisionAlignCommand extends CommandBase {
   */
   double rotationError;
   double distanceError;
-  double KpRot=-0.05;
-  double KpDist=-0.01;
-  double angleTolerance=5;//Deadzone for the angle control loop
-  double distanceTolerance=5;//Deadzone for the distance control loop
-  double constantForce=0.25;
+  double KpRot = -0.05;
+  double KpDist = -0.01;
+  double angleTolerance = 5; //Deadzone for the angle control loop
+  double distanceTolerance = 5; //Deadzone for the distance control loop
+  double constantForce = 0.25;
   double rotationAjust;
   double distanceAjust;
 
@@ -50,7 +50,7 @@ public class VisionAlignCommand extends CommandBase {
     if (rotationError > angleTolerance) {
       rotationAjust = constantForce;
     } else {
-      rotationAjust =  - constantForce;
+      rotationAjust =  -constantForce;
     }
     driveTrain.arcadeDrive(0, rotationAjust);
     SmartDashboard.putNumber("Distance Adjuist", distanceAjust);

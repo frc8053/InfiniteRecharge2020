@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
@@ -22,7 +23,7 @@ public class Elevator extends SubsystemBase {
 
   //Instance Variables
   private WPI_VictorSPX elevatorMotor;
-  private final double weight = 0.3;
+  private final double weight = 0.5;
   private Encoder encoder;
 
   /**
@@ -31,6 +32,7 @@ public class Elevator extends SubsystemBase {
   public Elevator() {
     elevatorMotor = new WPI_VictorSPX(9);
     elevatorMotor.setInverted(true);
+    elevatorMotor.setNeutralMode(NeutralMode.Brake);
     encoder = new Encoder(8, 9, false, EncodingType.k4X);
     encoder.setDistancePerPulse(Constants.Elevator.DISTANCE_PER_PULSE);
   }
@@ -42,17 +44,20 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("Elevator Voltage", elevatorMotor.getMotorOutputVoltage());
   }
 
+  /**
+  * Returns the height of the elevator. 
+  * @return
+  */
   public double getDistance() {
     return encoder.getDistance() + Constants.Elevator.HEIGHT;
   }
-
 
   /**
    * Controls the small winch for the climber setup.
    * @param speed sets the speed of the motor [-1, 1]
     */
   public void motorControl(double speed) {
-    elevatorMotor.set(ControlMode.PercentOutput, speed);
+    elevatorMotor.set(ControlMode.PercentOutput, speed * weight);
     
   }
 

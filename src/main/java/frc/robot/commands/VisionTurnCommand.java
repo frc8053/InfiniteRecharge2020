@@ -1,49 +1,68 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
+import frc.robot.Constants.DrivePid;
 import frc.robot.subsystems.DriveTrain;
 
-public class VisionTurnCommand extends CommandBase {
-  PIDController visionPid;
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
+public class VisionTurnCommand extends PIDCommand {
   DriveTrain driveTrain;
-
   /**
-   * Creates a new VisionTurnCommand.
+   * Turns the robot to the vision target.
+   * @param driveTrain the driveTrain subsystem used
    */
+
   public VisionTurnCommand(DriveTrain driveTrain) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    visionPid = new PIDController(0.05, 0.001, 0.001);
+    super(
+        // The controller that the command will use
+        new PIDController(DrivePid.P_TURN, DrivePid.I_TURN, DrivePid.D_TURN),
+        // This should return the measurement
+        driveTrain::getShootVisionYaw,
+        // This should return the setpoint (can also be a constant)
+        0,
+        // This uses the output
+        output -> {
+          // Use the output here
+          if (output > 0.55) {
+            driveTrain.arcadeDrive(0, 0.55);
+          } 
+          if (output < -0.55) {
+            driveTrain.arcadeDrive(0, -0.55);
+          } 
+          if (Math.abs(output) < 0.55) {
+            driveTrain.arcadeDrive(0, output);
+          }
+        },
+        driveTrain);
     this.driveTrain = driveTrain;
+    // Configure additional PID options by calling `getController` here.
+    getController().enableContinuousInput(-180, 180);
+    getController().setTolerance(DrivePid.TURN_TOLERANCE);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    visionPid.setSetpoint(0);
+    driveTrain.resetGyro();
+    super.initialize();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.arcadeDrive(0, visionPid.calculate(driveTrain.getShootVisionYaw()));
+    //SmartDashboard.putNumber("Turn Error", getController().getPositionError());
+    super.execute();
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    driveTrain.tankDrive(0, 0);
   }
-
+  
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return getController().atSetpoint();
   }
 }

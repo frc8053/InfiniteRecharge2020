@@ -41,17 +41,14 @@ public class DefaultIntakeCommand extends CommandBase {
   @Override
   public void execute() {
     intake.intakeBar(speed.getAsDouble() * 0.65);
-    //if (intake.haveBall()) {
-    //intake.conveyorControl(IntakeConstant.CONVEYOR_SPEED);
-    //} else {
-    //intake.conveyorControl(0);
-    //}
     intake.conveyorControl(speed.getAsDouble() * 0.3);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    intake.intakeBar(0);
+    intake.conveyorControl(0);
   }
 
   // Returns true when the command should end.

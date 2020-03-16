@@ -17,7 +17,7 @@ public class ElevatorCommand extends CommandBase {
   private final DoubleSupplier ds;
 
   /**
-   * Creates a new Elevatorommand.
+   * Default command of the elevator. Controls the power to the elevator.
    */
   public ElevatorCommand(DoubleSupplier power, Elevator subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.

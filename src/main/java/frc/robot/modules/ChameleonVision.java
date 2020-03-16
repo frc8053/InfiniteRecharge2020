@@ -24,8 +24,8 @@ public class ChameleonVision {
     yaw = ctable.getEntry("yaw");
     pipeline = ctable.getEntry("pipeline");
     timestamp = ctable.getEntry("timestamp");
-    driverMode = ctable.getEntry("driver_mode");
-    isValid = ctable.getEntry("is_valid");
+    driverMode = ctable.getEntry("driverMode");
+    isValid = ctable.getEntry("isValid");
   }
 
   /**
@@ -40,38 +40,66 @@ public class ChameleonVision {
     yaw = ctable.getEntry("targetYaw");
     pipeline = ctable.getEntry("pipeline");
     timestamp = ctable.getEntry("timestamp");
-    driverMode = ctable.getEntry("driver_mode");
-    isValid = ctable.getEntry("is_valid");
+    driverMode = ctable.getEntry("driverMode");
+    isValid = ctable.getEntry("isValid");
     pipeline.setValue(pipelinex);
   }
 
-  public void setVisionPipeline(double pipelinx) {
-    pipeline.setValue(pipelinx);
+  /**
+   * Sets the pipeline of the camera.
+   * @param pipelinex the desired pipeline
+   */
+  public void setVisionPipeline(double pipelinex) {
+    pipeline.setValue(pipelinex);
   }
 
+  /**
+   * Returns the degree to the target. Can either be Yaw or Pitch.
+   * @return 
+   */
   public Rotational getRotation() {
     return new Rotational(pitch.getDouble(0.0), yaw.getDouble(0.0));
   }
 
+  /**
+   * Sets driver Mode.
+   * @param enabled the desired state of driver Mode. True or false.
+   */
   public void setDriverMode(boolean enabled) {
     driverMode.setBoolean(enabled);
   }
 
+  /**
+   * Returns whether driverMode is enabled.
+   * @return
+   */
   public boolean isDriverMode() {
     return driverMode.getBoolean(false);
   }
 
+  /**
+   * gets the current pipeline used by the camera.
+   * 0 is the vision processing pipeline
+   * -1 is the driver pipeline
+   * @return pipeline as a double
+   */
   public double getVisionPipeline() {
     return pipeline.getDouble(0.0);
   }
 
+  /**
+   * Returns whether a vision target is detected.
+   * @return
+   */
   public boolean isValidFrame() {
     return isValid.getBoolean(false);
   }
 
+  /**
+   * Returns the timestamp as a double.
+   * @return
+   */
   public double getTimestamp() {
     return timestamp.getDouble(0.0);
   }
-
-
 }

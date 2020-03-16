@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PidShooter;
@@ -22,10 +21,10 @@ import frc.robot.subsystems.PidShooter;
 public class SetRpmShootCommandGroup extends SequentialCommandGroup {
   Intake intake;
   PidShooter pidShooter;
-  /**
-   * A temporary test command to shoot for the high goal.
-   */
   
+  /**
+   * A command that sets the shooter PID to the desired rpm.
+   */
   public SetRpmShootCommandGroup(double rpm, Intake intake, 
                                   PidShooter pidShooter) {
     // Add your commands in the super() call, e.g.

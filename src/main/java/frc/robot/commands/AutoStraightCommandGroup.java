@@ -15,7 +15,8 @@ import frc.robot.subsystems.DriveTrain;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class AutoStraightCommandGroup extends SequentialCommandGroup {
   /**
-   * Creates a new AutoStraightCommandGroup.
+   * Drives backward 50 inches.
+   * @param driveTrain the driveTrain subsystem used
    */
   public AutoStraightCommandGroup(DriveTrain driveTrain) {
     // Add your commands in the super() call, e.g.
