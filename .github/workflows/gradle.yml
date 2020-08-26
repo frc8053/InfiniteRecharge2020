@@ -20,3 +20,6 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew build
+      - name: Run java checkstyle
+        uses: nikitasavinov/checkstyle-action@0.3.1
+
